@@ -1,14 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Users, Rocket, Brain, Globe, Cpu } from 'lucide-react';
+import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram } from 'lucide-react';
 import LightRays from '../components/ui/LightRays';
 
 const AboutPage = () => {
-    const stats = [
-        { label: "Members", value: "500+" },
-        { label: "Projects", value: "45+" },
-        { label: "Events", value: "20+" },
-    ];
+
 
     const values = [
         {
@@ -84,24 +80,8 @@ const AboutPage = () => {
                     </motion.p>
                 </div>
 
-                {/* Stats Section */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-                    {stats.map((stat, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: i * 0.1 }}
-                            className="bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:from-white/15 hover:to-black/30 p-10 text-center rounded-2xl transition-all"
-                        >
-                            <h3 className="text-6xl font-bold text-white mb-2">{stat.value}</h3>
-                            <p className="text-gray-500 uppercase tracking-widest font-semibold">{stat.label}</p>
-                        </motion.div>
-                    ))}
-                </div>
-
                 {/* Values Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-32">
                     {values.map((item, index) => (
                         <motion.div
                             key={index}
@@ -120,8 +100,86 @@ const AboutPage = () => {
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Team Section */}
+                <div className="mb-20">
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-4xl md:text-6xl font-bold text-center text-white mb-20 tracking-tighter"
+                    >
+                        THE TEAM
+                    </motion.h2>
+
+                    {/* Hierarchy Helper Component */}
+                    <TeamHierarchy />
+                </div>
             </div>
         </motion.div>
+    );
+};
+
+const TeamMemberCard = ({ name, role, color = "bg-white/5" }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className={`flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 transition-all group w-full max-w-sm mx-auto`}
+    >
+        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative">
+            {/* Placeholder Image */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
+        </div>
+        <h3 className="text-xl font-bold text-white mb-1">{name}</h3>
+        <p className="text-sm text-blue-400 font-mono tracking-wide mb-4 uppercase">{role}</p>
+
+        <div className="flex gap-4">
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={18} /></a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github size={18} /></a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram size={18} /></a>
+        </div>
+    </motion.div>
+);
+
+const TeamHierarchy = () => {
+    return (
+        <div className="flex flex-col gap-16 items-center">
+            {/* Level 1: Chairperson */}
+            <div className="w-full flex justify-center">
+                <TeamMemberCard name="Chairperson Name" role="Chairperson" />
+            </div>
+
+            {/* Level 2: Vice Chairperson */}
+            <div className="w-full flex justify-center">
+                <TeamMemberCard name="Vice Chair Name" role="Vice Chairperson" />
+            </div>
+
+            {/* Level 3: General Secretary */}
+            <div className="w-full flex justify-center">
+                <TeamMemberCard name="Gen Sec Name" role="General Secretary" />
+            </div>
+
+            {/* Level 4: Leads */}
+            <div className="w-full">
+                <h3 className="text-center text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Cluster Leads</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-center">
+                    <TeamMemberCard name="Lead Name" role="Technical Lead" />
+                    <TeamMemberCard name="Lead Name" role="Finance Lead" />
+                    <TeamMemberCard name="Lead Name" role="Event Mgmt Lead" />
+                    <TeamMemberCard name="Lead Name" role="Content & Design" />
+                    <TeamMemberCard name="Lead Name" role="Social Media" />
+                </div>
+            </div>
+
+            {/* Level 5: Faculty Coordinator */}
+            <div className="w-full flex justify-center pt-8 border-t border-white/5">
+                <div className="text-center">
+                    <h3 className="text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Faculty Coordinator</h3>
+                    <TeamMemberCard name="Faculty Name" role="Faculty Coordinator" />
+                </div>
+            </div>
+        </div>
     );
 };
 
