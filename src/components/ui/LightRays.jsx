@@ -10,24 +10,27 @@ const hexToRgb = hex => {
 };
 
 const getAnchorAndDir = (origin, w, h) => {
-    const outside = 0.2;
+    // Use width for the offset to ensure consistency regardless of page height (scroll length)
+    // This prevents the light source from moving too far away on long pages
+    const offset = 0.2 * w;
+
     switch (origin) {
         case 'top-left':
-            return { anchor: [0, -outside * h], dir: [0, 1] };
+            return { anchor: [0, -offset], dir: [0, 1] };
         case 'top-right':
-            return { anchor: [w, -outside * h], dir: [0, 1] };
+            return { anchor: [w, -offset], dir: [0, 1] };
         case 'left':
-            return { anchor: [-outside * w, 0.5 * h], dir: [1, 0] };
+            return { anchor: [-offset, 0.5 * h], dir: [1, 0] };
         case 'right':
-            return { anchor: [(1 + outside) * w, 0.5 * h], dir: [-1, 0] };
+            return { anchor: [w + offset, 0.5 * h], dir: [-1, 0] };
         case 'bottom-left':
-            return { anchor: [0, (1 + outside) * h], dir: [0, -1] };
+            return { anchor: [0, h + offset], dir: [0, -1] };
         case 'bottom-center':
-            return { anchor: [0.5 * w, (1 + outside) * h], dir: [0, -1] };
+            return { anchor: [0.5 * w, h + offset], dir: [0, -1] };
         case 'bottom-right':
-            return { anchor: [w, (1 + outside) * h], dir: [0, -1] };
+            return { anchor: [w, h + offset], dir: [0, -1] };
         default: // "top-center"
-            return { anchor: [0.5 * w, -outside * h], dir: [0, 1] };
+            return { anchor: [0.5 * w, -offset], dir: [0, 1] };
     }
 };
 
@@ -192,9 +195,10 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
   }
 
   float brightness = 1.0 - (coord.y / iResolution.y);
-  fragColor.x *= 0.1 + brightness * 0.8;
-  fragColor.y *= 0.3 + brightness * 0.6;
-  fragColor.z *= 0.5 + brightness * 0.5;
+  // Removed hardcoded tinting to allow raysColor to control the color
+  // fragColor.x *= 0.1 + brightness * 0.8;
+  // fragColor.y *= 0.3 + brightness * 0.6;
+  // fragColor.z *= 0.5 + brightness * 0.5;
 
   if (saturation != 1.0) {
     float gray = dot(fragColor.rgb, vec3(0.299, 0.587, 0.114));
@@ -284,7 +288,10 @@ void main() {
                 }
             };
 
-            window.addEventListener('resize', updatePlacement);
+            // Use ResizeObserver to handle container resizing
+            const resizeObserver = new ResizeObserver(() => updatePlacement());
+            resizeObserver.observe(containerRef.current);
+
             updatePlacement();
             animationIdRef.current = requestAnimationFrame(loop);
 
@@ -294,7 +301,9 @@ void main() {
                     animationIdRef.current = null;
                 }
 
-                window.removeEventListener('resize', updatePlacement);
+                if (resizeObserver) {
+                    resizeObserver.disconnect();
+                }
 
                 if (renderer) {
                     try {

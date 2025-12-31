@@ -1,50 +1,109 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import LightRays from '../components/ui/LightRays';
 
+
 const EventsPage = () => {
-    const events = [
-        {
-            month: "OCT",
-            day: "15",
-            year: "2024",
-            title: "Introduction to Rust",
-            time: "10:00 AM - 02:00 PM",
-            location: "Lab 404, Tech Tower",
-            status: "Completed",
-            regStatus: null
-        },
-        {
-            month: "NOV",
-            day: "02",
-            year: "2025",
-            title: "ZBC Annual Hackathon",
-            time: "48 Hours",
-            location: "Main Auditorium",
-            status: "Upcoming",
-            regStatus: "Open"
-        },
-        {
-            month: "DEC",
-            day: "10",
-            year: "2025",
-            title: "Deploying with Docker",
-            time: "03:00 PM - 06:00 PM",
-            location: "Virtual (Discord)",
-            status: "Upcoming",
-            regStatus: "Closed"
-        },
-        {
-            month: "JAN",
-            day: "20",
-            year: "2026",
-            title: "Blockchain Basics",
-            time: "TBA",
-            location: "TBA",
-            status: "TBA",
-            regStatus: null
-        }
+    const [selectedSession, setSelectedSession] = React.useState('2025 - 2026 Season');
+    const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+
+    const sessions = [
+        '2025 - 2026 Season',
+        '2024 - 2025 Season',
+        '2023 - 2024 Season'
     ];
+
+    const allEvents = {
+        '2025 - 2026 Season': [
+            {
+                month: "OCT",
+                day: "15",
+                year: "2024",
+                title: "Introduction to Rust",
+                time: "10:00 AM - 02:00 PM",
+                location: "Lab 404, Tech Tower",
+                status: "Completed",
+                regStatus: null
+            },
+            {
+                month: "NOV",
+                day: "02",
+                year: "2025",
+                title: "ZBC Annual Hackathon",
+                time: "48 Hours",
+                location: "Main Auditorium",
+                status: "Upcoming",
+                regStatus: "Open"
+            },
+            {
+                month: "DEC",
+                day: "10",
+                year: "2025",
+                title: "Deploying with Docker",
+                time: "03:00 PM - 06:00 PM",
+                location: "Virtual (Discord)",
+                status: "Upcoming",
+                regStatus: "Closed"
+            },
+            {
+                month: "JAN",
+                day: "20",
+                year: "2026",
+                title: "Blockchain Basics",
+                time: "TBA",
+                location: "TBA",
+                status: "TBA",
+                regStatus: null
+            }
+        ],
+        '2024 - 2025 Season': [
+            {
+                month: "SEP",
+                day: "10",
+                year: "2024",
+                title: "Web Dev Bootcamp",
+                time: "09:00 AM - 04:00 PM",
+                location: "SJT 505",
+                status: "Completed",
+                regStatus: null
+            },
+            {
+                month: "FEB",
+                day: "14",
+                year: "2025",
+                title: "Cybersecurity Workshop",
+                time: "10:00 AM - 01:00 PM",
+                location: "Tech Tower Auditorium",
+                status: "Completed",
+                regStatus: null
+            }
+        ],
+        '2023 - 2024 Season': [
+            {
+                month: "AUG",
+                day: "20",
+                year: "2023",
+                title: "Intro to Python",
+                time: "02:00 PM - 05:00 PM",
+                location: "Online",
+                status: "Completed",
+                regStatus: null
+            },
+            {
+                month: "MAR",
+                day: "15",
+                year: "2024",
+                title: "AI & ML Summit",
+                time: "09:00 AM - 05:00 PM",
+                location: "Main Auditorium",
+                status: "Completed",
+                regStatus: null
+            }
+        ]
+    };
+
+    const currentEvents = allEvents[selectedSession] || [];
 
     return (
         <motion.div
@@ -67,13 +126,40 @@ const EventsPage = () => {
                 />
             </div>
             <div className="max-w-5xl mx-auto relative z-10">
-                <div className="flex items-end justify-between mb-20 border-b border-white/10 pb-6">
+                <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-20 border-b border-white/10 pb-6 gap-4 md:gap-0">
                     <h1 className="text-5xl md:text-8xl font-bold text-white tracking-tighter">Timeline</h1>
-                    <span className="text-gray-500 font-mono mb-4 hidden md:block">2025 - 2026 Season</span>
+
+                    {/* Glassy Dropdown */}
+                    <div className="relative">
+                        <button
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                            className="bg-white/5 border border-white/10 hover:bg-white/10 text-white px-6 py-3 rounded-xl flex items-center gap-3 backdrop-blur-md transition-all min-w-[200px] justify-between group"
+                        >
+                            <span className="font-mono text-sm tracking-wide text-gray-300">{selectedSession}</span>
+                            <ChevronDown size={16} className={`text-gray-400 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {isDropdownOpen && (
+                            <div className="absolute right-0 mt-2 w-full bg-black/90 border border-white/10 rounded-xl overflow-hidden backdrop-blur-xl z-50 shadow-2xl">
+                                {sessions.map((session) => (
+                                    <button
+                                        key={session}
+                                        onClick={() => {
+                                            setSelectedSession(session);
+                                            setIsDropdownOpen(false);
+                                        }}
+                                        className={`w-full text-left px-6 py-3 text-sm font-mono tracking-wide transition-colors ${selectedSession === session ? 'bg-white/10 text-white' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}
+                                    >
+                                        {session}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className="space-y-6">
-                    {events.map((event, i) => (
+                    {currentEvents.map((event, i) => (
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 30 }}
