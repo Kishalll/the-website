@@ -76,7 +76,7 @@ const AboutPage = () => {
                         <motion.div
                             key={i}
                             initial={{ scale: 0.9, opacity: 0 }}
-                            whileInView={{ scale: 1, opacity: 1 }}
+                            animate={{ scale: 1, opacity: 1 }}
                             transition={{ delay: i * 0.1 }}
                             className="bg-zinc-900/50 border border-white/5 p-10 text-center rounded-2xl"
                         >
@@ -92,8 +92,8 @@ const AboutPage = () => {
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 + (index * 0.1) }}
                             className="bg-[#111] p-8 rounded-xl border border-white/5 hover:border-white/20 transition-all group"
                         >
                             <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center text-white mb-6 group-hover:bg-white group-hover:text-black transition-colors">

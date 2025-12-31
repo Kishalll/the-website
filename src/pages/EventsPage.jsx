@@ -6,11 +6,12 @@ const EventsPage = () => {
         {
             month: "OCT",
             day: "15",
-            year: "2025",
+            year: "2024",
             title: "Introduction to Rust",
             time: "10:00 AM - 02:00 PM",
             location: "Lab 404, Tech Tower",
-            status: "Upcoming"
+            status: "Completed",
+            regStatus: null
         },
         {
             month: "NOV",
@@ -19,7 +20,8 @@ const EventsPage = () => {
             title: "ZBC Annual Hackathon",
             time: "48 Hours",
             location: "Main Auditorium",
-            status: "Registration Open"
+            status: "Upcoming",
+            regStatus: "Open"
         },
         {
             month: "DEC",
@@ -28,7 +30,18 @@ const EventsPage = () => {
             title: "Deploying with Docker",
             time: "03:00 PM - 06:00 PM",
             location: "Virtual (Discord)",
-            status: "TBA"
+            status: "Upcoming",
+            regStatus: "Closed"
+        },
+        {
+            month: "JAN",
+            day: "20",
+            year: "2026",
+            title: "Blockchain Basics",
+            time: "TBA",
+            location: "TBA",
+            status: "TBA",
+            regStatus: null
         }
     ];
 
@@ -50,7 +63,7 @@ const EventsPage = () => {
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
                             className="bg-[#050505] border border-white/5 hover:border-white/20 p-6 md:p-10 rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-8 group transition-all"
                         >
@@ -61,15 +74,37 @@ const EventsPage = () => {
                                 <span className="text-xs text-gray-600">{event.year}</span>
                             </div>
 
-                            <div className="flex-1">
-                                <div className="flex justify-between items-start mb-2">
+                            <div className="flex-1 w-full">
+                                <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-2 gap-4">
                                     <h3 className="text-2xl md:text-3xl font-bold text-white group-hover:text-gray-200 transition-colors">{event.title}</h3>
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${event.status === 'Upcoming' ? 'border-green-500/50 text-green-400' :
-                                            event.status === 'Registration Open' ? 'border-blue-500/50 text-blue-400' :
+
+                                    <div className="flex flex-wrap gap-2">
+                                        {/* Main Status Badge */}
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border self-start ${event.status === 'Upcoming' ? 'border-yellow-500/50 text-yellow-500' :
+                                            event.status === 'Completed' ? 'border-green-500/50 text-green-500' :
                                                 'border-gray-700 text-gray-500'
-                                        }`}>
-                                        {event.status}
-                                    </span>
+                                            }`}>
+                                            {event.status}
+                                        </span>
+
+                                        {/* Sub Tags for Upcoming */}
+                                        {event.status === 'Upcoming' && event.regStatus === 'Open' && (
+                                            <a
+                                                href="https://eventhubcc.vit.ac.in/EventHub/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-blue-500 text-blue-400 hover:bg-blue-500/10 transition-colors cursor-pointer flex items-center gap-1"
+                                            >
+                                                Registrations Open <span className="text-[10px]">↗</span>
+                                            </a>
+                                        )}
+
+                                        {event.status === 'Upcoming' && event.regStatus === 'Closed' && (
+                                            <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-red-500/50 text-red-500">
+                                                Registrations Closed
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-gray-400 text-sm">

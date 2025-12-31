@@ -23,11 +23,11 @@ const Navbar = ({ onContactClick }) => {
     ];
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-md border-b border-white/10' : 'bg-transparent'}`}>
+        <nav className={`fixed w-full z-50 transition-all duration-500 border-b ${scrolled ? 'bg-black/60 backdrop-blur-xl border-white/5 py-2' : 'bg-transparent border-transparent py-4'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
                     <div className="flex-shrink-0 flex items-center">
-                        <Link to="/" className="flex items-center gap-2 group">
+                        <Link to="/" className="flex items-center gap-2 group" onClick={() => window.scrollTo(0, 0)}>
                             <img className="h-10 w-auto filter grayscale group-hover:grayscale-0 transition-all duration-300" src="/logo.png" alt="ZBC Logo" />
                             <span className="font-bold text-xl tracking-tighter text-white">ZBC</span>
                         </Link>
@@ -38,9 +38,10 @@ const Navbar = ({ onContactClick }) => {
                                 <NavLink
                                     key={link.name}
                                     to={link.href}
+                                    onClick={() => window.scrollTo(0, 0)}
                                     className={({ isActive }) => `
-                    relative px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 group
-                    ${isActive ? 'text-white' : 'text-gray-300 hover:text-white'}
+                    relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 group overflow-hidden
+                    ${isActive ? 'text-black bg-white' : 'text-gray-400 hover:text-white'}
                   `}
                                 >
                                     {link.name}
@@ -49,7 +50,7 @@ const Navbar = ({ onContactClick }) => {
                             ))}
                             <button
                                 onClick={onContactClick}
-                                className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300"
+                                className="relative text-white px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 border border-white/20 hover:bg-white hover:text-black overflow-hidden group"
                             >
                                 Contact
                             </button>
@@ -78,7 +79,10 @@ const Navbar = ({ onContactClick }) => {
                             <NavLink
                                 key={link.name}
                                 to={link.href}
-                                onClick={() => setIsOpen(false)}
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    window.scrollTo(0, 0);
+                                }}
                                 className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                             >
                                 {link.name}

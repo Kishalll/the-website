@@ -5,6 +5,7 @@ import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ContactSidebar from './components/ContactSidebar';
+import Grain from './components/ui/Grain';
 
 // Pages
 import Home from './pages/Home';
@@ -28,7 +29,8 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black font-sans">
+      <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black font-sans antialiased overflow-x-hidden">
+        <Grain />
         <Navbar onContactClick={() => setIsContactOpen(true)} />
 
         <ContactSidebar

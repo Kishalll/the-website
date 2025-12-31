@@ -31,10 +31,10 @@ const Footer = () => {
                         <div>
                             <h4 className="font-bold mb-6 text-sm uppercase tracking-wider text-gray-500">Navigation</h4>
                             <ul className="space-y-4">
-                                <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link></li>
-                                <li><Link to="/activities" className="text-gray-300 hover:text-white transition-colors">Activities</Link></li>
-                                <li><Link to="/events" className="text-gray-300 hover:text-white transition-colors">Events</Link></li>
-                                <li><Link to="/gallery" className="text-gray-300 hover:text-white transition-colors">Gallery</Link></li>
+                                <li><Link to="/about" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">About</Link></li>
+                                <li><Link to="/activities" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">Activities</Link></li>
+                                <li><Link to="/events" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">Events</Link></li>
+                                <li><Link to="/gallery" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">Gallery</Link></li>
                             </ul>
                         </div>
                         <div>
