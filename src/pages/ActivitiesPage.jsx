@@ -56,7 +56,7 @@ const ActivitiesPage = () => {
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, x: -50 }}
-                            whileInView={{ opacity: 1, x: 0 }}
+                            animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
                             className="group border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:from-white/15 hover:to-black/30 hover:border-white/20 p-8 rounded-2xl transition-all"
                         >

@@ -109,7 +109,7 @@ const EventsPage = () => {
                                                 rel="noopener noreferrer"
                                                 className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border border-blue-500 text-blue-400 hover:bg-blue-500/10 transition-colors cursor-pointer flex items-center gap-1"
                                             >
-                                                Registrations Open <span className="text-[10px]">↗</span>
+                                                Registrations Open
                                             </a>
                                         )}
 
