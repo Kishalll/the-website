@@ -50,6 +50,11 @@ Once deployed, the site is linked to your GitHub repository.
 3.  **Automatic Trigger**: Netlify detects the new commit and automatically rebuilds and redeploys the site.
 4.  No manual action is required on the Netlify dashboard for standard updates.
 
+### Troubleshooting: 404 on Refresh
+If you experience "Page Not Found" errors when refreshing pages like `/about` or `/events`:
+*   This happens because Netlify tries to find a specific file (e.g., `about.html`) that doesn't exist in a Single Page Application.
+*   **The Fix:** We have included a `public/_redirects` file in the project. This tells Netlify to redirect all requests to `index.html`, allowing React to handle the routing. Ensure this file is present in your repository.
+
 ---
 
 ## �🛠️ Technology Stack
