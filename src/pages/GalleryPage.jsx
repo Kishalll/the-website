@@ -38,7 +38,7 @@ const GalleryPage = () => {
                         <motion.div
                             key={i}
                             initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
+                            animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.4, delay: i * 0.05 }}
                             className={`relative group overflow-hidden rounded-xl cursor-pointer border border-white/10 hover:border-white/30 transition-colors ${item.size === 'large' ? 'lg:col-span-2 lg:row-span-2' : ''
                                 }`}

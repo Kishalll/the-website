@@ -1,22 +1,50 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Github, Linkedin, Mail, Instagram } from 'lucide-react';
+import { X, Send, Github, Linkedin, Mail, Instagram, Loader2 } from 'lucide-react';
 
 const ContactSidebar = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
         name: '',
         message: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [result, setResult] = useState(null);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const subject = `Hello ZBC from ${formData.name}`;
-        const body = `${formData.message}`;
-        window.location.href = `mailto:zbcvitc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        setIsSubmitting(true);
+        setResult(null);
+
+        const formPayload = new FormData();
+        formPayload.append("access_key", "cf3291dd-bdb8-44a1-9371-b5d5a3f51aba");
+        formPayload.append("name", formData.name);
+        formPayload.append("message", formData.message);
+        formPayload.append("subject", `New Message from ZBC Website: ${formData.name}`);
+        formPayload.append("botcheck", ""); // Honeypot field (hidden)
+
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                body: formPayload
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                setResult({ success: true, message: "Message sent successfully!" });
+                setFormData({ name: '', message: '' });
+            } else {
+                setResult({ success: false, message: data.message || "Something went wrong." });
+            }
+        } catch (error) {
+            setResult({ success: false, message: "Failed to send message. Please try again." });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const socialLinks = [
@@ -63,6 +91,8 @@ const ContactSidebar = ({ isOpen, onClose }) => {
                             </p>
 
                             <form onSubmit={handleSubmit} className="space-y-6">
+                                {/* Honeypot Spam Protection */}
+                                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Name</label>
                                     <input
@@ -93,11 +123,26 @@ const ContactSidebar = ({ isOpen, onClose }) => {
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-white text-black font-bold py-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group"
+                                    disabled={isSubmitting}
+                                    className="w-full bg-white text-black font-bold py-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Send Message
-                                    <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                                    {isSubmitting ? (
+                                        <>
+                                            <Loader2 size={18} className="animate-spin" />
+                                            Sending...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Send Message
+                                            <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+                                        </>
+                                    )}
                                 </button>
+                                {result && (
+                                    <p className={`text-center text-sm ${result.success ? 'text-green-400' : 'text-red-400'}`}>
+                                        {result.message}
+                                    </p>
+                                )}
                             </form>
 
                             <div className="mt-12 text-center">
