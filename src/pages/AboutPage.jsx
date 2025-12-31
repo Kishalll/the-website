@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Users, Rocket, Brain, Globe, Cpu } from 'lucide-react';
+import LightRays from '../components/ui/LightRays';
 
 const AboutPage = () => {
     const stats = [
@@ -47,9 +48,22 @@ const AboutPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8"
+            className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
-            <div className="max-w-7xl mx-auto">
+            <div className="absolute inset-0 z-0">
+                <LightRays
+                    raysOrigin="top-center"
+                    raysColor="#cfcece"
+                    raysSpeed={1.5}
+                    lightSpread={0.8}
+                    rayLength={1.2}
+                    followMouse={true}
+                    mouseInfluence={0.1}
+                    noiseAmount={0.1}
+                    distortion={0.05}
+                />
+            </div>
+            <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-20">
                     <motion.h1
                         initial={{ y: 20, opacity: 0 }}
@@ -78,7 +92,7 @@ const AboutPage = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ delay: i * 0.1 }}
-                            className="bg-zinc-900/50 border border-white/5 p-10 text-center rounded-2xl"
+                            className="bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:from-white/15 hover:to-black/30 p-10 text-center rounded-2xl transition-all"
                         >
                             <h3 className="text-6xl font-bold text-white mb-2">{stat.value}</h3>
                             <p className="text-gray-500 uppercase tracking-widest font-semibold">{stat.label}</p>
@@ -94,7 +108,7 @@ const AboutPage = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 + (index * 0.1) }}
-                            className="bg-[#111] p-8 rounded-xl border border-white/5 hover:border-white/20 transition-all group"
+                            className="bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:border-white/20 hover:from-white/15 hover:to-black/30 transition-all group"
                         >
                             <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center text-white mb-6 group-hover:bg-white group-hover:text-black transition-colors">
                                 {item.icon}

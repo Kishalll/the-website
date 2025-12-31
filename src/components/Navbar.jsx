@@ -27,9 +27,9 @@ const Navbar = ({ onContactClick }) => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-20">
                     <div className="flex-shrink-0 flex items-center">
-                        <Link to="/" className="flex items-center gap-2 group" onClick={() => window.scrollTo(0, 0)}>
-                            <img className="h-10 w-auto filter grayscale group-hover:grayscale-0 transition-all duration-300" src="/logo.png" alt="ZBC Logo" />
-                            <span className="font-bold text-xl tracking-tighter text-white">ZBC</span>
+                        <Link to="/" className="flex items-center gap-3 group" onClick={() => window.scrollTo(0, 0)}>
+                            <img className="h-16 w-auto filter grayscale group-hover:grayscale-0 transition-all duration-300" src="/logo_new.png" alt="ZBC Logo" />
+                            <span className="font-bold text-3xl tracking-tighter text-white">ZBC</span>
                         </Link>
                     </div>
                     <div className="hidden md:block">

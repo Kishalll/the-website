@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import LightRays from '../components/ui/LightRays';
 
 const EventsPage = () => {
     const events = [
@@ -50,9 +51,22 @@ const EventsPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-zinc-950 pt-24 pb-20 px-4 sm:px-6 lg:px-8"
+            className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
-            <div className="max-w-5xl mx-auto">
+            <div className="absolute inset-0 z-0">
+                <LightRays
+                    raysOrigin="top-center"
+                    raysColor="#cfcece"
+                    raysSpeed={1.5}
+                    lightSpread={0.8}
+                    rayLength={1.2}
+                    followMouse={true}
+                    mouseInfluence={0.1}
+                    noiseAmount={0.1}
+                    distortion={0.05}
+                />
+            </div>
+            <div className="max-w-5xl mx-auto relative z-10">
                 <div className="flex items-end justify-between mb-20 border-b border-white/10 pb-6">
                     <h1 className="text-5xl md:text-8xl font-bold text-white tracking-tighter">Timeline</h1>
                     <span className="text-gray-500 font-mono mb-4 hidden md:block">2025 - 2026 Season</span>
@@ -65,7 +79,7 @@ const EventsPage = () => {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="bg-[#050505] border border-white/5 hover:border-white/20 p-6 md:p-10 rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-8 group transition-all"
+                            className="bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm border border-white/10 hover:border-white/20 hover:from-white/15 hover:to-black/30 p-6 md:p-10 rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-8 group transition-all"
                         >
                             {/* Date Block */}
                             <div className="flex flex-col items-center bg-white/5 p-4 rounded-xl min-w-[100px]">
