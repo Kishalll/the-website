@@ -3,7 +3,7 @@
 Welcome to the official repository for the **Zero Bugs Club** website. This project is a modern, high-performance web application designed to showcase our community, events, and technical achievements.
 
 ## 🚀 Live Demo
-Visit the live site: [https://zbc-website.netlify.app](https://zbc-website.netlify.app)
+Visit the live site: [https://zbc-website.netlify.app](https://zbcvitc.netlify.app/)
 
 ---
 
