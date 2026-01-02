@@ -30,11 +30,25 @@ const Footer = () => {
                     <div className="grid grid-cols-2 gap-12 sm:gap-24">
                         <div>
                             <h4 className="font-bold mb-6 text-sm uppercase tracking-wider text-gray-500">Navigation</h4>
-                            <ul className="space-y-4">
-                                <li><Link to="/about" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">About</Link></li>
-                                <li><Link to="/activities" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">Activities</Link></li>
-                                <li><Link to="/events" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">Events</Link></li>
-                                <li><Link to="/gallery" onClick={() => window.scrollTo(0, 0)} className="text-gray-300 hover:text-white transition-colors">Gallery</Link></li>
+                            <ul className="space-y-3">
+                                {[
+                                    { name: 'Home', path: '/' },
+                                    { name: 'About', path: '/about' },
+                                    { name: 'Domains', path: '/domains' },
+                                    { name: 'Events', path: '/events' },
+                                    { name: 'Gallery', path: '/gallery' }
+                                ].map((link) => (
+                                    <li key={link.name}>
+                                        <Link
+                                            to={link.path}
+                                            onClick={() => window.scrollTo(0, 0)}
+                                            className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors py-1"
+                                        >
+                                            <span className="h-px w-0 bg-white group-hover:w-4 transition-all duration-300"></span>
+                                            <span className="transform group-hover:translate-x-1 transition-transform duration-300 uppercase tracking-wider text-sm">{link.name}</span>
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                         <div>

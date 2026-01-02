@@ -2,22 +2,22 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import LightRays from '../components/ui/LightRays';
 
-const ActivitiesPage = () => {
+const DomainsPage = () => {
     const activities = [
         {
             title: "Technical Workshops",
-            desc: "Expert-led sessions covering full-stack development, cloud computing, AI/ML, and DevOps. We prefer live coding over slides.",
-            tags: ["React", "Rust", "AWS", "Docker"]
+            desc: "Expert-led sessions covering full-stack development, cloud computing, AI/ML, Cybersecurity, and DevOps. ",
+            tags: ["React", "Python", "Node.js", "Docker"]
         },
         {
-            title: "Intra-College Hackathons",
+            title: "Hackathons",
             desc: "Intense coding competitions designed to test problem-solving skills under pressure. Great for rapid prototyping and teamwork.",
-            tags: ["Hackathon", "Innovation", "Pizza"]
+            tags: ["MVP", "Innovation", "Snacks", "All-nighters"]
         },
         {
             title: "Open Source Sprints",
-            desc: "Dedicated weekends for contributing to popular open-source projects or maintaining ZBC's own tools and libraries.",
-            tags: ["Git", "OSS", "Community"]
+            desc: "Dedicated sessions for contributing to popular open-source projects or maintaining ZBC's own tools and libraries.",
+            tags: ["Git", "OSS", "Collaboration"]
         },
         {
             title: "Guest Tech Talks",
@@ -81,4 +81,4 @@ const ActivitiesPage = () => {
     );
 };
 
-export default ActivitiesPage;
+export default DomainsPage;

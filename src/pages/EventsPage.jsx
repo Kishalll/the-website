@@ -22,7 +22,7 @@ const EventsPage = () => {
                 year: "2024",
                 title: "Introduction to Rust",
                 time: "10:00 AM - 02:00 PM",
-                location: "Lab 404, Tech Tower",
+                location: "AB3 401",
                 status: "Completed",
                 regStatus: null
             },
@@ -32,7 +32,7 @@ const EventsPage = () => {
                 year: "2025",
                 title: "ZBC Annual Hackathon",
                 time: "48 Hours",
-                location: "Main Auditorium",
+                location: "MG Auditorium",
                 status: "Upcoming",
                 regStatus: "Open"
             },
@@ -42,7 +42,7 @@ const EventsPage = () => {
                 year: "2025",
                 title: "Deploying with Docker",
                 time: "03:00 PM - 06:00 PM",
-                location: "Virtual (Discord)",
+                location: "Virtual (GMeet)",
                 status: "Upcoming",
                 regStatus: "Closed"
             },
@@ -64,7 +64,7 @@ const EventsPage = () => {
                 year: "2024",
                 title: "Web Dev Bootcamp",
                 time: "09:00 AM - 04:00 PM",
-                location: "SJT 505",
+                location: "AB3 501",
                 status: "Completed",
                 regStatus: null
             },
@@ -74,7 +74,7 @@ const EventsPage = () => {
                 year: "2025",
                 title: "Cybersecurity Workshop",
                 time: "10:00 AM - 01:00 PM",
-                location: "Tech Tower Auditorium",
+                location: "MG Auditorium",
                 status: "Completed",
                 regStatus: null
             }
@@ -96,7 +96,7 @@ const EventsPage = () => {
                 year: "2024",
                 title: "AI & ML Summit",
                 time: "09:00 AM - 05:00 PM",
-                location: "Main Auditorium",
+                location: "MG Auditorium",
                 status: "Completed",
                 regStatus: null
             }

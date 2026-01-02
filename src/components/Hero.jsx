@@ -61,7 +61,7 @@ const Hero = () => {
                             transition={{ duration: 0.8, delay: 0.4 }}
                             className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-400 font-light leading-relaxed mb-12"
                         >
-                            We are the architects of the digital realm. A collective of engineers, designers, and innovators enforcing the standard of perfection.
+                            Real projects. Real impact. Zero bugs. We are a community turning ideas into fully deployable software, enforcing quality every step of the way.
                         </motion.p>
 
                         <motion.div

@@ -10,7 +10,7 @@ import Grain from './components/ui/Grain';
 // Pages
 import Home from './pages/Home';
 import AboutPage from './pages/AboutPage';
-import ActivitiesPage from './pages/ActivitiesPage';
+import DomainsPage from './pages/DomainsPage';
 import EventsPage from './pages/EventsPage';
 import GalleryPage from './pages/GalleryPage';
 
@@ -43,7 +43,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutPage />} />
-              <Route path="/activities" element={<ActivitiesPage />} />
+              <Route path="/domains" element={<DomainsPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
             </Routes>

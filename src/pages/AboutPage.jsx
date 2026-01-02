@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram } from 'lucide-react';
+import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram, Mail } from 'lucide-react';
 import LightRays from '../components/ui/LightRays';
 
 const AboutPage = () => {
@@ -15,27 +15,27 @@ const AboutPage = () => {
         {
             icon: <Code2 className="w-6 h-6" />,
             title: "Clean Code",
-            description: "We adhere to strict coding standards and architectural patterns."
+            description: "Ensuring code readability and maintainability, making it easy to update and debug."
         },
         {
             icon: <Rocket className="w-6 h-6" />,
-            title: "Innovation",
-            description: "Pushing boundaries with bleeding-edge technology stacks."
+            title: "Production-Ready",
+            description: "Transforming concepts into resilient, deployable solutions."
         },
         {
             icon: <Brain className="w-6 h-6" />,
             title: "Mentorship",
-            description: "Seniors guiding juniors to create a cycle of excellence."
+            description: "Hands-on guidance from experienced seniors and industry professionals."
         },
         {
             icon: <Globe className="w-6 h-6" />,
             title: "Open Source",
-            description: "Contributors to significant global repositories."
+            description: "Contributors to significant global repositories that power the developer community."
         },
         {
             icon: <Cpu className="w-6 h-6" />,
             title: "Performance",
-            description: "Optimizing for speed, efficiency, and scalability."
+            description: "Architecting scalable software designed to handle real-world loads"
         }
     ];
 
@@ -75,8 +75,10 @@ const AboutPage = () => {
                         transition={{ delay: 0.2 }}
                         className="text-xl text-gray-400 max-w-3xl mx-auto"
                     >
-                        ZBC is a collective of ambitious engineers dedicated to the craft of software development.
-                        We bridge the gap between academic theory and industry-grade engineering.
+                        ZBC is a student community dedicated to the practical application of software engineering.
+                        We transform academic concepts into tangible reality by designing, building, and maintaining fully deployable projects.
+
+
                     </motion.p>
                 </div>
 
@@ -120,7 +122,7 @@ const AboutPage = () => {
     );
 };
 
-const TeamMemberCard = ({ name, role, color = "bg-white/5" }) => (
+const TeamMemberCard = ({ name, role, color = "bg-white/5", socials }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -135,9 +137,21 @@ const TeamMemberCard = ({ name, role, color = "bg-white/5" }) => (
         <p className="text-sm text-blue-400 font-mono tracking-wide mb-4 uppercase">{role}</p>
 
         <div className="flex gap-4">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={18} /></a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github size={18} /></a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram size={18} /></a>
+            {socials ? (
+                // Custom socials
+                socials.map((social, index) => (
+                    <a key={index} href={social.href || '#'} className="text-gray-400 hover:text-white transition-colors">
+                        {social.icon}
+                    </a>
+                ))
+            ) : (
+                // Default socials
+                <>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={18} /></a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github size={18} /></a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram size={18} /></a>
+                </>
+            )}
         </div>
     </motion.div>
 );
@@ -155,9 +169,10 @@ const TeamHierarchy = () => {
                 <TeamMemberCard name="Vice Chair Name" role="Vice Chairperson" />
             </div>
 
-            {/* Level 3: General Secretary */}
-            <div className="w-full flex justify-center">
+            {/* Level 3: General Secretary & Treasurer */}
+            <div className="w-full flex justify-center gap-4 flex-wrap">
                 <TeamMemberCard name="Gen Sec Name" role="General Secretary" />
+                <TeamMemberCard name="Treasurer Name" role="Treasurer" />
             </div>
 
             {/* Level 4: Leads */}
@@ -165,10 +180,10 @@ const TeamHierarchy = () => {
                 <h3 className="text-center text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Cluster Leads</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-center">
                     <TeamMemberCard name="Lead Name" role="Technical Lead" />
-                    <TeamMemberCard name="Lead Name" role="Finance Lead" />
-                    <TeamMemberCard name="Lead Name" role="Event Mgmt Lead" />
-                    <TeamMemberCard name="Lead Name" role="Content & Design" />
-                    <TeamMemberCard name="Lead Name" role="Social Media" />
+                    <TeamMemberCard name="Lead Name" role="Content Lead" />
+                    <TeamMemberCard name="Lead Name" role="Event Management Lead" />
+                    <TeamMemberCard name="Lead Name" role="Design Lead" />
+                    <TeamMemberCard name="Lead Name" role="Social Media Lead" />
                 </div>
             </div>
 
@@ -176,7 +191,14 @@ const TeamHierarchy = () => {
             <div className="w-full flex justify-center pt-8 border-t border-white/5">
                 <div className="text-center">
                     <h3 className="text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Faculty Coordinator</h3>
-                    <TeamMemberCard name="Faculty Name" role="Faculty Coordinator" />
+                    <TeamMemberCard
+                        name="Faculty Name"
+                        role="Faculty Coordinator"
+                        socials={[
+                            { icon: <Linkedin size={18} />, href: "#" },
+                            { icon: <Mail size={18} />, href: "mailto:zbcvitc@gmail.com" }
+                        ]}
+                    />
                 </div>
             </div>
         </div>
