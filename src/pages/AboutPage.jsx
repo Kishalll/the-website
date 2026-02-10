@@ -178,12 +178,12 @@ const TeamHierarchy = () => {
             {/* Level 4: Leads */}
             <div className="w-full">
                 <h3 className="text-center text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Cluster Leads</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 justify-center">
-                    <TeamMemberCard name="Lead Name" role="Technical Lead" />
-                    <TeamMemberCard name="Lead Name" role="Content Lead" />
-                    <TeamMemberCard name="Lead Name" role="Event Management Lead" />
-                    <TeamMemberCard name="Lead Name" role="Design Lead" />
-                    <TeamMemberCard name="Lead Name" role="Social Media Lead" />
+                <div className="flex flex-wrap justify-center gap-6">
+                    <TeamMemberCard name="Lead Name" role="Development" />
+                    <TeamMemberCard name="Lead Name" role="UI/UX" />
+                    <TeamMemberCard name="Lead Name" role="Cybersec and Testing" />
+                    <TeamMemberCard name="Lead Name" role="Design and Content" />
+                    <TeamMemberCard name="Lead Name" role="Social Media and Marketing" />
                 </div>
             </div>
 
@@ -192,7 +192,7 @@ const TeamHierarchy = () => {
                 <div className="text-center">
                     <h3 className="text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Faculty Coordinator</h3>
                     <TeamMemberCard
-                        name="Faculty Name"
+                        name="Dr.Punitha K"
                         role="Faculty Coordinator"
                         socials={[
                             { icon: <Linkedin size={18} />, href: "#" },
