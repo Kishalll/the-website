@@ -13,6 +13,7 @@ import AboutPage from './pages/AboutPage';
 import DomainsPage from './pages/DomainsPage';
 import EventsPage from './pages/EventsPage';
 import GalleryPage from './pages/GalleryPage';
+import RecruitmentPage from './pages/RecruitmentPage';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -46,6 +47,7 @@ function App() {
               <Route path="/domains" element={<DomainsPage />} />
               <Route path="/events" element={<EventsPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/recruitment" element={<RecruitmentPage />} />
             </Routes>
           </AnimatePresence>
         </main>

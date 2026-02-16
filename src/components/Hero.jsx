@@ -1,10 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Spotlight from '../components/ui/Spotlight';
 import ColorBends from '../components/ui/ColorBends';
+import { recruitmentConfig } from '../config/recruitment.config';
 
 const Hero = () => {
+    const navigate = useNavigate();
+
+    const handleJoinClick = () => {
+        if (recruitmentConfig.isRecruiting) {
+            navigate('/recruitment');
+        } else {
+            alert("We aren't recruiting right now. Stay tuned for updates!");
+            navigate('/about');
+        }
+    };
+
     return (
         <div className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-black text-white selection:bg-white selection:text-black">
             {/* Background with ColorBends */}
@@ -70,12 +83,15 @@ const Hero = () => {
                             transition={{ duration: 0.8, delay: 0.6 }}
                             className="flex justify-center"
                         >
-                            <a href="#about" className="group relative px-8 py-4 bg-white text-black font-bold uppercase tracking-widest overflow-hidden">
+                            <button
+                                onClick={handleJoinClick}
+                                className="group relative px-8 py-4 bg-white text-black font-bold uppercase tracking-widest overflow-hidden"
+                            >
                                 <span className="relative z-10 flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
                                     Join Us <ArrowRight size={20} />
                                 </span>
                                 <div className="absolute inset-0 bg-gray-200 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
-                            </a>
+                            </button>
                         </motion.div>
                     </div>
                 </Spotlight>

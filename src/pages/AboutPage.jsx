@@ -182,7 +182,8 @@ const TeamHierarchy = () => {
                     <TeamMemberCard name="Lead Name" role="Development" />
                     <TeamMemberCard name="Lead Name" role="UI/UX" />
                     <TeamMemberCard name="Lead Name" role="Cybersec and Testing" />
-                    <TeamMemberCard name="Lead Name" role="Design and Content" />
+                    <TeamMemberCard name="Mano Kathik" role="Design and Content" />
+                    <TeamMemberCard name="Lead Name" role="Event Management" />
                     <TeamMemberCard name="Lead Name" role="Social Media and Marketing" />
                 </div>
             </div>
