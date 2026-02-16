@@ -1,19 +1,417 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/logo_new.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <title>Zero Bugs Club</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero Bugs Club - Coming Soon</title>
+    <link rel="icon" type="image/png" href="/logo_new.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --glass-bg: rgba(0, 0, 0, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Glass Container - Foreground */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 4rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2px;
+            /* Sharper corners for retro feel */
+            box-shadow: 0 4px 60px rgba(0, 0, 0, 1.0);
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+        }
+
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            /* Make logo monochrome/high-contrast if needed */
+            filter: grayscale(100%) contrast(1.2) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+        }
+
+        h1 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        p {
+            font-family: 'Courier New', Courier, monospace;
+            color: #ccc;
+            font-size: 1.0rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        /* Glitch Animation for Text */
+        .glitch {
+            position: relative;
+            color: white;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Monochrome Glitch Colors (White/Grey drift) */
+        .glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 #888;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 #444;
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                clip: rect(32px, 9999px, 12px, 0);
+            }
+
+            5% {
+                clip: rect(65px, 9999px, 89px, 0);
+            }
+
+            10% {
+                clip: rect(12px, 9999px, 2px, 0);
+            }
+
+            15% {
+                clip: rect(98px, 9999px, 4px, 0);
+            }
+
+            20% {
+                clip: rect(23px, 9999px, 87px, 0);
+            }
+
+            100% {
+                clip: rect(54px, 9999px, 12px, 0);
+            }
+        }
+
+        @keyframes glitch-anim2 {
+            0% {
+                clip: rect(12px, 9999px, 78px, 0);
+            }
+
+            5% {
+                clip: rect(87px, 9999px, 32px, 0);
+            }
+
+            10% {
+                clip: rect(5px, 9999px, 12px, 0);
+            }
+
+            15% {
+                clip: rect(54px, 9999px, 9px, 0);
+            }
+
+            20% {
+                clip: rect(12px, 9999px, 56px, 0);
+            }
+
+            100% {
+                clip: rect(3px, 9999px, 76px, 0);
+            }
+        }
+
+        .divider {
+            width: 50px;
+            height: 2px;
+            background: #fff;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 5px #fff;
+        }
+
+
+
+        /* Scanline Overlay (Hardware CSS) */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        /* Typing Cursor */
+        .typing-cursor::after {
+            content: '█';
+            animation: blink 1s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+    <div class="scanlines"></div>
+    <!-- WebGL Canvas -->
+    <div id="canvas-container"></div>
+
+    <div class="container" id="card">
+        <img src="/logo_new.png" alt="ZBC Logo" class="logo">
+        <h1 class="glitch" data-text="COMING SOON">COMING SOON</h1>
+        <div class="divider"></div>
+        <p id="typing-text"></p>
+
+
+    </div>
+
+    <!-- OGL Library for lightweight WebGL -->
+    <script type="module">
+        import { Renderer, Program, Mesh, Triangle } from 'https://esm.sh/ogl@1.0.3';
+
+        const vertex = `
+            attribute vec2 position;
+            attribute vec2 uv;
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = vec4(position, 0.0, 1.0);
+            }
+        `;
+
+        const fragment = `
+            precision highp float;
+            uniform float uTime;
+            uniform vec2 uResolution;
+            varying vec2 vUv;
+
+            // Random number generator
+            float random(vec2 st) {
+                return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+            }
+
+            // CRT Curvature
+            vec2 curve(vec2 uv) {
+                uv = (uv - 0.5) * 2.0;
+                uv *= 1.1;	
+                uv.x *= 1.0 + pow((abs(uv.y) / 5.0), 2.0);
+                uv.y *= 1.0 + pow((abs(uv.x) / 4.0), 2.0);
+                uv  = (uv / 2.0) + 0.5;
+                uv =  uv *0.92 + 0.04;
+                return uv;
+            }
+
+            void main() {
+                // Base UV
+                vec2 uv = vUv;
+                
+                // Apply CRT Curve
+                uv = curve(uv);
+                
+                // Black outside the screen
+                if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
+                    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+                    return;
+                }
+
+                // Grid of characters logic (Simulated)
+                // We create a grid of cells
+                float rows = 20.0;
+                float cols = 40.0; // Correct aspect ratio approx
+                cols = rows * (uResolution.x / uResolution.y);
+                
+                vec2 cellUV = fract(uv * vec2(cols, rows));
+                vec2 cellId = floor(uv * vec2(cols, rows));
+
+                // Scrolling effect
+                float scrollSpeed = 5.0; // Lines per second
+                float scrollOffset = floor(uTime * scrollSpeed);
+                
+                // Randomness for "characters"
+                // We use cellId.y + scrollOffset to make lines move up
+                float rand = random(vec2(cellId.x, cellId.y - scrollOffset));
+                
+                // Blink effect for some chars
+                float blink = sin(uTime * 5.0 + rand * 10.0);
+                
+                // Char definition: simple block or nothing
+                // High contrast white blocks descending
+                float charMask = step(0.5, rand); // 50% chance of char
+                
+                // "Tail" fading effect for scrolling
+                float fade = random(vec2(0.0, floor(uv.y * rows) - scrollOffset * 0.1));
+                
+                // Pixelate the char slightly
+                vec2 pixelUV = floor(cellUV * 4.0) / 4.0;
+                float pixelNoise = random(pixelUV + cellId);
+                
+                // Final character color
+                float intensity = charMask * step(0.2, pixelNoise);
+                
+                // Combine into a "Code Rain" style but chaotic
+                // Making it more like static terminal data
+                
+                float lineNoise = random(vec2(0.0, uv.y + uTime * 0.1));
+                float glitch = step(0.98, lineNoise); // Occasional horizontal glitch lines
+                
+                float colorVal = intensity * 0.3; // Dim grey base
+                if (glitch > 0.5) colorVal = 0.8; // Bright glitch line
+                
+                // Vignette with scanlines
+                float vig = (0.0 + 1.0*16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y));
+                vig = pow(vig, 0.3);
+                
+                // Scanlines (Moving sine wave)
+                float scans = 0.5 + 0.5*sin(uv.y * 500.0 + uTime * 10.0);
+                
+                // Add Film Grain
+                float grain = random(uv * uTime) * 0.1;
+                
+                // Compose final color (Monochrome)
+                vec3 col = vec3(colorVal);
+                
+                // Add glow/bloom for bright spots
+                col += vec3(intensity * 0.4);
+                
+                // Apply CRT artifacts
+                col *= vig;
+                col *= (0.8 + 0.2 * scans); // Scanlines
+                col += grain;
+                
+                // Tint slightly cold grey/blue for "white phosphor" look, or strict BW
+                // User asked for "shades of black white and grey"
+                // So strict BW
+                col = vec3(col.r); 
+
+                gl_FragColor = vec4(col, 1.0);
+            }
+        `;
+
+        {
+            const renderer = new Renderer({ antialias: false, alpha: false }); // False alpha for better perf/blending with black body
+            const gl = renderer.gl;
+            document.getElementById('canvas-container').appendChild(gl.canvas);
+
+            const geometry = new Triangle(gl);
+
+            const program = new Program(gl, {
+                vertex,
+                fragment,
+                uniforms: {
+                    uTime: { value: 0 },
+                    uResolution: { value: new Float32Array([window.innerWidth, window.innerHeight]) },
+                },
+            });
+
+            const mesh = new Mesh(gl, { geometry, program });
+
+            function resize() {
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                program.uniforms.uResolution.value[0] = window.innerWidth;
+                program.uniforms.uResolution.value[1] = window.innerHeight;
+            }
+            window.addEventListener('resize', resize, false);
+            resize();
+
+            requestAnimationFrame(update);
+            function update(t) {
+                requestAnimationFrame(update);
+                program.uniforms.uTime.value = t * 0.001;
+                renderer.render({ scene: mesh });
+            }
+        }
+    </script>
+
+    <script>
+        const text = "System Check... OK\nLoading Kernel... OK\nBooting ZBC...\n_";
+        const typingElement = document.getElementById('typing-text');
+        // Clear initial text
+        typingElement.innerHTML = "";
+
+        let index = 0;
+
+        function typeWriter() {
+            if (index < text.length) {
+                const char = text.charAt(index);
+
+                if (char === '\n') {
+                    typingElement.innerHTML += '<br>';
+                } else {
+                    typingElement.innerHTML += char;
+                }
+
+                index++;
+                setTimeout(typeWriter, 50 + Math.random() * 50); // Random typing speed
+            }
+        }
+
+        // Start after load
+        setTimeout(typeWriter, 1000);
+    </script>
 </body>
 
 </html>

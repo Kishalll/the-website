@@ -31,7 +31,11 @@ export const recruitmentConfig = {
                 label: 'GitHub Profile Link',
                 type: 'url',
                 required: true,
-                placeholder: 'https://github.com/username'
+                placeholder: 'https://github.com/username',
+                validation: {
+                    pattern: "^https?:\\/\\/(www\\.)?github\\.com\\/[a-zA-Z0-9_-]+\\/?$",
+                    message: "Please enter a valid GitHub profile link"
+                }
             }
         ],
         ui_ux: [

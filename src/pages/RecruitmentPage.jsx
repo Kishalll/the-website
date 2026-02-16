@@ -27,12 +27,18 @@ const RecruitmentPage = () => {
         answers: {}
     });
 
+    const [errors, setErrors] = useState({});
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
+        // Clear error when user types
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
     };
 
     const handleAnswerChange = (questionId, value) => {
@@ -43,13 +49,106 @@ const RecruitmentPage = () => {
                 [questionId]: value
             }
         }));
+        // Clear error when user types
+        if (errors[questionId]) {
+            setErrors(prev => ({ ...prev, [questionId]: '' }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        // 1. Name
+        if (!formData.name.trim()) newErrors.name = "Name is required";
+
+        // 2. Reg No
+        if (!formData.regNo.trim()) {
+            newErrors.regNo = "Registration Number is required";
+        } else {
+            const regNoPattern = /^\d{2}[a-zA-Z]{3}\d{4}$/;
+            if (!regNoPattern.test(formData.regNo)) {
+                newErrors.regNo = "Format must be XXYYYXXXX (e.g., 24BCE0000)";
+            }
+        }
+
+        // 3. VIT Email
+        if (!formData.vitEmail.trim()) {
+            newErrors.vitEmail = "VIT Email ID is required";
+        } else {
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@vit\.ac\.in$/;
+            if (!emailPattern.test(formData.vitEmail)) {
+                newErrors.vitEmail = "Email must end with @vit.ac.in";
+            }
+        }
+
+        // 4. Year
+        if (!formData.year) newErrors.year = "Year is required";
+
+        // 5. Department
+        if (!formData.department) newErrors.department = "Department is required";
+
+        // 6. General Questions
+        generalQuestions.forEach(q => {
+            const answer = formData.answers[q.id];
+            if (q.required && !answer?.trim()) {
+                newErrors[q.id] = "This field is required";
+            } else if (answer && q.validation && q.validation.pattern) {
+                const regex = new RegExp(q.validation.pattern);
+                if (!regex.test(answer)) {
+                    newErrors[q.id] = q.validation.message || "Invalid format";
+                }
+            }
+        });
+
+        // 7. Domain Questions
+        if (formData.department && domainQuestions[formData.department]) {
+            domainQuestions[formData.department].forEach(q => {
+                const answer = formData.answers[q.id];
+                if (q.required && !answer?.trim()) {
+                    newErrors[q.id] = "This field is required";
+                } else if (answer && q.validation && q.validation.pattern) {
+                    const regex = new RegExp(q.validation.pattern);
+                    if (!regex.test(answer)) {
+                        newErrors[q.id] = q.validation.message || "Invalid format";
+                    }
+                }
+            });
+        }
+
+        return newErrors;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Form Submitted:', formData);
-        alert('Application Submitted! (This is a demo)');
-        // Add actual submission logic here
+        const formErrors = validateForm();
+
+        if (Object.keys(formErrors).length === 0) {
+            console.log('Form Submitted:', formData);
+            alert('Application Submitted! (This is a demo)');
+            // Add actual submission logic here
+        } else {
+            // Get the first error field
+            const firstErrorField = Object.keys(formErrors)[0];
+
+            // Set only the first error to display
+            setErrors({ [firstErrorField]: formErrors[firstErrorField] });
+
+            // Scroll to the error
+            const element = document.getElementsByName(firstErrorField)[0];
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                element.focus({ preventScroll: true });
+            }
+
+            // Auto-hide error after 3 seconds
+            setTimeout(() => {
+                setErrors(prev => {
+                    const newState = { ...prev };
+                    delete newState[firstErrorField];
+                    return newState;
+                });
+            }, 3000);
+        }
     };
 
     if (!isRecruiting) return null;
@@ -79,7 +178,7 @@ const RecruitmentPage = () => {
                     <p className="text-gray-400">Join the community. Build the future.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8 bg-white/5 backdrop-blur-md p-8 rounded-2xl border border-white/10">
+                <form onSubmit={handleSubmit} className="space-y-8 bg-white/5 backdrop-blur-md p-8 rounded-2xl border border-white/10" noValidate>
 
                     {/* Basic Details */}
                     <div className="space-y-6">
@@ -94,12 +193,19 @@ const RecruitmentPage = () => {
                                 <input
                                     type="text"
                                     name="name"
-                                    required
                                     value={formData.name}
                                     onChange={handleInputChange}
                                     className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
                                     placeholder="John Doe"
                                 />
+                                {errors.name && (
+                                    <span
+                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
+                                        onClick={() => setErrors(prev => ({ ...prev, name: '' }))}
+                                    >
+                                        {errors.name}
+                                    </span>
+                                )}
                             </div>
 
                             {/* Reg No */}
@@ -110,12 +216,19 @@ const RecruitmentPage = () => {
                                 <input
                                     type="text"
                                     name="regNo"
-                                    required
                                     value={formData.regNo}
                                     onChange={handleInputChange}
-                                    className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
+                                    className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors.regNo ? 'border-red-500' : 'border-white/20'}`}
                                     placeholder="24BCE0000"
                                 />
+                                {errors.regNo && (
+                                    <span
+                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
+                                        onClick={() => setErrors(prev => ({ ...prev, regNo: '' }))}
+                                    >
+                                        {errors.regNo}
+                                    </span>
+                                )}
                             </div>
 
                             {/* VIT Email */}
@@ -126,12 +239,19 @@ const RecruitmentPage = () => {
                                 <input
                                     type="email"
                                     name="vitEmail"
-                                    required
                                     value={formData.vitEmail}
                                     onChange={handleInputChange}
-                                    className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
+                                    className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors.vitEmail ? 'border-red-500' : 'border-white/20'}`}
                                     placeholder="john.doe2024@vitstudent.ac.in"
                                 />
+                                {errors.vitEmail && (
+                                    <span
+                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
+                                        onClick={() => setErrors(prev => ({ ...prev, vitEmail: '' }))}
+                                    >
+                                        {errors.vitEmail}
+                                    </span>
+                                )}
                             </div>
 
                             {/* Year Dropdown */}
@@ -142,7 +262,6 @@ const RecruitmentPage = () => {
                                 <div className="relative">
                                     <select
                                         name="year"
-                                        required
                                         value={formData.year}
                                         onChange={handleInputChange}
                                         className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-white transition-colors cursor-pointer"
@@ -155,6 +274,14 @@ const RecruitmentPage = () => {
                                     </select>
                                     <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                                 </div>
+                                {errors.year && (
+                                    <span
+                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
+                                        onClick={() => setErrors(prev => ({ ...prev, year: '' }))}
+                                    >
+                                        {errors.year}
+                                    </span>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -167,7 +294,6 @@ const RecruitmentPage = () => {
                             <div className="relative">
                                 <select
                                     name="department"
-                                    required
                                     value={formData.department}
                                     onChange={handleInputChange}
                                     className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-white transition-colors cursor-pointer"
@@ -179,6 +305,14 @@ const RecruitmentPage = () => {
                                 </select>
                                 <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
                             </div>
+                            {errors.department && (
+                                <span
+                                    className="text-red-500 text-xs mt-1 cursor-pointer block"
+                                    onClick={() => setErrors(prev => ({ ...prev, department: '' }))}
+                                >
+                                    {errors.department}
+                                </span>
+                            )}
                         </div>
                     </div>
 
@@ -199,7 +333,7 @@ const RecruitmentPage = () => {
                                     </label>
                                     {q.type === 'textarea' ? (
                                         <textarea
-                                            required={q.required}
+                                            name={q.id}
                                             onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                                             placeholder={q.placeholder}
                                             className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-32"
@@ -207,11 +341,19 @@ const RecruitmentPage = () => {
                                     ) : (
                                         <input
                                             type={q.type}
-                                            required={q.required}
+                                            name={q.id}
                                             onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                                             placeholder={q.placeholder}
                                             className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
                                         />
+                                    )}
+                                    {errors[q.id] && (
+                                        <span
+                                            className="text-red-500 text-xs mt-1 cursor-pointer block"
+                                            onClick={() => setErrors(prev => ({ ...prev, [q.id]: '' }))}
+                                        >
+                                            {errors[q.id]}
+                                        </span>
                                     )}
                                 </div>
                             ))}
@@ -224,19 +366,27 @@ const RecruitmentPage = () => {
                                     </label>
                                     {q.type === 'textarea' ? (
                                         <textarea
-                                            required={q.required}
+                                            name={q.id}
                                             onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                                             placeholder={q.placeholder}
-                                            className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-32"
+                                            className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-32 ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
                                         />
                                     ) : (
                                         <input
                                             type={q.type}
-                                            required={q.required}
+                                            name={q.id}
                                             onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                                             placeholder={q.placeholder}
-                                            className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
+                                            className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
                                         />
+                                    )}
+                                    {errors[q.id] && (
+                                        <span
+                                            className="text-red-500 text-xs mt-1 cursor-pointer block"
+                                            onClick={() => setErrors(prev => ({ ...prev, [q.id]: '' }))}
+                                        >
+                                            {errors[q.id]}
+                                        </span>
                                     )}
                                 </div>
                             ))}
