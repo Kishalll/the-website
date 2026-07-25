@@ -2,7 +2,6 @@
  * Toolbar — language selector, run button, fullscreen, font size controls.
  * ZBC-styled: dark glassmorphism with white/10 borders.
  */
-import { useState, useCallback } from "react";
 import { LANGUAGES } from "../types/languages";
 import { Play, Maximize2, Minimize2, Minus, Plus } from "lucide-react";
 
