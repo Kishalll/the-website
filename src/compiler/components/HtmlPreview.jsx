@@ -1,12 +1,13 @@
 /**
  * HTML/CSS live preview — renders content in a sandboxed iframe.
  */
-import { useRef, useEffect, useCallback } from "react";
-import { RefreshCw } from "lucide-react";
+import { useRef, useEffect, useCallback, useState } from "react";
+import { RefreshCw, ExternalLink, Maximize2, Minimize2 } from "lucide-react";
 
 export function HtmlPreview({ code, language, result }) {
   const iframeRef = useRef(null);
   const prevUrlRef = useRef("");
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const renderPreview = useCallback(() => {
     const iframe = iframeRef.current;
@@ -63,14 +64,48 @@ export function HtmlPreview({ code, language, result }) {
     renderPreview();
   }, [renderPreview]);
 
+  const handleOpenNewTab = useCallback(() => {
+    let content = code;
+    if (language === "css") {
+      content = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${code}</style>
+</head>
+<body>
+  <div class="card">
+    <h1>CSS Preview</h1>
+    <p>Your CSS styles are applied to this page.</p>
+    <button style="background:#4f46e5;color:white;border:none;padding:10px 24px;border-radius:8px;font-size:16px;cursor:pointer">Sample Button</button>
+  </div>
+</body>
+</html>`;
+    }
+    const blob = new Blob([content], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+  }, [code, language]);
+
   return (
-    <div className="compiler-panel">
+    <div className={`compiler-panel ${isFullscreen ? "compiler-preview-fullscreen" : ""}`}>
       <div className="compiler-panel-header">
         <span>{language === "css" ? "🎨 CSS Preview" : "🌐 HTML Preview"}</span>
-        <button className="compiler-panel-btn" onClick={handleRefresh} title="Refresh preview">
-          <RefreshCw size={14} />
-          <span>Refresh</span>
-        </button>
+        <div className="compiler-panel-actions">
+          <button className="compiler-panel-btn" onClick={handleRefresh} title="Refresh preview">
+            <RefreshCw size={14} />
+            <span>Refresh</span>
+          </button>
+          <button className="compiler-panel-btn" onClick={handleOpenNewTab} title="Open preview in new tab">
+            <ExternalLink size={14} />
+            <span>Open Tab</span>
+          </button>
+          <button className="compiler-panel-btn" onClick={() => setIsFullscreen(!isFullscreen)} title={isFullscreen ? "Exit Fullscreen" : "Fullscreen preview"}>
+            {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
+            <span>{isFullscreen ? "Exit" : "Fullscreen"}</span>
+          </button>
+        </div>
       </div>
       <iframe
         ref={iframeRef}
@@ -81,3 +116,4 @@ export function HtmlPreview({ code, language, result }) {
     </div>
   );
 }
+
