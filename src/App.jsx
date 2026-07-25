@@ -11,7 +11,8 @@ import Grain from './components/ui/Grain';
 import Home from './pages/Home';
 import AboutPage from './pages/AboutPage';
 import DomainsPage from './pages/DomainsPage';
-import EventsPage from './pages/EventsPage';
+import ToolsPage from './pages/ToolsPage';
+import CompilerPage from './pages/CompilerPage';
 import GalleryPage from './pages/GalleryPage';
 import RecruitmentPage from './pages/RecruitmentPage';
 
@@ -45,7 +46,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/domains" element={<DomainsPage />} />
-              <Route path="/events" element={<EventsPage />} />
+              <Route path="/tools" element={<ToolsPage />} />
+              <Route path="/tools/compiler" element={<CompilerPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/recruitment" element={<RecruitmentPage />} />
             </Routes>
