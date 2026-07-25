@@ -16,10 +16,13 @@ export class PythonRuntime {
 
   async load() {
     if (this.isLoaded) return;
-    if (this.loadPromise) return this.loadPromise;
     if (this.loadError) throw new Error(this.loadError);
+    if (this.loadPromise) return this.loadPromise;
 
-    this.loadPromise = this._initialize();
+    this.loadPromise = this._initialize().catch((err) => {
+      this.loadPromise = null;
+      throw err;
+    });
     return this.loadPromise;
   }
 
