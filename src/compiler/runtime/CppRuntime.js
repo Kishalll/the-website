@@ -2,8 +2,10 @@
  * CppRuntime — In-browser C/C++ execution via JSCPP interpreter.
  */
 
-const JSCPP_CDN =
-  "https://cdn.jsdelivr.net/npm/JSCPP@2.0.9/dist/JSCPP.es5.min.js";
+const JSCPP_CDNS = [
+  "https://cdn.jsdelivr.net/npm/JSCPP@2.0.4/dist/JSCPP.es5.min.js",
+  "https://unpkg.com/JSCPP@2.0.4/dist/JSCPP.es5.min.js",
+];
 
 export class CppRuntime {
   constructor(isCpp = true) {
@@ -26,7 +28,22 @@ export class CppRuntime {
   async _initialize() {
     try {
       if (!window.JSCPP) {
-        await this._loadScript(JSCPP_CDN);
+        let loaded = false;
+        let lastErr = null;
+
+        for (const cdnUrl of JSCPP_CDNS) {
+          try {
+            await this._loadScript(cdnUrl);
+            loaded = true;
+            break;
+          } catch (e) {
+            lastErr = e;
+          }
+        }
+
+        if (!loaded) {
+          throw lastErr || new Error("Failed to load JSCPP script");
+        }
       }
 
       if (!window.JSCPP?.run) {

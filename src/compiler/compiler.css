@@ -21,6 +21,8 @@
 
 /* ── Toolbar ──────────────────────────────────────────────────────── */
 .compiler-toolbar {
+  position: relative;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -170,6 +172,8 @@
 
 /* ── Main Content ────────────────────────────────────────────────── */
 .compiler-main {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex: 1;
   overflow: hidden;

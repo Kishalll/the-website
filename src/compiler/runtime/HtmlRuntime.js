@@ -21,7 +21,7 @@ export class HtmlRuntime {
       const endTime = performance.now();
 
       return {
-        stdout: code,
+        stdout: "🌐 HTML/CSS rendered in the Live Preview panel below.",
         stderr: scriptErrors.join("\n"),
         error: scriptErrors.length > 0 ? "Script warnings found" : null,
         executionTimeMs: Math.round(endTime - startTime),
@@ -32,7 +32,7 @@ export class HtmlRuntime {
     } catch (err) {
       const endTime = performance.now();
       return {
-        stdout: code,
+        stdout: "",
         stderr: "",
         error: err instanceof Error ? err.message : "HTML validation failed",
         executionTimeMs: Math.round(endTime - startTime),

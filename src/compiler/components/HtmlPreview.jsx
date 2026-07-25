@@ -4,6 +4,8 @@
 import { useRef, useEffect, useCallback, useState } from "react";
 import { RefreshCw, ExternalLink, Maximize2, Minimize2 } from "lucide-react";
 
+import { HtmlIcon, CssIcon } from "./LanguageIcons";
+
 export function HtmlPreview({ code, language, result }) {
   const iframeRef = useRef(null);
   const prevUrlRef = useRef("");
@@ -91,7 +93,10 @@ export function HtmlPreview({ code, language, result }) {
   return (
     <div className={`compiler-panel ${isFullscreen ? "compiler-preview-fullscreen" : ""}`}>
       <div className="compiler-panel-header">
-        <span>{language === "css" ? "🎨 CSS Preview" : "🌐 HTML Preview"}</span>
+        <div className="flex items-center gap-2.5 shrink-0">
+          {language === "css" ? <CssIcon size={22} className="shrink-0" /> : <HtmlIcon size={22} className="shrink-0" />}
+          <span className="font-semibold text-white/90 whitespace-nowrap text-sm">{language === "css" ? "CSS Preview" : "HTML Preview"}</span>
+        </div>
         <div className="compiler-panel-actions">
           <button className="compiler-panel-btn" onClick={handleRefresh} title="Refresh preview">
             <RefreshCw size={14} />

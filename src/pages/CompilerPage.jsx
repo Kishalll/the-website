@@ -47,7 +47,7 @@ const CompilerPage = () => {
                     </div>
 
                     <p className="text-gray-500 text-sm mt-2">
-                        Write and run Python, JavaScript, HTML/CSS, and C/C++ code in your browser — no backend required.
+                        Write and run Python, JavaScript, HTML/CSS, and C/C++ code in your browser.
                     </p>
                 </div>
 

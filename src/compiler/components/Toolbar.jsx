@@ -2,8 +2,10 @@
  * Toolbar — language selector, run button, fullscreen, font size controls.
  * ZBC-styled: dark glassmorphism with white/10 borders.
  */
+import { useState, useRef, useEffect } from "react";
 import { LANGUAGES } from "../types/languages";
-import { Play, Maximize2, Minimize2, Minus, Plus } from "lucide-react";
+import { LANGUAGE_ICON_MAP } from "./LanguageIcons";
+import { Play, Maximize2, Minimize2, Minus, Plus, ChevronDown, Check } from "lucide-react";
 
 export function Toolbar({
   language,
@@ -16,22 +18,73 @@ export function Toolbar({
   onFullscreenToggle,
   onFontSizeChange,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const activeLangObj = LANGUAGES.find((l) => l.id === language) || LANGUAGES[0];
+  const ActiveIcon = LANGUAGE_ICON_MAP[language];
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="compiler-toolbar">
       <div className="compiler-toolbar-left">
-        {/* Language selector */}
-        <select
-          className="compiler-toolbar-select"
-          value={language}
-          onChange={(e) => onLanguageChange(e.target.value)}
-          disabled={isRunning}
-        >
-          {LANGUAGES.map((lang) => (
-            <option key={lang.id} value={lang.id}>
-              {lang.icon} {lang.label}
-            </option>
-          ))}
-        </select>
+        {/* Website themed custom language dropdown */}
+        <div className="relative" ref={dropdownRef}>
+          <button
+            type="button"
+            className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-white/15 rounded-xl px-3 py-1.5 text-sm font-medium text-white transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => setIsOpen(!isOpen)}
+            disabled={isRunning}
+          >
+            {ActiveIcon && <ActiveIcon size={20} className="shrink-0" />}
+            <span className="font-semibold text-white/90">{activeLangObj.label}</span>
+            <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+          </button>
+
+          {isOpen && (
+            <div className="absolute top-full left-0 mt-2 w-56 bg-neutral-900/98 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl z-[9999] py-1.5 overflow-hidden ring-1 ring-white/10 animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="px-3 py-1.5 text-[11px] font-semibold text-gray-500 uppercase tracking-wider border-b border-white/10 mb-1">
+                Select Language
+              </div>
+              {LANGUAGES.map((lang) => {
+                const IconComp = LANGUAGE_ICON_MAP[lang.id];
+                const isSelected = lang.id === language;
+
+                return (
+                  <button
+                    key={lang.id}
+                    type="button"
+                    className={`w-full px-3 py-2 text-sm font-medium flex items-center justify-between transition-colors ${
+                      isSelected
+                        ? "bg-white/15 text-white font-semibold"
+                        : "text-gray-300 hover:bg-white/10 hover:text-white"
+                    }`}
+                    onClick={() => {
+                      onLanguageChange(lang.id);
+                      setIsOpen(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      {IconComp && <IconComp size={20} className="shrink-0" />}
+                      <span>{lang.label}</span>
+                    </div>
+                    {isSelected && <Check size={16} className="text-white shrink-0" />}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
 
         {/* Font size controls */}
         <div className="compiler-toolbar-group">

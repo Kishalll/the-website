@@ -2,7 +2,6 @@ export const LANGUAGES = [
   {
     id: "python",
     label: "Python",
-    icon: "🐍",
     mode: "python",
     needsLazyLoad: true,
     template: `print("Hello, World!")`,
@@ -10,7 +9,6 @@ export const LANGUAGES = [
   {
     id: "javascript",
     label: "JavaScript",
-    icon: "🟨",
     mode: "javascript",
     needsLazyLoad: false,
     template: `console.log("Hello, World!");`,
@@ -18,7 +16,6 @@ export const LANGUAGES = [
   {
     id: "html",
     label: "HTML/CSS/JS",
-    icon: "🌐",
     mode: "html",
     needsLazyLoad: false,
     template: `<!DOCTYPE html>
@@ -50,7 +47,6 @@ export const LANGUAGES = [
   {
     id: "css",
     label: "CSS",
-    icon: "🎨",
     mode: "css",
     needsLazyLoad: false,
     template: `/* CSS Demo — enter any CSS here */
@@ -86,7 +82,6 @@ p {
   {
     id: "c",
     label: "C",
-    icon: "🔵",
     mode: "clike",
     needsLazyLoad: false,
     template: `#include <stdio.h>
@@ -99,7 +94,6 @@ int main() {
   {
     id: "cpp",
     label: "C++",
-    icon: "🔷",
     mode: "clike",
     needsLazyLoad: false,
     template: `#include <iostream>
