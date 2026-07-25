@@ -40,7 +40,7 @@ const ContactSidebar = ({ isOpen, onClose }) => {
             } else {
                 setResult({ success: false, message: data.message || "Something went wrong." });
             }
-        } catch (error) {
+        } catch {
             setResult({ success: false, message: "Failed to send message. Please try again." });
         } finally {
             setIsSubmitting(false);

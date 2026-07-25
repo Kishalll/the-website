@@ -70,12 +70,3 @@ export function CppIcon({ size = 16, className = "" }) {
     </svg>
   );
 }
-
-export const LANGUAGE_ICON_MAP = {
-  python: PythonIcon,
-  javascript: JSIcon,
-  html: HtmlIcon,
-  css: CssIcon,
-  c: CIcon,
-  cpp: CppIcon,
-};

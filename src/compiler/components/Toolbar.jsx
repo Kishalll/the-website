@@ -5,7 +5,7 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { LANGUAGES } from "../types/languages";
-import { LANGUAGE_ICON_MAP } from "./LanguageIcons";
+import { LANGUAGE_ICON_MAP } from "./languageIconMap";
 import { Play, Maximize2, Minimize2, Minus, Plus, ChevronDown, Check } from "lucide-react";
 
 export function Toolbar({

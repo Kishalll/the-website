@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 
 const Spotlight = ({ children, className = "" }) => {
     const divRef = useRef(null);

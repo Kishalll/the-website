@@ -122,7 +122,7 @@ const AboutPage = () => {
     );
 };
 
-const TeamMemberCard = ({ name, role, color = "bg-white/5", socials }) => (
+const TeamMemberCard = ({ name, role, _color = "bg-white/5", socials }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
