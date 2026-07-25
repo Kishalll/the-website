@@ -72,7 +72,8 @@ export class CppRuntime {
     let execError = null;
 
     try {
-      exitCode = window.JSCPP.run(code, stdin ?? "", {
+      const codeToRun = this._preprocessCode(code);
+      exitCode = window.JSCPP.run(codeToRun, stdin ?? "", {
         stdio: {
           write: (s) => {
             capturedStdout += s;
@@ -108,6 +109,21 @@ export class CppRuntime {
     this.isLoaded = false;
     this.loadPromise = null;
     this.loadError = null;
+  }
+
+  _preprocessCode(code) {
+    if (!code) return code;
+    let prep = code;
+    if (prep.includes("<stdio.h>") || prep.includes("printf") || prep.includes("puts")) {
+      prep = prep.replace(/#include\s*<stdio\.h>/g, "#include <iostream>\nusing namespace std;");
+      if (!prep.includes("using namespace std;")) {
+        prep = "#include <iostream>\nusing namespace std;\n" + prep;
+      }
+      prep = prep.replace(/puts\s*\(\s*"([^"\\]*)"\s*\)\s*;/g, 'cout << "$1" << endl;');
+      prep = prep.replace(/printf\s*\(\s*"([^"\\]*)\\n"\s*\)\s*;/g, 'cout << "$1" << endl;');
+      prep = prep.replace(/printf\s*\(\s*"([^"\\]*)"\s*\)\s*;/g, 'cout << "$1";');
+    }
+    return prep;
   }
 
   _loadScript(src) {

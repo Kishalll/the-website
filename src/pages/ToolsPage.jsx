@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Wrench, ArrowRight } from 'lucide-react';
+import { Terminal, Wrench, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import LightRays from '../components/ui/LightRays';
 
@@ -8,7 +8,7 @@ const tools = [
     {
         id: 'compiler',
         label: 'Online Compiler',
-        icon: '🧩',
+        icon: Terminal,
         description: 'Write and run Python, JavaScript, HTML/CSS, and C/C++ code directly in your browser. Multi-language support with syntax highlighting.',
         slug: '/tools/compiler',
         tags: ['Python', 'JavaScript', 'C++', 'HTML/CSS']
@@ -39,11 +39,10 @@ const ToolsPage = () => {
             <div className="max-w-6xl mx-auto relative z-10">
                 <div className="mb-16">
                     <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tighter mb-4">
-                        <span className="text-gray-500">//</span> Tools
+                        Tools
                     </h1>
                     <p className="text-gray-400 text-lg max-w-2xl">
-                        Developer tools and utilities — all running entirely in your browser.
-                        No installation, no backend, no setup.
+                        Developer tools and utilities running directly in your browser.
                     </p>
                 </div>
 
@@ -62,7 +61,11 @@ const ToolsPage = () => {
                             >
                                 <div className="flex flex-col h-full">
                                     <div className="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center text-2xl mb-6 group-hover:bg-white group-hover:text-black transition-all duration-300">
-                                        <span>{tool.icon}</span>
+                                        {typeof tool.icon === 'string' ? (
+                                            <span>{tool.icon}</span>
+                                        ) : (
+                                            <tool.icon size={26} />
+                                        )}
                                     </div>
 
                                     <h3 className="text-2xl font-bold text-white mb-3 group-hover:translate-x-1 transition-transform">
