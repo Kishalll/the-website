@@ -34,7 +34,7 @@ export function HtmlPreview({ code, language, result }) {
   </div>
   <script>
     document.getElementById('user-css').textContent = ${cssLiteral};
-  <\\/script>
+  </script>
 </body>
 </html>`;
       iframe.srcdoc = srcdoc;
