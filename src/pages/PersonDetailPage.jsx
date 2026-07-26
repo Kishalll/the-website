@@ -58,7 +58,7 @@ const PersonDetailPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-black pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-white"
+            className="min-h-screen bg-black pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-white"
         >
             <div className="absolute inset-0 z-0">
                 <LightRays
@@ -77,7 +77,7 @@ const PersonDetailPage = () => {
             {/* Identical max-w-7xl outer container to align Back button perfectly with DepartmentPage */}
             <div className="max-w-7xl mx-auto relative z-20">
                 {/* Clickable Back Navigation Button */}
-                <div className="mb-8 relative z-30">
+                <div className="mb-6 relative z-30">
                     <button
                         onClick={() => navigate(backPath)}
                         className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-all cursor-pointer font-mono text-sm uppercase tracking-wider shadow-lg"

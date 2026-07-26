@@ -44,7 +44,7 @@ const DepartmentPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-black pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-white"
+            className="min-h-screen bg-black pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-white"
         >
             <div className="absolute inset-0 z-0">
                 <LightRays
@@ -62,7 +62,7 @@ const DepartmentPage = () => {
 
             <div className="max-w-7xl mx-auto relative z-20">
                 {/* Back Button */}
-                <div className="mb-8 relative z-30">
+                <div className="mb-6 relative z-30">
                     <button
                         onClick={() => navigate('/about')}
                         className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-all cursor-pointer font-mono text-sm uppercase tracking-wider shadow-lg"
@@ -73,8 +73,8 @@ const DepartmentPage = () => {
                 </div>
 
                 {/* Department Header */}
-                <div className="text-center mb-16">
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 text-white">
+                <div className="text-center mb-10">
+                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-2 text-white">
                         {name} Department
                     </h1>
                     <p className="text-gray-400 text-lg font-mono tracking-wide">
@@ -83,8 +83,8 @@ const DepartmentPage = () => {
                 </div>
 
                 {/* Clickable Lead Card Section */}
-                <div className="mb-20">
-                    <h2 className="text-center text-white font-bold mb-8 text-xl md:text-2xl tracking-wide">
+                <div className="mb-12">
+                    <h2 className="text-center text-white font-bold mb-4 text-xl md:text-2xl tracking-wide">
                         Department Lead
                     </h2>
                     <div
@@ -122,7 +122,7 @@ const DepartmentPage = () => {
 
                 {/* Members Section */}
                 <div>
-                    <h2 className="text-center text-white font-bold mb-10 text-xl md:text-2xl tracking-wide">
+                    <h2 className="text-center text-white font-bold mb-6 text-xl md:text-2xl tracking-wide">
                         Members
                     </h2>
                     {members && members.length > 0 ? (

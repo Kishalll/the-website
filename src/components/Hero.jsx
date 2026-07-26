@@ -72,9 +72,9 @@ const Hero = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-400 font-light leading-relaxed mb-12"
+                            className="mt-6 max-w-3xl mx-auto text-xl md:text-3xl font-mono tracking-widest text-gray-300 uppercase leading-relaxed mb-12"
                         >
-                            Real projects. Real impact. Zero bugs. We are a community turning ideas into fully deployable software, enforcing quality every step of the way.
+                            EXPLORE. ENGINEER. EVOLVE.
                         </motion.p>
 
                         <motion.div

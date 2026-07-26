@@ -2,7 +2,7 @@ export const boardMembers = [
     {
         slug: 'manvi-chadha',
         name: 'Manvi Chadha',
-        role: 'President',
+        role: 'Chairperson',
         image: '',
         noteFrom: 'Faculty Coordinator',
         note: 'Outstanding strategic vision and executive leadership, driving innovation and guiding Zero Bugs Club across all technical and community initiatives.',
@@ -20,7 +20,7 @@ export const boardMembers = [
     {
         slug: 'kishal-p',
         name: 'Kishal P',
-        role: 'Vice-President',
+        role: 'Vice Chairperson',
         image: '',
         noteFrom: 'Faculty Coordinator',
         note: 'Exceptional operational execution and technical leadership, ensuring seamless execution across all projects.',

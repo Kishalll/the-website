@@ -94,7 +94,7 @@ const AboutPage = () => {
                 </div>
 
                 {/* Values Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-32">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
                     {values.map((item, index) => (
                         <motion.div
                             key={index}
@@ -115,8 +115,8 @@ const AboutPage = () => {
                 </div>
 
                 {/* Team Section */}
-                <div className="mb-20">
-                    <h2 className="text-4xl md:text-6xl font-bold text-center text-white mb-20 tracking-tighter">
+                <div className="mb-12">
+                    <h2 className="text-4xl md:text-6xl font-bold text-center text-white mb-10 tracking-tighter">
                         THE TEAM
                     </h2>
 
@@ -172,8 +172,8 @@ const TeamHierarchy = () => {
     const coSecretary = boardMembers.find(m => m.slug === 'divyashri-rajaraman');
 
     return (
-        <div className="flex flex-col gap-16 items-center">
-            {/* Level 1: President */}
+        <div className="flex flex-col gap-10 items-center">
+            {/* Level 1: Chairperson */}
             {president && (
                 <div className="w-full flex justify-center">
                     <TeamMemberCard
@@ -184,7 +184,7 @@ const TeamHierarchy = () => {
                 </div>
             )}
 
-            {/* Level 2: Vice-President */}
+            {/* Level 2: Vice Chairperson */}
             {vicePresident && (
                 <div className="w-full flex justify-center">
                     <TeamMemberCard
@@ -215,7 +215,7 @@ const TeamHierarchy = () => {
 
             {/* Level 4: Departments */}
             <div className="w-full">
-                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-10">
+                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-6">
                     Departments
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
@@ -239,8 +239,8 @@ const TeamHierarchy = () => {
             </div>
 
             {/* Level 5: Faculty Coordinator */}
-            <div className="w-full pt-8 border-t border-white/5">
-                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-10">
+            <div className="w-full pt-6 border-t border-white/5">
+                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-6">
                     Faculty Coordinator
                 </h3>
                 <div className="flex justify-center">
