@@ -83,15 +83,32 @@ const Hero = () => {
                             transition={{ duration: 0.8, delay: 0.6 }}
                             className="flex justify-center"
                         >
-                            <button
+                            <motion.button
                                 onClick={handleJoinClick}
-                                className="group relative px-8 py-4 bg-white text-black font-bold uppercase tracking-widest overflow-hidden"
+                                initial={{ 
+                                    borderRadius: "0px", 
+                                    backgroundColor: "#9ca3af",
+                                    color: "#111827" 
+                                }}
+                                whileHover={{ 
+                                    borderRadius: "12px", 
+                                    backgroundColor: "#ffffff",
+                                    color: "#000000",
+                                    scale: 1.03,
+                                    boxShadow: "0px 0px 25px rgba(255, 255, 255, 0.6)"
+                                }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{ 
+                                    type: "spring", 
+                                    stiffness: 260, 
+                                    damping: 22 
+                                }}
+                                className="group relative px-10 py-4 font-bold uppercase tracking-widest outline-none border border-white/20 backdrop-blur-sm cursor-pointer"
                             >
                                 <span className="relative z-10 flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
-                                    Join Us <ArrowRight size={20} />
+                                    Join Us <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
                                 </span>
-                                <div className="absolute inset-0 bg-gray-200 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-in-out"></div>
-                            </button>
+                            </motion.button>
                         </motion.div>
                     </div>
                 </Spotlight>

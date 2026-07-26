@@ -1,11 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram, Mail } from 'lucide-react';
+import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight } from 'lucide-react';
 import LightRays from '../components/ui/LightRays';
+import { boardMembers, facultyCoordinator, departments } from '../data/teamData';
 
 const AboutPage = () => {
-
-
     const values = [
         {
             icon: <Users className="w-6 h-6" />,
@@ -77,8 +77,6 @@ const AboutPage = () => {
                     >
                         ZBC is a student community dedicated to the practical application of software engineering.
                         We transform academic concepts into tangible reality by designing, building, and maintaining fully deployable projects.
-
-
                     </motion.p>
                 </div>
 
@@ -122,30 +120,28 @@ const AboutPage = () => {
     );
 };
 
-const TeamMemberCard = ({ name, role, _color = "bg-white/5", socials }) => (
+const TeamMemberCard = ({ name, role, onClick, socials }) => (
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className={`flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 transition-all group w-full max-w-sm mx-auto`}
+        onClick={onClick}
+        className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-sm mx-auto shadow-lg"
     >
         <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative">
-            {/* Placeholder Image */}
             <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
         </div>
-        <h3 className="text-xl font-bold text-white mb-1">{name}</h3>
+        <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">{name}</h3>
         <p className="text-sm text-blue-400 font-mono tracking-wide mb-4 uppercase">{role}</p>
 
-        <div className="flex gap-4">
+        <div className="flex gap-4" onClick={(e) => e.stopPropagation()}>
             {socials ? (
-                // Custom socials
                 socials.map((social, index) => (
                     <a key={index} href={social.href || '#'} className="text-gray-400 hover:text-white transition-colors">
                         {social.icon}
                     </a>
                 ))
             ) : (
-                // Default socials
                 <>
                     <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={18} /></a>
                     <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github size={18} /></a>
@@ -157,34 +153,77 @@ const TeamMemberCard = ({ name, role, _color = "bg-white/5", socials }) => (
 );
 
 const TeamHierarchy = () => {
+    const navigate = useNavigate();
+
+    const president = boardMembers.find(m => m.slug === 'manvi-chadha');
+    const vicePresident = boardMembers.find(m => m.slug === 'kishal-p');
+    const secretary = boardMembers.find(m => m.slug === 'm-mano-karthik');
+    const coSecretary = boardMembers.find(m => m.slug === 'divyashri-rajaraman');
+
     return (
         <div className="flex flex-col gap-16 items-center">
-            {/* Level 1: Chairperson */}
-            <div className="w-full flex justify-center">
-                <TeamMemberCard name="Chairperson Name" role="Chairperson" />
+            {/* Level 1: President */}
+            {president && (
+                <div className="w-full flex justify-center">
+                    <TeamMemberCard
+                        name={president.name}
+                        role={president.role}
+                        onClick={() => navigate(`/about/${president.slug}`)}
+                    />
+                </div>
+            )}
+
+            {/* Level 2: Vice-President */}
+            {vicePresident && (
+                <div className="w-full flex justify-center">
+                    <TeamMemberCard
+                        name={vicePresident.name}
+                        role={vicePresident.role}
+                        onClick={() => navigate(`/about/${vicePresident.slug}`)}
+                    />
+                </div>
+            )}
+
+            {/* Level 3: Secretary & Co-secretary */}
+            <div className="w-full flex justify-center gap-6 flex-wrap">
+                {secretary && (
+                    <TeamMemberCard
+                        name={secretary.name}
+                        role={secretary.role}
+                        onClick={() => navigate(`/about/${secretary.slug}`)}
+                    />
+                )}
+                {coSecretary && (
+                    <TeamMemberCard
+                        name={coSecretary.name}
+                        role={coSecretary.role}
+                        onClick={() => navigate(`/about/${coSecretary.slug}`)}
+                    />
+                )}
             </div>
 
-            {/* Level 2: Vice Chairperson */}
-            <div className="w-full flex justify-center">
-                <TeamMemberCard name="Vice Chair Name" role="Vice Chairperson" />
-            </div>
-
-            {/* Level 3: General Secretary & Treasurer */}
-            <div className="w-full flex justify-center gap-4 flex-wrap">
-                <TeamMemberCard name="Gen Sec Name" role="General Secretary" />
-                <TeamMemberCard name="Treasurer Name" role="Treasurer" />
-            </div>
-
-            {/* Level 4: Leads */}
+            {/* Level 4: Departments */}
             <div className="w-full">
-                <h3 className="text-center text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Cluster Leads</h3>
-                <div className="flex flex-wrap justify-center gap-6">
-                    <TeamMemberCard name="Lead Name" role="Development" />
-                    <TeamMemberCard name="Lead Name" role="UI/UX" />
-                    <TeamMemberCard name="Lead Name" role="Cybersec and Testing" />
-                    <TeamMemberCard name="Mano Kathik" role="Design and Content" />
-                    <TeamMemberCard name="Lead Name" role="Event Management" />
-                    <TeamMemberCard name="Lead Name" role="Social Media and Marketing" />
+                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-10">
+                    Departments
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                    {departments.map((dept) => (
+                        <div key={dept.slug} className="flex flex-col items-center gap-4 w-full max-w-sm">
+                            <TeamMemberCard
+                                name={dept.lead.name}
+                                role={`${dept.name} Lead`}
+                                onClick={() => navigate(`/about/${dept.slug}/${dept.lead.slug}`)}
+                            />
+                            <button
+                                onClick={() => navigate(`/about/${dept.slug}`)}
+                                className="w-full py-2.5 px-4 rounded-xl border border-white/15 bg-white/5 hover:bg-white hover:text-black font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer shadow-md"
+                            >
+                                View members
+                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                        </div>
+                    ))}
                 </div>
             </div>
 
@@ -193,8 +232,9 @@ const TeamHierarchy = () => {
                 <div className="text-center">
                     <h3 className="text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Faculty Coordinator</h3>
                     <TeamMemberCard
-                        name="Dr.Punitha K"
-                        role="Faculty Coordinator"
+                        name={facultyCoordinator.name}
+                        role={facultyCoordinator.role}
+                        onClick={() => navigate(`/about/${facultyCoordinator.slug}`)}
                         socials={[
                             { icon: <Linkedin size={18} />, href: "#" },
                             { icon: <Mail size={18} />, href: "mailto:zbcvitc@gmail.com" }

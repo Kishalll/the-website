@@ -10,6 +10,8 @@ import Grain from './components/ui/Grain';
 // Pages
 import Home from './pages/Home';
 import AboutPage from './pages/AboutPage';
+import AboutSlugResolver from './pages/AboutSlugResolver';
+import PersonDetailPage from './pages/PersonDetailPage';
 import DomainsPage from './pages/DomainsPage';
 import ToolsPage from './pages/ToolsPage';
 import CompilerPage from './pages/CompilerPage';
@@ -45,6 +47,8 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/about/:slug" element={<AboutSlugResolver />} />
+              <Route path="/about/:dept/:name" element={<PersonDetailPage />} />
               <Route path="/domains" element={<DomainsPage />} />
               <Route path="/tools" element={<ToolsPage />} />
               <Route path="/tools/compiler" element={<CompilerPage />} />
