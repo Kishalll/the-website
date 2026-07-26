@@ -1,100 +1,80 @@
 export const recruitmentConfig = {
-    isRecruiting: true, // Toggle this to true to enable recruitment
+    isRecruiting: true,
     departments: [
-        { id: 'development', name: 'Development' },
-        { id: 'ui_ux', name: 'UI/UX' },
-        { id: 'cybersec_testing', name: 'Cybersec and Testing' },
-        { id: 'design_content', name: 'Design and Content' },
-        { id: 'social_marketing', name: 'Social Media and Marketing' },
-        { id: 'management', name: 'Management' } // Added as potential 6th based on context
+        { id: 'technical', name: 'Technical' },
+        { id: 'design', name: 'Design' },
+        { id: 'events', name: 'Events' },
+        { id: 'hr', name: 'HR' },
+        { id: 'outreach', name: 'Outreach' }
     ],
     generalQuestions: [
         {
             id: 'why_zbc',
-            label: 'Why do you want to join ZBC?',
+            label: 'Why do you want to join this club?',
             type: 'textarea',
             required: true,
-            placeholder: 'Tell us about your motivation...'
+            wordLimit: 300,
+            placeholder: 'Tell us about your motivation (max 300 words)...'
         }
     ],
     domainQuestions: {
-        development: [
+        technical: [
             {
                 id: 'tech_stack',
-                label: 'What is your preferred tech stack?',
+                label: 'What is your preferred tech stack and programming languages?',
                 type: 'text',
                 required: true,
-                placeholder: 'e.g., React, Node.js, Python...'
+                placeholder: 'e.g., C++, Python, Rust, React, Node.js...'
             },
             {
-                id: 'github_link',
-                label: 'GitHub Profile Link',
-                type: 'url',
-                required: true,
-                placeholder: 'https://github.com/username',
-                validation: {
-                    pattern: "^https?:\\/\\/(www\\.)?github\\.com\\/[a-zA-Z0-9_-]+\\/?$",
-                    message: "Please enter a valid GitHub profile link"
-                }
+                id: 'problem_solving',
+                label: 'Share your LeetCode/CodeChef profile or competitive programming experience.',
+                type: 'text',
+                required: false,
+                placeholder: 'Profile handles, ratings, or contest achievements...'
             }
         ],
-        ui_ux: [
+        design: [
             {
-                id: 'tools',
+                id: 'design_tools',
                 label: 'Which design tools do you use?',
                 type: 'text',
                 required: true,
-                placeholder: 'Figma, Adobe XD, etc.'
+                placeholder: 'Figma, Adobe XD, Photoshop, Illustrator, Spline...'
             },
             {
-                id: 'portfolio',
-                label: 'Portfolio Link',
-                type: 'url',
-                required: false,
-                placeholder: 'Behance, Dribbble, or personal site'
-            }
-        ],
-        cybersec_testing: [
-            {
-                id: 'experience',
-                label: 'Do you have any experience with CTFs or Bug Bounties?',
-                type: 'textarea',
-                required: true,
-                placeholder: 'Share your achievements or participation...'
-            }
-        ],
-        design_content: [
-            {
-                id: 'content_type',
-                label: 'What type of content do you enjoy creating?',
-                type: 'text',
-                required: true,
-                placeholder: 'Blogs, Video scripts, Social media posts...'
-            },
-            {
-                id: 'portfolio',
-                label: 'Portfolio/Work Samples',
+                id: 'portfolio_link',
+                label: 'Portfolio or Work Showcase Link',
                 type: 'url',
                 required: true,
-                placeholder: 'Link to your work'
+                placeholder: 'Behance, Dribbble, Figma Community, or personal website'
             }
         ],
-        social_marketing: [
+        events: [
             {
-                id: 'campaign_idea',
-                label: 'Pitch a quick marketing idea for a tech club event.',
+                id: 'event_experience',
+                label: 'Describe your past experience organizing or managing tech events/hackathons.',
                 type: 'textarea',
                 required: true,
-                placeholder: 'Keep it short and creative...'
+                placeholder: 'Tell us about the events, team size, and responsibilities...'
             }
         ],
-        management: [ // Hypothetical 6th
+        hr: [
             {
-                id: 'event_exp',
-                label: 'Have you organized any events before?',
+                id: 'hr_scenario',
+                label: 'How do you handle conflict or low active engagement within a team?',
                 type: 'textarea',
                 required: true,
-                placeholder: 'Describe your role and the event...'
+                placeholder: 'Share your approach to team bonding, recruitment, and conflict resolution...'
+            }
+        ],
+        outreach: [
+            {
+                id: 'outreach_pitch',
+                label: 'How would you pitch Zero Bugs Club to potential industry sponsors or partners?',
+                type: 'textarea',
+                required: true,
+                placeholder: 'Share your ideas for sponsorship proposals and external outreach...'
             }
         ]
     }

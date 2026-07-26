@@ -1,9 +1,77 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { recruitmentConfig } from '../config/recruitment.config';
-import { Send, User, Hash, Mail, Calendar, ChevronDown } from 'lucide-react';
+import { Send, User, Hash, Mail, Calendar, ChevronDown, Check, Layers } from 'lucide-react';
 import LightRays from '../components/ui/LightRays';
+
+const CustomSelect = ({ name, value, options, placeholder, onChange, icon: Icon, error }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const containerRef = useRef(null);
+
+    const selectedOption = options.find(o => (o.value || o.id) === value);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (containerRef.current && !containerRef.current.contains(e.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleSelect = (val) => {
+        onChange({ target: { name, value: val } });
+        setIsOpen(false);
+    };
+
+    return (
+        <div className="relative" ref={containerRef}>
+            <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className={`w-full bg-black/60 border rounded-lg px-4 py-3 text-left text-white flex items-center justify-between transition-all duration-200 cursor-pointer shadow-sm ${
+                    error ? 'border-red-500' : 'border-white/20 hover:border-white/40'
+                }`}
+            >
+                <div className="flex items-center gap-2 text-sm font-medium">
+                    {Icon && <Icon size={16} className="text-gray-400 shrink-0" />}
+                    <span className={selectedOption ? 'text-white font-semibold' : 'text-gray-400'}>
+                        {selectedOption ? selectedOption.label || selectedOption.name : placeholder}
+                    </span>
+                </div>
+                <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180 text-white' : ''}`} />
+            </button>
+
+            {isOpen && (
+                <div className="absolute top-full left-0 mt-2 w-full bg-neutral-900/98 backdrop-blur-2xl border border-white/20 rounded-xl shadow-2xl z-50 py-1.5 overflow-y-auto max-h-56 ring-1 ring-white/10">
+                    {options.map((opt) => {
+                        const optVal = opt.value || opt.id;
+                        const optLabel = opt.label || opt.name;
+                        const isSelected = optVal === value;
+
+                        return (
+                            <button
+                                key={optVal}
+                                type="button"
+                                onClick={() => handleSelect(optVal)}
+                                className={`w-full px-4 py-2.5 text-sm font-medium flex items-center justify-between transition-colors cursor-pointer text-left ${
+                                    isSelected
+                                        ? 'bg-white/15 text-white font-semibold'
+                                        : 'text-gray-300 hover:bg-white/10 hover:text-white'
+                                }`}
+                            >
+                                <span>{optLabel}</span>
+                                {isSelected && <Check size={16} className="text-white shrink-0" />}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const RecruitmentPage = () => {
     const navigate = useNavigate();
@@ -19,8 +87,6 @@ const RecruitmentPage = () => {
     const [formData, setFormData] = useState({
         name: '',
         regNo: '',
-        info: '', // Changed 'vitEmail' to 'info' as generic or keeping it 'vitEmail' if explicitly asked
-        // User asked for: name, regno, vit mailid
         vitEmail: '',
         year: '',
         department: '',
@@ -29,13 +95,20 @@ const RecruitmentPage = () => {
 
     const [errors, setErrors] = useState({});
 
+    const yearOptions = [
+        { value: '1', label: '1st Year' },
+        { value: '2', label: '2nd Year' },
+        { value: '3', label: '3rd Year' },
+        { value: '4', label: '4th Year' }
+    ];
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
-        // Clear error when user types
+        // Clear error when user selects/types
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
@@ -92,6 +165,11 @@ const RecruitmentPage = () => {
             const answer = formData.answers[q.id];
             if (q.required && !answer?.trim()) {
                 newErrors[q.id] = "This field is required";
+            } else if (answer && q.wordLimit) {
+                const wordCount = answer.trim().split(/\s+/).filter(Boolean).length;
+                if (wordCount > q.wordLimit) {
+                    newErrors[q.id] = `Maximum limit of ${q.wordLimit} words exceeded (${wordCount}/${q.wordLimit} words)`;
+                }
             } else if (answer && q.validation && q.validation.pattern) {
                 const regex = new RegExp(q.validation.pattern);
                 if (!regex.test(answer)) {
@@ -106,6 +184,11 @@ const RecruitmentPage = () => {
                 const answer = formData.answers[q.id];
                 if (q.required && !answer?.trim()) {
                     newErrors[q.id] = "This field is required";
+                } else if (answer && q.wordLimit) {
+                    const wordCount = answer.trim().split(/\s+/).filter(Boolean).length;
+                    if (wordCount > q.wordLimit) {
+                        newErrors[q.id] = `Maximum limit of ${q.wordLimit} words exceeded (${wordCount}/${q.wordLimit} words)`;
+                    }
                 } else if (answer && q.validation && q.validation.pattern) {
                     const regex = new RegExp(q.validation.pattern);
                     if (!regex.test(answer)) {
@@ -125,22 +208,16 @@ const RecruitmentPage = () => {
         if (Object.keys(formErrors).length === 0) {
             console.log('Form Submitted:', formData);
             alert('Application Submitted! (This is a demo)');
-            // Add actual submission logic here
         } else {
-            // Get the first error field
             const firstErrorField = Object.keys(formErrors)[0];
-
-            // Set only the first error to display
             setErrors({ [firstErrorField]: formErrors[firstErrorField] });
 
-            // Scroll to the error
             const element = document.getElementsByName(firstErrorField)[0];
             if (element) {
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 element.focus({ preventScroll: true });
             }
 
-            // Auto-hide error after 3 seconds
             setTimeout(() => {
                 setErrors(prev => {
                     const newState = { ...prev };
@@ -158,7 +235,7 @@ const RecruitmentPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
+            className="min-h-screen bg-black pt-24 pb-40 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <LightRays
@@ -196,7 +273,7 @@ const RecruitmentPage = () => {
                                     value={formData.name}
                                     onChange={handleInputChange}
                                     className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
-                                    placeholder="John Doe"
+                                    placeholder="Pattasu Balu"
                                 />
                                 {errors.name && (
                                     <span
@@ -219,7 +296,7 @@ const RecruitmentPage = () => {
                                     value={formData.regNo}
                                     onChange={handleInputChange}
                                     className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors.regNo ? 'border-red-500' : 'border-white/20'}`}
-                                    placeholder="24BCE0000"
+                                    placeholder="24BCE6767"
                                 />
                                 {errors.regNo && (
                                     <span
@@ -242,7 +319,7 @@ const RecruitmentPage = () => {
                                     value={formData.vitEmail}
                                     onChange={handleInputChange}
                                     className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors.vitEmail ? 'border-red-500' : 'border-white/20'}`}
-                                    placeholder="john.doe2024@vitstudent.ac.in"
+                                    placeholder="pattasu.balu2024@vitstudent.ac.in"
                                 />
                                 {errors.vitEmail && (
                                     <span
@@ -254,26 +331,20 @@ const RecruitmentPage = () => {
                                 )}
                             </div>
 
-                            {/* Year Dropdown */}
+                            {/* Custom Year Dropdown */}
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
                                     <Calendar size={16} /> Year
                                 </label>
-                                <div className="relative">
-                                    <select
-                                        name="year"
-                                        value={formData.year}
-                                        onChange={handleInputChange}
-                                        className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-white transition-colors cursor-pointer"
-                                    >
-                                        <option value="" disabled>Select Year</option>
-                                        <option value="1">1st Year</option>
-                                        <option value="2">2nd Year</option>
-                                        <option value="3">3rd Year</option>
-                                        <option value="4">4th Year</option>
-                                    </select>
-                                    <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
-                                </div>
+                                <CustomSelect
+                                    name="year"
+                                    value={formData.year}
+                                    options={yearOptions}
+                                    placeholder="Select Year"
+                                    onChange={handleInputChange}
+                                    icon={Calendar}
+                                    error={errors.year}
+                                />
                                 {errors.year && (
                                     <span
                                         className="text-red-500 text-xs mt-1 cursor-pointer block"
@@ -290,21 +361,18 @@ const RecruitmentPage = () => {
                     <div className="space-y-6">
                         <h2 className="text-2xl font-bold text-white border-b border-white/10 pb-2">Department</h2>
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300">Select Department</label>
-                            <div className="relative">
-                                <select
-                                    name="department"
-                                    value={formData.department}
-                                    onChange={handleInputChange}
-                                    className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white appearance-none focus:outline-none focus:border-white transition-colors cursor-pointer"
-                                >
-                                    <option value="" disabled>Select Department</option>
-                                    {departments.map(dept => (
-                                        <option key={dept.id} value={dept.id}>{dept.name}</option>
-                                    ))}
-                                </select>
-                                <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={16} />
-                            </div>
+                            <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
+                                <Layers size={16} /> Select Department
+                            </label>
+                            <CustomSelect
+                                name="department"
+                                value={formData.department}
+                                options={departments}
+                                placeholder="Select Department"
+                                onChange={handleInputChange}
+                                icon={Layers}
+                                error={errors.department}
+                            />
                             {errors.department && (
                                 <span
                                     className="text-red-500 text-xs mt-1 cursor-pointer block"
@@ -332,16 +400,25 @@ const RecruitmentPage = () => {
                                         {q.label} {q.required && <span className="text-red-500">*</span>}
                                     </label>
                                     {q.type === 'textarea' ? (
-                                        <textarea
-                                            name={q.id}
-                                            onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                                            placeholder={q.placeholder}
-                                            className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-32"
-                                        />
+                                        <div className="space-y-1">
+                                            <textarea
+                                                name={q.id}
+                                                value={formData.answers[q.id] || ''}
+                                                onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                                placeholder={q.placeholder}
+                                                className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-36 ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
+                                            />
+                                            {q.wordLimit && (
+                                                <div className="flex justify-end text-xs text-gray-400 font-mono">
+                                                    Word count: {formData.answers[q.id] ? formData.answers[q.id].trim().split(/\s+/).filter(Boolean).length : 0} / {q.wordLimit} words
+                                                </div>
+                                            )}
+                                        </div>
                                     ) : (
                                         <input
                                             type={q.type}
                                             name={q.id}
+                                            value={formData.answers[q.id] || ''}
                                             onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                                             placeholder={q.placeholder}
                                             className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
@@ -365,16 +442,25 @@ const RecruitmentPage = () => {
                                         {q.label} {q.required && <span className="text-red-500">*</span>}
                                     </label>
                                     {q.type === 'textarea' ? (
-                                        <textarea
-                                            name={q.id}
-                                            onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                                            placeholder={q.placeholder}
-                                            className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-32 ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
-                                        />
+                                        <div className="space-y-1">
+                                            <textarea
+                                                name={q.id}
+                                                value={formData.answers[q.id] || ''}
+                                                onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                                placeholder={q.placeholder}
+                                                className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-36 ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
+                                            />
+                                            {q.wordLimit && (
+                                                <div className="flex justify-end text-xs text-gray-400 font-mono">
+                                                    Word count: {formData.answers[q.id] ? formData.answers[q.id].trim().split(/\s+/).filter(Boolean).length : 0} / {q.wordLimit} words
+                                                </div>
+                                            )}
+                                        </div>
                                     ) : (
                                         <input
                                             type={q.type}
                                             name={q.id}
+                                            value={formData.answers[q.id] || ''}
                                             onChange={(e) => handleAnswerChange(q.id, e.target.value)}
                                             placeholder={q.placeholder}
                                             className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}

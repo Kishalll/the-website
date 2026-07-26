@@ -103,7 +103,7 @@ const ContactSidebar = ({ isOpen, onClose }) => {
                                         onChange={handleChange}
                                         required
                                         className="w-full bg-white/5 border border-white/10 rounded-lg p-3 text-white focus:outline-none focus:border-white/50 transition-colors"
-                                        placeholder="John Doe"
+                                        placeholder="Maanik Baasha"
                                     />
                                 </div>
 
