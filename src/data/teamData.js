@@ -117,13 +117,45 @@ export const departments = [
             {
                 slug: 'alex-morgan',
                 name: 'Alex Morgan',
-                role: 'Project Engineer',
+                role: 'Full Stack Engineer',
                 image: '',
                 noteFrom: 'Lead',
-                note: 'Consistently delivers high-quality features with excellent problem-solving skills.',
+                note: 'Consistently delivers clean, performant microservices and responsive web applications.',
                 contributions: [
-                    'Built scalable application modules and microservices.',
-                    'Optimized code execution and data processing tasks.'
+                    'Built scalable backend endpoints and database models.',
+                    'Implemented real-time data sync for club dashboard.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'github', url: '#' }
+                ]
+            },
+            {
+                slug: 'rohan-sharma',
+                name: 'Rohan Sharma',
+                role: 'Frontend Specialist',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Expert in state management and crafting buttery smooth user interactions.',
+                contributions: [
+                    'Created dynamic UI components using Framer Motion.',
+                    'Optimized front-end build bundles for speed.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'github', url: '#' }
+                ]
+            },
+            {
+                slug: 'ananya-verma',
+                name: 'Ananya Verma',
+                role: 'DevOps Engineer',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Streamlined deployment workflows and server monitoring for all club projects.',
+                contributions: [
+                    'Configured CI/CD pipelines and automated Docker deployments.',
+                    'Maintained uptime monitoring and logging infrastructure.'
                 ],
                 socials: [
                     { platform: 'linkedin', url: '#' },
@@ -157,13 +189,45 @@ export const departments = [
             {
                 slug: 'sam-wilson',
                 name: 'Sam Wilson',
-                role: 'Tech Contributor',
+                role: 'Systems Architect',
                 image: '',
                 noteFrom: 'Lead',
-                note: 'Reliable developer focused on backend stability and performance.',
+                note: 'Reliable developer focused on high-concurrency backend services and database optimization.',
                 contributions: [
-                    'Engineered REST APIs and database integrations.',
+                    'Engineered REST APIs and database schema migrations.',
                     'Wrote automated test suites for club applications.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'github', url: '#' }
+                ]
+            },
+            {
+                slug: 'priya-nair',
+                name: 'Priya Nair',
+                role: 'Cloud Developer',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Passionate about serverless computing and cloud infrastructure.',
+                contributions: [
+                    'Integrated AWS services and serverless functions.',
+                    'Authored technical documentation for developer onboarding.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'github', url: '#' }
+                ]
+            },
+            {
+                slug: 'vikram-aditya',
+                name: 'Vikram Aditya',
+                role: 'Security Analyst',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Sharp eye for vulnerability research and secure coding practices.',
+                contributions: [
+                    'Conducted vulnerability audits across active web endpoints.',
+                    'Wrote automated integration test checks.'
                 ],
                 socials: [
                     { platform: 'linkedin', url: '#' },
@@ -197,13 +261,45 @@ export const departments = [
             {
                 slug: 'jordan-lee',
                 name: 'Jordan Lee',
-                role: 'UI Designer',
+                role: 'UI/UX Designer',
                 image: '',
                 noteFrom: 'Lead',
-                note: 'Talented designer crafting responsive graphics and UI layouts.',
+                note: 'Talented designer crafting responsive graphics and high-fidelity UI layouts.',
                 contributions: [
-                    'Designed high-fidelity mockups for flagship events.',
-                    'Crafted custom vector graphics and branding assets.'
+                    'Designed high-fidelity mockups for flagship event websites.',
+                    'Crafted custom vector graphics and icon sets.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
+            },
+            {
+                slug: 'sneha-patel',
+                name: 'Sneha Patel',
+                role: 'Motion Designer',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Specializes in eye-catching motion graphics and brand animations.',
+                contributions: [
+                    'Produced animated trailers for club tech symposiums.',
+                    'Designed dark mode UI micro-interactions.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
+            },
+            {
+                slug: 'kavya-reddy',
+                name: 'Kavya Reddy',
+                role: 'Brand Designer',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Focuses on visual storytelling and consistent brand collateral.',
+                contributions: [
+                    'Designed merchandise and event badges.',
+                    'Created social media poster design systems.'
                 ],
                 socials: [
                     { platform: 'linkedin', url: '#' },
@@ -241,8 +337,40 @@ export const departments = [
                 noteFrom: 'Lead',
                 note: 'Proactive coordinator managing on-ground event operations and participant desks.',
                 contributions: [
-                    'Handled participant registrations and hospitality.',
+                    'Handled participant registrations and desk support.',
                     'Managed event stage logistics and technical checks.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
+            },
+            {
+                slug: 'aditya-kumar',
+                name: 'Aditya Kumar',
+                role: 'Logistics Manager',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Ensures flawless equipment allocation and venue coordination.',
+                contributions: [
+                    'Coordinated audiovisual setups for hackathons.',
+                    'Managed speaker hospitality and scheduling.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
+            },
+            {
+                slug: 'meera-joshi',
+                name: 'Meera Joshi',
+                role: 'Volunteer Lead',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Organizes volunteer shifts and manages real-time event assistance.',
+                contributions: [
+                    'Trained student volunteers for major campus workshops.',
+                    'Handled attendee query desks during sessions.'
                 ],
                 socials: [
                     { platform: 'linkedin', url: '#' },
@@ -287,6 +415,38 @@ export const departments = [
                     { platform: 'linkedin', url: '#' },
                     { platform: 'instagram', url: '#' }
                 ]
+            },
+            {
+                slug: 'deepak-singh',
+                name: 'Deepak Singh',
+                role: 'Talent Acquisition',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Drives candidate outreach and structures interview schedules.',
+                contributions: [
+                    'Streamlined candidate interview scheduling.',
+                    'Maintained active member directory records.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
+            },
+            {
+                slug: 'ritika-gupta',
+                name: 'Ritika Gupta',
+                role: 'Culture Specialist',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Focuses on team building, rewards, and inclusive community initiatives.',
+                contributions: [
+                    'Organized internal games and team appreciation awards.',
+                    'Collected feedback to improve club culture.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
             }
         ]
     },
@@ -314,13 +474,45 @@ export const departments = [
             {
                 slug: 'morgan-davis',
                 name: 'Morgan Davis',
-                role: 'Outreach Executive',
+                role: 'Social Media Strategist',
                 image: '',
                 noteFrom: 'Lead',
                 note: 'Energetic marketer creating engaging social content and media assets.',
                 contributions: [
                     'Created promotional reels and graphic posts.',
                     'Managed active community engagement across channels.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
+            },
+            {
+                slug: 'aravind-swamy',
+                name: 'Aravind Swamy',
+                role: 'PR Officer',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Handles media communications and press releases for ZBC events.',
+                contributions: [
+                    'Drafted press notes and campus newsletter features.',
+                    'Coordinated sponsor visibility across media channels.'
+                ],
+                socials: [
+                    { platform: 'linkedin', url: '#' },
+                    { platform: 'instagram', url: '#' }
+                ]
+            },
+            {
+                slug: 'tanya-kapoor',
+                name: 'Tanya Kapoor',
+                role: 'Community Manager',
+                image: '',
+                noteFrom: 'Lead',
+                note: 'Engages with external developer communities and manages Discord channels.',
+                contributions: [
+                    'Moderated ZBC Discord and online discussion forums.',
+                    'Hosted live Q&A sessions for prospective applicants.'
                 ],
                 socials: [
                     { platform: 'linkedin', url: '#' },

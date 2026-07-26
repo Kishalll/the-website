@@ -6,6 +6,19 @@ import LightRays from '../components/ui/LightRays';
 import { boardMembers, facultyCoordinator, departments } from '../data/teamData';
 
 const AboutPage = () => {
+    React.useLayoutEffect(() => {
+        const lockedY = sessionStorage.getItem('about_locked_y');
+        if (lockedY !== null) {
+            const targetY = parseFloat(lockedY);
+            window.scrollTo(0, targetY);
+            const rafId = requestAnimationFrame(() => {
+                window.scrollTo(0, targetY);
+                sessionStorage.removeItem('about_locked_y');
+            });
+            return () => cancelAnimationFrame(rafId);
+        }
+    }, []);
+
     const values = [
         {
             icon: <Users className="w-6 h-6" />,
@@ -103,14 +116,9 @@ const AboutPage = () => {
 
                 {/* Team Section */}
                 <div className="mb-20">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="text-4xl md:text-6xl font-bold text-center text-white mb-20 tracking-tighter"
-                    >
+                    <h2 className="text-4xl md:text-6xl font-bold text-center text-white mb-20 tracking-tighter">
                         THE TEAM
-                    </motion.h2>
+                    </h2>
 
                     {/* Hierarchy Helper Component */}
                     <TeamHierarchy />
@@ -121,10 +129,7 @@ const AboutPage = () => {
 };
 
 const TeamMemberCard = ({ name, role, onClick, socials }) => (
-    <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+    <div
         onClick={onClick}
         className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-sm mx-auto shadow-lg"
     >
@@ -149,11 +154,17 @@ const TeamMemberCard = ({ name, role, onClick, socials }) => (
                 </>
             )}
         </div>
-    </motion.div>
+    </div>
 );
 
 const TeamHierarchy = () => {
     const navigate = useNavigate();
+
+    const handleNavigate = (path) => {
+        const currentY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+        sessionStorage.setItem('about_locked_y', currentY.toString());
+        navigate(path);
+    };
 
     const president = boardMembers.find(m => m.slug === 'manvi-chadha');
     const vicePresident = boardMembers.find(m => m.slug === 'kishal-p');
@@ -168,7 +179,7 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={president.name}
                         role={president.role}
-                        onClick={() => navigate(`/about/${president.slug}`)}
+                        onClick={() => handleNavigate(`/about/${president.slug}`)}
                     />
                 </div>
             )}
@@ -179,7 +190,7 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={vicePresident.name}
                         role={vicePresident.role}
-                        onClick={() => navigate(`/about/${vicePresident.slug}`)}
+                        onClick={() => handleNavigate(`/about/${vicePresident.slug}`)}
                     />
                 </div>
             )}
@@ -190,14 +201,14 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={secretary.name}
                         role={secretary.role}
-                        onClick={() => navigate(`/about/${secretary.slug}`)}
+                        onClick={() => handleNavigate(`/about/${secretary.slug}`)}
                     />
                 )}
                 {coSecretary && (
                     <TeamMemberCard
                         name={coSecretary.name}
                         role={coSecretary.role}
-                        onClick={() => navigate(`/about/${coSecretary.slug}`)}
+                        onClick={() => handleNavigate(`/about/${coSecretary.slug}`)}
                     />
                 )}
             </div>
@@ -213,10 +224,10 @@ const TeamHierarchy = () => {
                             <TeamMemberCard
                                 name={dept.lead.name}
                                 role={`${dept.name} Lead`}
-                                onClick={() => navigate(`/about/${dept.slug}/${dept.lead.slug}`)}
+                                onClick={() => handleNavigate(`/about/${dept.slug}/${dept.lead.slug}`)}
                             />
                             <button
-                                onClick={() => navigate(`/about/${dept.slug}`)}
+                                onClick={() => handleNavigate(`/about/${dept.slug}`)}
                                 className="w-full py-2.5 px-4 rounded-xl border border-white/15 bg-white/5 hover:bg-white hover:text-black font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer shadow-md"
                             >
                                 View members
@@ -228,13 +239,15 @@ const TeamHierarchy = () => {
             </div>
 
             {/* Level 5: Faculty Coordinator */}
-            <div className="w-full flex justify-center pt-8 border-t border-white/5">
-                <div className="text-center">
-                    <h3 className="text-gray-500 font-mono mb-8 uppercase tracking-widest text-sm">Faculty Coordinator</h3>
+            <div className="w-full pt-8 border-t border-white/5">
+                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-10">
+                    Faculty Coordinator
+                </h3>
+                <div className="flex justify-center">
                     <TeamMemberCard
                         name={facultyCoordinator.name}
                         role={facultyCoordinator.role}
-                        onClick={() => navigate(`/about/${facultyCoordinator.slug}`)}
+                        onClick={() => handleNavigate(`/about/${facultyCoordinator.slug}`)}
                         socials={[
                             { icon: <Linkedin size={18} />, href: "#" },
                             { icon: <Mail size={18} />, href: "mailto:zbcvitc@gmail.com" }

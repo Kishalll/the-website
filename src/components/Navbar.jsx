@@ -39,7 +39,11 @@ const Navbar = ({ onContactClick }) => {
                                 <NavLink
                                     key={link.name}
                                     to={link.href}
-                                    onClick={() => window.scrollTo(0, 0)}
+                                    onClick={() => {
+                                        if (link.href !== '/about') {
+                                            window.scrollTo(0, 0);
+                                        }
+                                    }}
                                     className={({ isActive }) => `
                     relative px-4 py-2 rounded-full text-base lg:text-lg font-medium transition-all duration-300 group overflow-hidden
                     ${isActive ? 'text-black bg-white font-semibold' : 'text-gray-400 hover:text-white'}
@@ -82,7 +86,9 @@ const Navbar = ({ onContactClick }) => {
                                 to={link.href}
                                 onClick={() => {
                                     setIsOpen(false);
-                                    window.scrollTo(0, 0);
+                                    if (link.href !== '/about') {
+                                        window.scrollTo(0, 0);
+                                    }
                                 }}
                                 className="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-lg font-medium"
                             >

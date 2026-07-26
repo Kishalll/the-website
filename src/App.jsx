@@ -18,14 +18,36 @@ import CompilerPage from './pages/CompilerPage';
 import GalleryPage from './pages/GalleryPage';
 import RecruitmentPage from './pages/RecruitmentPage';
 
-// Scroll to top on route change
+// Scroll to top on route change with smart About page scroll restoration
 const ScrollToTop = () => {
   const { pathname } = useLocation();
+  const prevPathRef = React.useRef(pathname);
+
   React.useEffect(() => {
-    window.scrollTo(0, 0);
+    const prevPath = prevPathRef.current;
+    prevPathRef.current = pathname;
+
+    if (pathname === '/about') {
+      if (prevPath && prevPath.startsWith('/about/') && prevPath !== '/about') {
+        // Returning from an About sub-route, let AboutPage handle scroll restoration
+        return;
+      }
+      // Coming from another main page, clear saved scroll pos and scroll to top
+      sessionStorage.removeItem('about_locked_y');
+      sessionStorage.removeItem('about_scroll_pos');
+      window.scrollTo(0, 0);
+    } else {
+      // For non-about pages, if leaving about sub-routes for main nav pages, clear saved scroll
+      if (!pathname.startsWith('/about')) {
+        sessionStorage.removeItem('about_locked_y');
+        sessionStorage.removeItem('about_scroll_pos');
+      }
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
+
   return null;
-}
+};
 
 function App() {
   const [isContactOpen, setIsContactOpen] = useState(false);

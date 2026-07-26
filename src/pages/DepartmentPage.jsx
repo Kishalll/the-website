@@ -21,7 +21,8 @@ const SocialIcon = ({ platform }) => {
 };
 
 const DepartmentPage = () => {
-    const { dept: deptSlug } = useParams();
+    const { dept, slug } = useParams();
+    const deptSlug = dept || slug;
     const navigate = useNavigate();
     const department = getDepartmentBySlug(deptSlug);
 
@@ -60,7 +61,7 @@ const DepartmentPage = () => {
             </div>
 
             <div className="max-w-7xl mx-auto relative z-20">
-                {/* Clickable Back Button */}
+                {/* Back Button */}
                 <div className="mb-8 relative z-30">
                     <button
                         onClick={() => navigate('/about')}
@@ -73,31 +74,30 @@ const DepartmentPage = () => {
 
                 {/* Department Header */}
                 <div className="text-center mb-16">
-                    <motion.h1
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 text-white"
-                    >
+                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-4 text-white">
                         {name} Department
-                    </motion.h1>
+                    </h1>
                     <p className="text-gray-400 text-lg font-mono tracking-wide">
                         ZERO BUGS CLUB
                     </p>
                 </div>
 
-                {/* Lead Card Section */}
+                {/* Clickable Lead Card Section */}
                 <div className="mb-20">
                     <h2 className="text-center text-white font-bold mb-8 text-xl md:text-2xl tracking-wide">
                         Department Lead
                     </h2>
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
+                    <div
                         onClick={() => navigate(`/about/${deptSlug}/${lead.slug}`)}
                         className="flex flex-col items-center p-8 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/40 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-md mx-auto shadow-2xl"
                     >
-                        <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-neutral-800 mb-5 border-2 border-white/20 group-hover:border-white/60 transition-colors overflow-hidden relative">
-                            <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
+                        {/* Square Avatar */}
+                        <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-neutral-800 mb-5 border-2 border-white/20 group-hover:border-white/60 transition-colors overflow-hidden relative shadow-lg">
+                            {lead.image ? (
+                                <img src={lead.image} alt={lead.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
+                            )}
                         </div>
                         <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">
                             {lead.name}
@@ -117,7 +117,7 @@ const DepartmentPage = () => {
                                 </a>
                             ))}
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* Members Section */}
@@ -128,16 +128,18 @@ const DepartmentPage = () => {
                     {members && members.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                             {members.map((member) => (
-                                <motion.div
+                                <div
                                     key={member.slug}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
                                     onClick={() => navigate(`/about/${deptSlug}/${member.slug}`)}
-                                    className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-sm"
+                                    className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-sm shadow-md"
                                 >
-                                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative">
-                                        <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
+                                    {/* Square Avatar */}
+                                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative shadow-md">
+                                        {member.image ? (
+                                            <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
+                                        )}
                                     </div>
                                     <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">
                                         {member.name}
@@ -157,7 +159,7 @@ const DepartmentPage = () => {
                                             </a>
                                         ))}
                                     </div>
-                                </motion.div>
+                                </div>
                             ))}
                         </div>
                     ) : (
