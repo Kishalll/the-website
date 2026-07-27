@@ -19,7 +19,6 @@ const Navbar = ({ onContactClick }) => {
         { name: 'About', href: '/about' },
         { name: 'Domains', href: '/domains' },
         { name: 'Tools', href: '/tools' },
-        { name: 'Gallery', href: '/gallery' },
     ];
 
     return (
@@ -33,7 +32,6 @@ const Navbar = ({ onContactClick }) => {
                         </Link>
                     </div>
                     <div className="hidden md:block">
-                        {/* Slightly shifted left by reducing ml-10 to ml-4 lg:ml-8 and tightening item gap */}
                         <div className="ml-4 lg:ml-8 flex items-center space-x-5 lg:space-x-8">
                             {navLinks.map((link) => (
                                 <NavLink
@@ -45,9 +43,9 @@ const Navbar = ({ onContactClick }) => {
                                         }
                                     }}
                                     className={({ isActive }) => `
-                    relative px-4 py-2 rounded-full text-base lg:text-lg font-medium transition-all duration-300 group overflow-hidden
-                    ${isActive ? 'text-black bg-white font-semibold' : 'text-gray-400 hover:text-white'}
-                  `}
+                                    relative px-4 py-2 rounded-full text-base lg:text-lg font-medium transition-all duration-300 group overflow-hidden
+                                    ${isActive ? 'text-black bg-white font-semibold' : 'text-gray-400 hover:text-white'}
+                                  `}
                                 >
                                     {link.name}
                                     <span className="absolute inset-x-0 bottom-0 h-0.5 bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>

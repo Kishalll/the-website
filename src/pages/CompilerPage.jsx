@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Code2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import LightRays from '../components/ui/LightRays';
+import FogBackground from '../components/ui/FogBackground'; // Import from your saved component path
 import CompilerApp from '../compiler/App';
 import '../compiler/compiler.css';
 
@@ -14,19 +14,8 @@ const CompilerPage = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-black pt-24 pb-0 px-0 relative overflow-hidden flex flex-col"
         >
-            <div className="absolute inset-0 z-0">
-                <LightRays
-                    raysOrigin="top-center"
-                    raysColor="#cfcece"
-                    raysSpeed={1.5}
-                    lightSpread={0.8}
-                    rayLength={1.2}
-                    followMouse={true}
-                    mouseInfluence={0.1}
-                    noiseAmount={0.1}
-                    distortion={0.05}
-                />
-            </div>
+            {/* Background Layer - Sit strictly behind content */}
+            <FogBackground />
 
             <div className="relative z-10 flex flex-col flex-1 px-4 sm:px-6 lg:px-8">
                 {/* Header */}
@@ -51,8 +40,8 @@ const CompilerPage = () => {
                     </p>
                 </div>
 
-                {/* Compiler Area */}
-                <div className="flex-1 rounded-2xl overflow-hidden border border-white/10 bg-black/80 backdrop-blur-sm shadow-2xl">
+                {/* Compiler Area - Solid opaque background bg-[#0a0c10] prevents fog penetration */}
+                <div className="flex-1 rounded-2xl overflow-hidden border border-white/10 bg-[#0a0c10] shadow-2xl">
                     <CompilerApp />
                 </div>
             </div>
