@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Linkedin, Github, Instagram, Mail } from 'lucide-react';
-import LightRays from '../components/ui/LightRays';
+import FogBackground from '../components/ui/FogBackground';
 import { getDepartmentBySlug } from '../data/teamData';
 
 const SocialIcon = ({ platform }) => {
@@ -46,26 +46,15 @@ const DepartmentPage = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-black pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-white"
         >
-            <div className="absolute inset-0 z-0">
-                <LightRays
-                    raysOrigin="top-center"
-                    raysColor="#cfcece"
-                    raysSpeed={1.5}
-                    lightSpread={0.8}
-                    rayLength={1.2}
-                    followMouse={true}
-                    mouseInfluence={0.1}
-                    noiseAmount={0.1}
-                    distortion={0.05}
-                />
-            </div>
+            {/* Background Layer - Sits strictly behind content */}
+            <FogBackground />
 
             <div className="max-w-7xl mx-auto relative z-20">
                 {/* Back Button */}
                 <div className="mb-6 relative z-30">
                     <button
                         onClick={() => navigate('/about')}
-                        className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-all cursor-pointer font-mono text-sm uppercase tracking-wider shadow-lg"
+                        className="group inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-neutral-900 hover:bg-neutral-800 text-gray-300 hover:text-white transition-all cursor-pointer font-mono text-sm uppercase tracking-wider shadow-lg"
                     >
                         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
                         Back to Team
@@ -82,14 +71,25 @@ const DepartmentPage = () => {
                     </p>
                 </div>
 
-                {/* Clickable Lead Card Section */}
+                {/* Clickable Lead Card Section with Spring Hover Animation */}
                 <div className="mb-12">
                     <h2 className="text-center text-white font-bold mb-4 text-xl md:text-2xl tracking-wide">
                         Department Lead
                     </h2>
-                    <div
+                    <motion.div
                         onClick={() => navigate(`/about/${deptSlug}/${lead.slug}`)}
-                        className="flex flex-col items-center p-8 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/40 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-md mx-auto shadow-2xl"
+                        whileHover={{
+                            y: -8,
+                            scale: 1.02,
+                            boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.2)",
+                            zIndex: 10
+                        }}
+                        transition={{
+                            y: { type: "spring", stiffness: 300, damping: 25 },
+                            scale: { type: "spring", stiffness: 300, damping: 25 },
+                            boxShadow: { duration: 0.25 }
+                        }}
+                        className="flex flex-col items-center p-8 rounded-2xl border border-white/15 bg-gradient-to-b from-zinc-900 to-neutral-950 hover:border-white/40 transition-colors cursor-pointer group w-full max-w-md mx-auto shadow-2xl relative"
                     >
                         {/* Square Avatar */}
                         <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-neutral-800 mb-5 border-2 border-white/20 group-hover:border-white/60 transition-colors overflow-hidden relative shadow-lg">
@@ -99,7 +99,7 @@ const DepartmentPage = () => {
                                 <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
                             )}
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">
+                        <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300">
                             {lead.name}
                         </h3>
                         <p className="text-sm text-blue-400 font-mono tracking-wide mb-4 uppercase font-semibold">
@@ -117,21 +117,35 @@ const DepartmentPage = () => {
                                 </a>
                             ))}
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
 
-                {/* Members Section */}
+                {/* Members Section with Spring Hover Animation */}
                 <div>
                     <h2 className="text-center text-white font-bold mb-6 text-xl md:text-2xl tracking-wide">
                         Members
                     </h2>
                     {members && members.length > 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                            {members.map((member) => (
-                                <div
+                            {members.map((member, index) => (
+                                <motion.div
                                     key={member.slug}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    whileHover={{
+                                        y: -8,
+                                        scale: 1.02,
+                                        boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.2)",
+                                        zIndex: 10
+                                    }}
+                                    transition={{
+                                        delay: index * 0.05,
+                                        y: { type: "spring", stiffness: 300, damping: 25 },
+                                        scale: { type: "spring", stiffness: 300, damping: 25 },
+                                        boxShadow: { duration: 0.25 }
+                                    }}
                                     onClick={() => navigate(`/about/${deptSlug}/${member.slug}`)}
-                                    className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-sm shadow-md"
+                                    className="flex flex-col items-center p-6 rounded-2xl border border-white/15 bg-gradient-to-b from-zinc-900 to-neutral-950 hover:border-white/30 transition-colors cursor-pointer group w-full max-w-sm shadow-md relative"
                                 >
                                     {/* Square Avatar */}
                                     <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative shadow-md">
@@ -141,7 +155,7 @@ const DepartmentPage = () => {
                                             <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
                                         )}
                                     </div>
-                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">
+                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300">
                                         {member.name}
                                     </h3>
                                     <p className="text-xs text-blue-400 font-mono tracking-wide mb-4 uppercase">
@@ -149,9 +163,9 @@ const DepartmentPage = () => {
                                     </p>
 
                                     <div className="flex gap-4" onClick={(e) => e.stopPropagation()}>
-                                        {member.socials?.map((social, index) => (
+                                        {member.socials?.map((social, idx) => (
                                             <a
-                                                key={index}
+                                                key={idx}
                                                 href={social.url}
                                                 className="text-gray-400 hover:text-white transition-colors"
                                             >
@@ -159,7 +173,7 @@ const DepartmentPage = () => {
                                             </a>
                                         ))}
                                     </div>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                     ) : (

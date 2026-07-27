@@ -1,13 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import LightRays from '../components/ui/LightRays';
+import FogBackground from '../components/ui/FogBackground'; // Adjust path based on your folder structure
 
 const GalleryPage = () => {
-    // Generate placeholder items
     const items = Array.from({ length: 9 }).map((_, i) => ({
         id: i,
-        size: i % 3 === 0 ? "large" : "small", // Simple logic for grid variation
-        color: `bg-neutral-${(i % 5 + 4) * 100}` // Varying shades
+        size: i % 3 === 0 ? "large" : "small",
+        color: `bg-neutral-${(i % 5 + 4) * 100}`
     }));
 
     return (
@@ -17,19 +16,9 @@ const GalleryPage = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
-            <div className="absolute inset-0 z-0">
-                <LightRays
-                    raysOrigin="top-center"
-                    raysColor="#cfcece"
-                    raysSpeed={1.5}
-                    lightSpread={0.8}
-                    rayLength={1.2}
-                    followMouse={true}
-                    mouseInfluence={0.1}
-                    noiseAmount={0.1}
-                    distortion={0.05}
-                />
-            </div>
+            {/* Replaced MonochromeAuroraBackground with unified FogBackground */}
+            <FogBackground />
+
             <div className="max-w-7xl mx-auto relative z-10">
                 <h1 className="text-5xl md:text-6xl font-bold mb-12 text-center text-white">Captured Moments</h1>
 
@@ -39,13 +28,27 @@ const GalleryPage = () => {
                             key={i}
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.4, delay: i * 0.05 }}
-                            className={`relative group overflow-hidden rounded-xl cursor-pointer border border-white/10 hover:border-white/30 transition-colors ${item.size === 'large' ? 'lg:col-span-2 lg:row-span-2' : ''
-                                }`}
+                            whileHover={{
+                                y: -6,
+                                scale: 1.02,
+                                boxShadow: "0px 10px 25px 2px rgba(255, 255, 255, 0.18)",
+                                zIndex: 20
+                            }}
+                            transition={{
+                                duration: 0.4,
+                                delay: i * 0.05,
+                                y: { type: "spring", stiffness: 300, damping: 25 },
+                                scale: { type: "spring", stiffness: 300, damping: 25 },
+                                boxShadow: { duration: 0.25 }
+                            }}
+                            className={`relative group overflow-hidden rounded-xl cursor-pointer border border-white/10 bg-[#111111] hover:border-white/30 transition-colors shadow-xl ${
+                                item.size === 'large' ? 'lg:col-span-2 lg:row-span-2' : ''
+                            }`}
                         >
                             {/* Placeholder Gradient */}
-                            <div className={`w-full h-full bg-gradient-to-br ${i % 2 === 0 ? 'from-[#1a1a1a] to-[#050505]' : 'from-[#222] to-[#111]'
-                                } hover:scale-105 transition-transform duration-700 ease-out`}
+                            <div className={`w-full h-full bg-gradient-to-br ${
+                                i % 2 === 0 ? 'from-[#1a1a1a] to-[#050505]' : 'from-[#222] to-[#111]'
+                            } group-hover:scale-105 transition-transform duration-700 ease-out`}
                             />
 
                             {/* Overlay */}

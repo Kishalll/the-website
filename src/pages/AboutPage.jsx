@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight } from 'lucide-react';
-import LightRays from '../components/ui/LightRays';
+import FogBackground from '../components/ui/FogBackground';
 import { boardMembers, facultyCoordinator, departments } from '../data/teamData';
 
 const AboutPage = () => {
@@ -59,19 +59,8 @@ const AboutPage = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
-            <div className="absolute inset-0 z-0">
-                <LightRays
-                    raysOrigin="top-center"
-                    raysColor="#cfcece"
-                    raysSpeed={1.5}
-                    lightSpread={0.8}
-                    rayLength={1.2}
-                    followMouse={true}
-                    mouseInfluence={0.1}
-                    noiseAmount={0.1}
-                    distortion={0.05}
-                />
-            </div>
+            <FogBackground />
+
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-20">
                     <motion.h1
@@ -94,33 +83,45 @@ const AboutPage = () => {
                 </div>
 
                 {/* Values Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20 p-2">
                     {values.map((item, index) => (
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 + (index * 0.1) }}
-                            className="bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm p-8 rounded-xl border border-white/10 hover:border-white/20 hover:from-white/15 hover:to-black/30 transition-all group"
+                            whileHover={{
+                                y: -8,
+                                scale: 1.03,
+                                boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.15)",
+                                zIndex: 20
+                            }}
+                            transition={{
+                                delay: 0.4 + (index * 0.1),
+                                y: { type: "spring", stiffness: 300, damping: 25 },
+                                scale: { type: "spring", stiffness: 300, damping: 25 },
+                                boxShadow: { duration: 0.25 }
+                            }}
+                            className="bg-[#111111] p-8 rounded-2xl border border-white/10 hover:border-white/20 cursor-pointer group flex flex-col justify-between relative shadow-xl z-10"
                         >
-                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center text-white mb-6 group-hover:bg-white group-hover:text-black transition-colors">
-                                {item.icon}
+                            <div>
+                                <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center text-white mb-6 group-hover:bg-white group-hover:text-black transition-colors duration-300 shadow-md">
+                                    {item.icon}
+                                </div>
+                                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                                <p className="text-gray-400 leading-relaxed">
+                                    {item.description}
+                                </p>
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
-                            <p className="text-gray-400 leading-relaxed">
-                                {item.description}
-                            </p>
                         </motion.div>
                     ))}
                 </div>
 
                 {/* Team Section */}
                 <div className="mb-12">
-                    <h2 className="text-4xl md:text-6xl font-bold text-center text-white mb-10 tracking-tighter">
+                    <h2 className="text-4xl md:text-6xl font-bold text-center text-white mb-12 tracking-tighter">
                         THE TEAM
                     </h2>
 
-                    {/* Hierarchy Helper Component */}
                     <TeamHierarchy />
                 </div>
             </div>
@@ -129,11 +130,23 @@ const AboutPage = () => {
 };
 
 const TeamMemberCard = ({ name, role, onClick, socials }) => (
-    <div
+    <motion.div
         onClick={onClick}
-        className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/20 backdrop-blur-sm hover:border-white/30 hover:scale-[1.02] transition-all cursor-pointer group w-full max-w-sm mx-auto shadow-lg"
+        whileHover={{
+            y: -6,
+            scale: 1.02,
+            boxShadow: "0px 10px 25px 2px rgba(255, 255, 255, 0.15)",
+            zIndex: 20
+        }}
+        transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 25,
+            boxShadow: { duration: 0.25 }
+        }}
+        className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-[#111111] hover:border-white/30 transition-colors cursor-pointer group w-full max-w-sm mx-auto relative shadow-xl z-10"
     >
-        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative">
+        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative shadow-inner">
             <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
         </div>
         <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">{name}</h3>
@@ -154,7 +167,7 @@ const TeamMemberCard = ({ name, role, onClick, socials }) => (
                 </>
             )}
         </div>
-    </div>
+    </motion.div>
 );
 
 const TeamHierarchy = () => {
@@ -172,10 +185,9 @@ const TeamHierarchy = () => {
     const coSecretary = boardMembers.find(m => m.slug === 'divyashri-rajaraman');
 
     return (
-        <div className="flex flex-col gap-10 items-center">
-            {/* Level 1: Chairperson */}
+        <div className="flex flex-col gap-12 items-center">
             {president && (
-                <div className="w-full flex justify-center">
+                <div className="w-full flex justify-center p-2">
                     <TeamMemberCard
                         name={president.name}
                         role={president.role}
@@ -184,9 +196,8 @@ const TeamHierarchy = () => {
                 </div>
             )}
 
-            {/* Level 2: Vice Chairperson */}
             {vicePresident && (
-                <div className="w-full flex justify-center">
+                <div className="w-full flex justify-center p-2">
                     <TeamMemberCard
                         name={vicePresident.name}
                         role={vicePresident.role}
@@ -195,8 +206,7 @@ const TeamHierarchy = () => {
                 </div>
             )}
 
-            {/* Level 3: Secretary & Co-secretary */}
-            <div className="w-full flex justify-center gap-6 flex-wrap">
+            <div className="w-full flex justify-center gap-8 flex-wrap p-2">
                 {secretary && (
                     <TeamMemberCard
                         name={secretary.name}
@@ -213,12 +223,11 @@ const TeamHierarchy = () => {
                 )}
             </div>
 
-            {/* Level 4: Departments */}
             <div className="w-full">
-                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-6">
+                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-8">
                     Departments
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center p-2">
                     {departments.map((dept) => (
                         <div key={dept.slug} className="flex flex-col items-center gap-4 w-full max-w-sm">
                             <TeamMemberCard
@@ -226,24 +235,36 @@ const TeamHierarchy = () => {
                                 role={`${dept.name} Lead`}
                                 onClick={() => handleNavigate(`/about/${dept.slug}/${dept.lead.slug}`)}
                             />
-                            <button
+                            <motion.button
                                 onClick={() => handleNavigate(`/about/${dept.slug}`)}
-                                className="w-full py-2.5 px-4 rounded-xl border border-white/15 bg-white/5 hover:bg-white hover:text-black font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 group cursor-pointer shadow-md"
+                                whileHover={{
+                                    y: -3,
+                                    scale: 1.02,
+                                    boxShadow: "0px 8px 20px 2px rgba(255, 255, 255, 0.2)",
+                                    zIndex: 20
+                                }}
+                                whileTap={{ scale: 0.98 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 25,
+                                    boxShadow: { duration: 0.25 }
+                                }}
+                                className="w-full py-2.5 px-4 rounded-xl border border-white/15 bg-[#1a1a1a] hover:bg-white hover:text-black font-semibold text-sm flex items-center justify-center gap-2 group cursor-pointer shadow-md text-white transition-colors duration-300 z-10"
                             >
                                 View members
                                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                            </button>
+                            </motion.button>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {/* Level 5: Faculty Coordinator */}
-            <div className="w-full pt-6 border-t border-white/5">
-                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-6">
+            <div className="w-full pt-8 border-t border-white/10">
+                <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-8">
                     Faculty Coordinator
                 </h3>
-                <div className="flex justify-center">
+                <div className="flex justify-center p-2">
                     <TeamMemberCard
                         name={facultyCoordinator.name}
                         role={facultyCoordinator.role}

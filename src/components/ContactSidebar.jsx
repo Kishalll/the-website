@@ -73,20 +73,21 @@ const ContactSidebar = ({ isOpen, onClose }) => {
                         animate={{ x: 0 }}
                         exit={{ x: '100%' }}
                         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                        className="fixed right-0 top-0 h-full w-full sm:w-[400px] bg-[#0a0a0a] border-l border-white/10 z-[70] p-8 shadow-2xl flex flex-col"
+                        className="fixed right-0 top-0 h-full w-full sm:w-[420px] bg-[#0a0a0a] border-l border-white/10 z-[70] p-6 sm:p-8 shadow-2xl flex flex-col"
                     >
-                        <div className="flex justify-between items-center mb-10">
-                            <h2 className="text-3xl font-bold tracking-tighter">Get in Touch</h2>
+                        <div className="flex justify-between items-center mb-8 shrink-0">
+                            <h2 className="text-3xl font-bold tracking-tighter text-white">Get in Touch</h2>
                             <button
                                 onClick={onClose}
-                                className="p-2 rounded-full hover:bg-white/10 transition-colors"
+                                className="p-2 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors cursor-pointer"
                             >
                                 <X size={24} />
                             </button>
                         </div>
 
-                        <div className="flex-1 overflow-y-auto">
-                            <p className="text-gray-400 mb-8">
+                        {/* Scrollable Body Container with Offset Padding */}
+                        <div className="flex-1 overflow-y-auto pr-3 -mr-2 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.2)_transparent]">
+                            <p className="text-gray-400 mb-8 leading-relaxed">
                                 Have a project in mind or want to join the club? Send us a message directly.
                             </p>
 
@@ -121,10 +122,12 @@ const ContactSidebar = ({ isOpen, onClose }) => {
                                     ></textarea>
                                 </div>
 
-                                <button
+                                <motion.button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    className="w-full bg-white text-black font-bold py-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                                    whileHover={{ scale: 1.01, y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="w-full bg-white text-black font-bold py-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-md"
                                 >
                                     {isSubmitting ? (
                                         <>
@@ -137,7 +140,8 @@ const ContactSidebar = ({ isOpen, onClose }) => {
                                             <Send size={18} className="group-hover:translate-x-1 transition-transform" />
                                         </>
                                     )}
-                                </button>
+                                </motion.button>
+
                                 {result && (
                                     <p className={`text-center text-sm ${result.success ? 'text-green-400' : 'text-red-400'}`}>
                                         {result.message}
@@ -145,17 +149,17 @@ const ContactSidebar = ({ isOpen, onClose }) => {
                                 )}
                             </form>
 
-                            <div className="mt-12 text-center">
+                            <div className="mt-12 mb-4 text-center">
                                 <div className="relative mb-8">
                                     <div className="absolute inset-0 flex items-center">
                                         <div className="w-full border-t border-white/10"></div>
                                     </div>
                                     <div className="relative flex justify-center text-sm">
-                                        <span className="px-2 bg-[#0a0a0a] text-gray-500">Or connect via</span>
+                                        <span className="px-3 bg-[#0a0a0a] text-gray-500">Or connect via</span>
                                     </div>
                                 </div>
 
-                                <div className="flex justify-center gap-4">
+                                <div className="flex justify-center gap-4 pb-2">
                                     {socialLinks.map((link, i) => (
                                         <a
                                             key={i}

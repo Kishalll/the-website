@@ -108,7 +108,6 @@ const RecruitmentPage = () => {
             ...prev,
             [name]: value
         }));
-        // Clear error when user selects/types
         if (errors[name]) {
             setErrors(prev => ({ ...prev, [name]: '' }));
         }
@@ -122,7 +121,6 @@ const RecruitmentPage = () => {
                 [questionId]: value
             }
         }));
-        // Clear error when user types
         if (errors[questionId]) {
             setErrors(prev => ({ ...prev, [questionId]: '' }));
         }
@@ -131,10 +129,8 @@ const RecruitmentPage = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        // 1. Name
         if (!formData.name.trim()) newErrors.name = "Name is required";
 
-        // 2. Reg No
         if (!formData.regNo.trim()) {
             newErrors.regNo = "Registration Number is required";
         } else {
@@ -144,7 +140,6 @@ const RecruitmentPage = () => {
             }
         }
 
-        // 3. VIT Email
         if (!formData.vitEmail.trim()) {
             newErrors.vitEmail = "VIT Email ID is required";
         } else {
@@ -154,13 +149,9 @@ const RecruitmentPage = () => {
             }
         }
 
-        // 4. Year
         if (!formData.year) newErrors.year = "Year is required";
-
-        // 5. Department
         if (!formData.department) newErrors.department = "Department is required";
 
-        // 6. General Questions
         generalQuestions.forEach(q => {
             const answer = formData.answers[q.id];
             if (q.required && !answer?.trim()) {
@@ -178,7 +169,6 @@ const RecruitmentPage = () => {
             }
         });
 
-        // 7. Domain Questions
         if (formData.department && domainQuestions[formData.department]) {
             domainQuestions[formData.department].forEach(q => {
                 const answer = formData.answers[q.id];
@@ -479,12 +469,34 @@ const RecruitmentPage = () => {
                         </motion.div>
                     )}
 
-                    <button
+                    {/* Animated Submit Button */}
+                    <motion.button
                         type="submit"
-                        className="w-full bg-white text-black font-bold uppercase tracking-widest py-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+                        whileHover={{
+                            scale: 1.02,
+                            y: -4,
+                            boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.35)",
+                            backgroundColor: "#ffffff"
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 22
+                        }}
+                        className="group w-full bg-white text-black font-bold uppercase tracking-widest py-4 rounded-lg cursor-pointer flex items-center justify-center gap-2 relative overflow-hidden transition-colors"
                     >
-                        Submit Application <Send size={18} />
-                    </button>
+                        <span>Submit Application</span>
+                        <motion.div
+                            className="flex items-center justify-center"
+                            variants={{
+                                hover: { x: 4, rotate: -10 }
+                            }}
+                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                        >
+                            <Send size={18} className="group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-200" />
+                        </motion.div>
+                    </motion.button>
 
                 </form>
             </div>
