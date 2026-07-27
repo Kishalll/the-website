@@ -38,7 +38,8 @@ const Hero = () => {
 
             {/* Main Content Area */}
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pointer-events-auto">
-                <h1 className="text-6xl md:text-9xl font-bold tracking-tighter mb-8 text-white">
+                {/* Responsive Headline: stacks nicely on mobile with balanced text sizing */}
+                <h1 className="text-4xl sm:text-6xl md:text-9xl font-bold tracking-tighter mb-6 md:mb-8 text-white flex flex-col md:block items-center justify-center leading-[1.1] md:leading-none">
                     <span className="inline-block overflow-hidden">
                         <motion.span
                             initial={{ y: "100%" }}
@@ -49,7 +50,7 @@ const Hero = () => {
                             ZERO
                         </motion.span>
                     </span>
-                    <span className="inline-block overflow-hidden mx-4 text-white">
+                    <span className="inline-block overflow-hidden md:mx-4 text-white">
                         <motion.span
                             initial={{ y: "100%" }}
                             animate={{ y: 0 }}
@@ -76,7 +77,7 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    className="mt-6 max-w-3xl mx-auto text-xl md:text-3xl font-mono tracking-widest text-gray-300 uppercase leading-relaxed mb-12"
+                    className="mt-4 md:mt-6 max-w-3xl mx-auto text-sm sm:text-xl md:text-3xl font-mono tracking-widest text-gray-300 uppercase leading-relaxed mb-8 md:mb-12 px-2"
                 >
                     EXPLORE. ENGINEER. EVOLVE.
                 </motion.p>
@@ -107,10 +108,10 @@ const Hero = () => {
                             stiffness: 260, 
                             damping: 22 
                         }}
-                        className="group relative px-10 py-4 font-bold uppercase tracking-widest outline-none border border-white/20 backdrop-blur-sm cursor-pointer"
+                        className="group relative px-8 py-3.5 md:px-10 md:py-4 text-sm md:text-base font-bold uppercase tracking-widest outline-none border border-white/20 backdrop-blur-sm cursor-pointer"
                     >
                         <span className="relative z-10 flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
-                            Join Us <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
+                            Join Us <ArrowRight size={18} className="md:w-5 md:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                         </span>
                     </motion.button>
                 </motion.div>
