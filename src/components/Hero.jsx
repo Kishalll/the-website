@@ -37,9 +37,9 @@ const Hero = () => {
             </div>
 
             {/* Main Content Area */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pointer-events-auto">
-                {/* Responsive Headline: stacks nicely on mobile with balanced text sizing */}
-                <h1 className="text-4xl sm:text-6xl md:text-9xl font-bold tracking-tighter mb-6 md:mb-8 text-white flex flex-col md:block items-center justify-center leading-[1.1] md:leading-none">
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pointer-events-auto -mt-8 md:mt-0">
+                {/* Responsive Headline: 1-word per line on mobile with increased line spacing and width */}
+                <h1 className="text-6xl xs:text-7xl sm:text-8xl md:text-9xl font-bold tracking-tight mb-6 md:mb-8 text-white flex flex-col space-y-3 md:space-y-0 md:block items-center justify-center leading-none">
                     <span className="inline-block overflow-hidden">
                         <motion.span
                             initial={{ y: "100%" }}
@@ -77,7 +77,7 @@ const Hero = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    className="mt-4 md:mt-6 max-w-3xl mx-auto text-sm sm:text-xl md:text-3xl font-mono tracking-widest text-gray-300 uppercase leading-relaxed mb-8 md:mb-12 px-2"
+                    className="mt-6 md:mt-6 max-w-4xl mx-auto text-[3.8vw] xs:text-sm sm:text-2xl md:text-4xl font-mono font-extrabold tracking-wider sm:tracking-widest uppercase leading-relaxed mb-8 md:mb-12 px-2 whitespace-nowrap text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-100 to-white drop-shadow-[0_0_15px_rgba(255,255,255,0.75)]"
                 >
                     EXPLORE. ENGINEER. EVOLVE.
                 </motion.p>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { recruitmentConfig } from '../config/recruitment.config';
-import { Send, User, Hash, Mail, Calendar, ChevronDown, Check, Layers } from 'lucide-react';
+import { Send, User, Hash, Mail, Calendar, ChevronDown, Check, Layers, ArrowLeft } from 'lucide-react';
 import LightRays from '../components/ui/LightRays';
 
 const CustomSelect = ({ name, value, options, placeholder, onChange, icon: Icon, error }) => {
@@ -238,6 +238,15 @@ const RecruitmentPage = () => {
             </div>
 
             <div className="max-w-4xl mx-auto relative z-10">
+                <button
+                    type="button"
+                    onClick={() => navigate('/')}
+                    className="mb-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white hover:text-black text-gray-300 font-medium text-sm transition-all duration-300 group cursor-pointer shadow-md"
+                >
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Back to Home</span>
+                </button>
+
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4 text-white uppercase glitch-wrapper" data-text="ZBC Recruitments 2025 -26">
                         ZBC Recruitments 2025 -26

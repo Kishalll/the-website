@@ -46,8 +46,7 @@ const Footer = () => {
                                     { name: 'Home', path: '/' },
                                     { name: 'About', path: '/about' },
                                     { name: 'Domains', path: '/domains' },
-                                    { name: 'Tools', path: '/tools' },
-                                    { name: 'Gallery', path: '/gallery' }
+                                    { name: 'Tools', path: '/tools' }
                                 ].map((link) => (
                                     <li key={link.name}>
                                         <Link
@@ -87,9 +86,7 @@ const Footer = () => {
 
                     {/* Brand Bio & Socials */}
                     <div className="lg:col-span-3 text-center lg:text-right flex flex-col items-center lg:items-end">
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="text-3xl font-bold tracking-tighter">ZBC</span>
-                        </div>
+
                         <p className="text-gray-400 text-sm max-w-[220px] mb-5 leading-relaxed">
                             Zero Bugs Club. <br />
                             Shipping code that matters. <br />

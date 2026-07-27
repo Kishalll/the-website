@@ -38,12 +38,14 @@ const FloatingLines = ({
     // Pre-calculated target mouse coordinates (prevents layout thrashing)
     const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
 
+    let currentDpr = 1;
+
     const resize = () => {
       const parent = canvas.parentElement;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x DPR for smooth high-Hz rendering
-      canvas.width = (parent ? parent.offsetWidth : window.innerWidth) * dpr;
-      canvas.height = (parent ? parent.offsetHeight : window.innerHeight) * dpr;
-      ctx.scale(dpr, dpr);
+      currentDpr = Math.min(window.devicePixelRatio || 1, 2); // Cap at 2x DPR for smooth high-Hz rendering
+      canvas.width = (parent ? parent.offsetWidth : window.innerWidth) * currentDpr;
+      canvas.height = (parent ? parent.offsetHeight : window.innerHeight) * currentDpr;
+      ctx.scale(currentDpr, currentDpr);
     };
 
     resize();
@@ -89,8 +91,8 @@ const FloatingLines = ({
     const render = () => {
       time += 0.015 * animationSpeed;
 
-      const displayWidth = canvas.width / (window.devicePixelRatio || 1);
-      const displayHeight = canvas.height / (window.devicePixelRatio || 1);
+      const displayWidth = canvas.width / currentDpr;
+      const displayHeight = canvas.height / currentDpr;
 
       ctx.clearRect(0, 0, displayWidth, displayHeight);
 
