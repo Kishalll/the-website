@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { recruitmentConfig } from '../config/recruitment.config';
+import { supabase } from '../lib/supabase';
 import { Send, User, Hash, Mail, Calendar, ChevronDown, Check, Layers, ArrowLeft } from 'lucide-react';
 import LightRays from '../components/ui/LightRays';
 
@@ -200,20 +201,29 @@ const RecruitmentPage = () => {
         if (Object.keys(formErrors).length === 0) {
             setIsSubmitting(true);
             try {
-                if (recruitmentConfig.webhookUrl) {
-                    await fetch(recruitmentConfig.webhookUrl, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'text/plain;charset=utf-8'
-                        },
-                        body: JSON.stringify(formData)
-                    });
+                const { error } = await supabase
+                    .from('recruitment_applications')
+                    .insert([
+                        {
+                            name: formData.name,
+                            reg_no: formData.regNo,
+                            vit_email: formData.vitEmail,
+                            year: formData.year,
+                            department: formData.department,
+                            answers: formData.answers
+                        }
+                    ]);
+
+                if (error) {
+                    console.error('Supabase insertion error:', error);
+                    alert('Submission failed. Please check your details and try again.');
+                } else {
+                    setIsSubmitted(true);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-                setIsSubmitted(true);
             } catch (err) {
-                console.error('Submission error:', err);
-                alert('Submission failed. Please check your network connection and try again.');
+                console.error('Unexpected error:', err);
+                alert('Submission failed. Please try again.');
             } finally {
                 setIsSubmitting(false);
             }
