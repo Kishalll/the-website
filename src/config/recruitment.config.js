@@ -1,5 +1,6 @@
 export const recruitmentConfig = {
     isRecruiting: true,
+    webhookUrl: 'https://script.google.com/macros/s/AKfycbxHkD1cW5mM-Faqk05rRjAEHj5g1tEvHFYQD4yQxEokb0KnhEmdqRT6m_uUnGhG_X263g/exec',
     departments: [
         { id: 'technical', name: 'Technical' },
         { id: 'design', name: 'Design' },

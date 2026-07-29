@@ -94,6 +94,8 @@ const RecruitmentPage = () => {
     });
 
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const yearOptions = [
         { value: '1', label: '1st Year' },
@@ -191,13 +193,30 @@ const RecruitmentPage = () => {
         return newErrors;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const formErrors = validateForm();
 
         if (Object.keys(formErrors).length === 0) {
-            console.log('Form Submitted:', formData);
-            alert('Application Submitted! (This is a demo)');
+            setIsSubmitting(true);
+            try {
+                if (recruitmentConfig.webhookUrl) {
+                    await fetch(recruitmentConfig.webhookUrl, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'text/plain;charset=utf-8'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                }
+                setIsSubmitted(true);
+            } catch (err) {
+                console.error('Submission error:', err);
+                alert('Submission failed. Please check your network connection and try again.');
+            } finally {
+                setIsSubmitting(false);
+            }
         } else {
             const firstErrorField = Object.keys(formErrors)[0];
             setErrors({ [firstErrorField]: formErrors[firstErrorField] });
@@ -254,261 +273,251 @@ const RecruitmentPage = () => {
                     <p className="text-gray-400">Join the community. Build the future.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8 bg-white/5 backdrop-blur-md p-8 rounded-2xl border border-white/10" noValidate>
-
-                    {/* Basic Details */}
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-white border-b border-white/10 pb-2">Basic Details</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                            {/* Name */}
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                                    <User size={16} /> Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
-                                    placeholder="Pattasu Balu"
-                                />
-                                {errors.name && (
-                                    <span
-                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
-                                        onClick={() => setErrors(prev => ({ ...prev, name: '' }))}
-                                    >
-                                        {errors.name}
-                                    </span>
-                                )}
-                            </div>
-
-                            {/* Reg No */}
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                                    <Hash size={16} /> Registration Number
-                                </label>
-                                <input
-                                    type="text"
-                                    name="regNo"
-                                    value={formData.regNo}
-                                    onChange={handleInputChange}
-                                    className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors.regNo ? 'border-red-500' : 'border-white/20'}`}
-                                    placeholder="24BCE6767"
-                                />
-                                {errors.regNo && (
-                                    <span
-                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
-                                        onClick={() => setErrors(prev => ({ ...prev, regNo: '' }))}
-                                    >
-                                        {errors.regNo}
-                                    </span>
-                                )}
-                            </div>
-
-                            {/* VIT Email */}
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                                    <Mail size={16} /> VIT Email ID
-                                </label>
-                                <input
-                                    type="email"
-                                    name="vitEmail"
-                                    value={formData.vitEmail}
-                                    onChange={handleInputChange}
-                                    className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors.vitEmail ? 'border-red-500' : 'border-white/20'}`}
-                                    placeholder="pattasu.balu2024@vitstudent.ac.in"
-                                />
-                                {errors.vitEmail && (
-                                    <span
-                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
-                                        onClick={() => setErrors(prev => ({ ...prev, vitEmail: '' }))}
-                                    >
-                                        {errors.vitEmail}
-                                    </span>
-                                )}
-                            </div>
-
-                            {/* Custom Year Dropdown */}
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                                    <Calendar size={16} /> Year
-                                </label>
-                                <CustomSelect
-                                    name="year"
-                                    value={formData.year}
-                                    options={yearOptions}
-                                    placeholder="Select Year"
-                                    onChange={handleInputChange}
-                                    icon={Calendar}
-                                    error={errors.year}
-                                />
-                                {errors.year && (
-                                    <span
-                                        className="text-red-500 text-xs mt-1 cursor-pointer block"
-                                        onClick={() => setErrors(prev => ({ ...prev, year: '' }))}
-                                    >
-                                        {errors.year}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Department Selection */}
-                    <div className="space-y-6">
-                        <h2 className="text-2xl font-bold text-white border-b border-white/10 pb-2">Department</h2>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
-                                <Layers size={16} /> Select Department
-                            </label>
-                            <CustomSelect
-                                name="department"
-                                value={formData.department}
-                                options={departments}
-                                placeholder="Select Department"
-                                onChange={handleInputChange}
-                                icon={Layers}
-                                error={errors.department}
-                            />
-                            {errors.department && (
-                                <span
-                                    className="text-red-500 text-xs mt-1 cursor-pointer block"
-                                    onClick={() => setErrors(prev => ({ ...prev, department: '' }))}
-                                >
-                                    {errors.department}
-                                </span>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Dynamic Questions */}
-                    {formData.department && (
+                    {/* Form Container or Success View */}
+                    {isSubmitted ? (
                         <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            className="space-y-6"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="bg-zinc-950/75 backdrop-blur-md p-8 sm:p-12 rounded-2xl border border-white/15 shadow-2xl text-center space-y-6 relative z-30"
                         >
-                            <h2 className="text-2xl font-bold text-white border-b border-white/10 pb-2">Department Questions</h2>
+                            <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto text-white">
+                                <Check size={36} />
+                            </div>
+                            <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight uppercase">
+                                Application Submitted!
+                            </h2>
+                            <p className="text-gray-300 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
+                                Thank you for applying to ZBC. <span className="text-white font-semibold border-b border-white/30 pb-0.5">We will review your application and reach out to you via your email.</span>
+                            </p>
+                            <div className="pt-4 flex items-center justify-center">
+                                <button
+                                    type="button"
+                                    onClick={() => navigate('/')}
+                                    className="w-full sm:w-auto px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs sm:text-sm rounded-lg hover:bg-gray-200 transition-colors"
+                                >
+                                    Return to Home
+                                </button>
+                            </div>
+                        </motion.div>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 bg-zinc-950/75 backdrop-blur-md p-5 sm:p-8 rounded-2xl border border-white/15 shadow-2xl relative z-30" noValidate>
+
+                            {/* Basic Details */}
+                            <div className="space-y-5 sm:space-y-6">
+                                <h2 className="text-xl sm:text-2xl font-bold text-white border-b border-white/10 pb-2">Basic Details</h2>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                                    {/* Name */}
+                                    <div>
+                                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-1.5">
+                                            Full Name <span className="text-red-500">*</span>
+                                        </label>
+                                        <div className="relative">
+                                            <User className="absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleInputChange}
+                                                placeholder="Enter your full name"
+                                                className={`w-full bg-black/60 border ${errors.name ? 'border-red-500' : 'border-white/15 focus:border-white'} rounded-lg pl-9 sm:pl-10 pr-3.5 sm:pr-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-colors`}
+                                            />
+                                        </div>
+                                        {errors.name && <span className="text-xs text-red-500 mt-1 block">{errors.name}</span>}
+                                    </div>
+
+                                    {/* Registration Number */}
+                                    <div>
+                                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-1.5">
+                                            Registration Number <span className="text-red-500">*</span>
+                                        </label>
+                                        <div className="relative">
+                                            <Hash className="absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+                                            <input
+                                                type="text"
+                                                name="regNo"
+                                                value={formData.regNo}
+                                                onChange={handleInputChange}
+                                                placeholder="e.g. 24BCE0000"
+                                                className={`w-full bg-black/60 border ${errors.regNo ? 'border-red-500' : 'border-white/15 focus:border-white'} rounded-lg pl-9 sm:pl-10 pr-3.5 sm:pr-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white uppercase placeholder-gray-500 focus:outline-none transition-colors`}
+                                            />
+                                        </div>
+                                        {errors.regNo && <span className="text-xs text-red-500 mt-1 block">{errors.regNo}</span>}
+                                    </div>
+
+                                    {/* VIT Email */}
+                                    <div>
+                                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-1.5">
+                                            VIT Email ID <span className="text-red-500">*</span>
+                                        </label>
+                                        <div className="relative">
+                                            <Mail className="absolute left-3 sm:left-3.5 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+                                            <input
+                                                type="email"
+                                                name="vitEmail"
+                                                value={formData.vitEmail}
+                                                onChange={handleInputChange}
+                                                placeholder="name.number@vit.ac.in"
+                                                className={`w-full bg-black/60 border ${errors.vitEmail ? 'border-red-500' : 'border-white/15 focus:border-white'} rounded-lg pl-9 sm:pl-10 pr-3.5 sm:pr-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-colors`}
+                                            />
+                                        </div>
+                                        {errors.vitEmail && <span className="text-xs text-red-500 mt-1 block">{errors.vitEmail}</span>}
+                                    </div>
+
+                                    {/* Academic Year */}
+                                    <div>
+                                        <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-1.5">
+                                            Academic Year <span className="text-red-500">*</span>
+                                        </label>
+                                        <CustomSelect
+                                            name="year"
+                                            value={formData.year}
+                                            options={yearOptions}
+                                            placeholder="Select your year"
+                                            onChange={handleInputChange}
+                                            icon={Calendar}
+                                            error={errors.year}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Preferred Department */}
+                                <div>
+                                    <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-1.5">
+                                        Preferred Department <span className="text-red-500">*</span>
+                                    </label>
+                                    <CustomSelect
+                                        name="department"
+                                        value={formData.department}
+                                        options={departments}
+                                        placeholder="Select department"
+                                        onChange={handleInputChange}
+                                        icon={Layers}
+                                        error={errors.department}
+                                    />
+                                </div>
+                            </div>
 
                             {/* General Questions */}
-                            {generalQuestions.map(q => (
-                                <div key={q.id} className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300">
-                                        {q.label} {q.required && <span className="text-red-500">*</span>}
-                                    </label>
-                                    {q.type === 'textarea' ? (
-                                        <div className="space-y-1">
-                                            <textarea
-                                                name={q.id}
-                                                value={formData.answers[q.id] || ''}
-                                                onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                                                placeholder={q.placeholder}
-                                                className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-36 ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
-                                            />
-                                            {q.wordLimit && (
-                                                <div className="flex justify-end text-xs text-gray-400 font-mono">
-                                                    Word count: {formData.answers[q.id] ? formData.answers[q.id].trim().split(/\s+/).filter(Boolean).length : 0} / {q.wordLimit} words
-                                                </div>
+                            {generalQuestions.length > 0 && (
+                                <div className="space-y-5 sm:space-y-6 pt-4 border-t border-white/10">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-white">General Questions</h2>
+                                    {generalQuestions.map((q) => (
+                                        <div key={q.id}>
+                                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-1.5">
+                                                {q.label} {q.required && <span className="text-red-500">*</span>}
+                                            </label>
+                                            {q.type === 'textarea' ? (
+                                                <textarea
+                                                    name={q.id}
+                                                    rows={4}
+                                                    value={formData.answers[q.id] || ''}
+                                                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                                    placeholder={q.placeholder}
+                                                    className={`w-full bg-black/60 border ${errors[q.id] ? 'border-red-500' : 'border-white/15 focus:border-white'} rounded-lg p-3 sm:p-3.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-colors resize-y min-h-[100px]`}
+                                                />
+                                            ) : (
+                                                <input
+                                                    type={q.type || 'text'}
+                                                    name={q.id}
+                                                    value={formData.answers[q.id] || ''}
+                                                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                                    placeholder={q.placeholder}
+                                                    className={`w-full bg-black/60 border ${errors[q.id] ? 'border-red-500' : 'border-white/15 focus:border-white'} rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-colors`}
+                                                />
+                                            )}
+                                            {errors[q.id] && (
+                                                <span className="text-xs text-red-500 mt-1 block">
+                                                    {errors[q.id]}
+                                                </span>
                                             )}
                                         </div>
-                                    ) : (
-                                        <input
-                                            type={q.type}
-                                            name={q.id}
-                                            value={formData.answers[q.id] || ''}
-                                            onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                                            placeholder={q.placeholder}
-                                            className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors"
-                                        />
-                                    )}
-                                    {errors[q.id] && (
-                                        <span
-                                            className="text-red-500 text-xs mt-1 cursor-pointer block"
-                                            onClick={() => setErrors(prev => ({ ...prev, [q.id]: '' }))}
-                                        >
-                                            {errors[q.id]}
-                                        </span>
-                                    )}
+                                    ))}
                                 </div>
-                            ))}
+                            )}
 
-                            {/* Specific Domain Questions */}
-                            {domainQuestions[formData.department]?.map(q => (
-                                <div key={q.id} className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-300">
-                                        {q.label} {q.required && <span className="text-red-500">*</span>}
-                                    </label>
-                                    {q.type === 'textarea' ? (
-                                        <div className="space-y-1">
-                                            <textarea
-                                                name={q.id}
-                                                value={formData.answers[q.id] || ''}
-                                                onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                                                placeholder={q.placeholder}
-                                                className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors h-36 ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
-                                            />
-                                            {q.wordLimit && (
-                                                <div className="flex justify-end text-xs text-gray-400 font-mono">
-                                                    Word count: {formData.answers[q.id] ? formData.answers[q.id].trim().split(/\s+/).filter(Boolean).length : 0} / {q.wordLimit} words
-                                                </div>
+                            {/* Domain-Specific Questions */}
+                            {formData.department && domainQuestions[formData.department] && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="space-y-5 sm:space-y-6 pt-4 border-t border-white/10"
+                                >
+                                    <h2 className="text-xl sm:text-2xl font-bold text-white capitalize">
+                                        {formData.department} Department Questions
+                                    </h2>
+                                    {domainQuestions[formData.department].map((q) => (
+                                        <div key={q.id}>
+                                            <label className="block text-xs sm:text-sm font-medium text-gray-300 mb-1 sm:mb-1.5">
+                                                {q.label} {q.required && <span className="text-red-500">*</span>}
+                                            </label>
+                                            {q.type === 'textarea' ? (
+                                                <textarea
+                                                    name={q.id}
+                                                    rows={4}
+                                                    value={formData.answers[q.id] || ''}
+                                                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                                    placeholder={q.placeholder}
+                                                    className={`w-full bg-black/60 border ${errors[q.id] ? 'border-red-500' : 'border-white/15 focus:border-white'} rounded-lg p-3 sm:p-3.5 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-colors resize-y min-h-[100px]`}
+                                                />
+                                            ) : (
+                                                <input
+                                                    type={q.type || 'text'}
+                                                    name={q.id}
+                                                    value={formData.answers[q.id] || ''}
+                                                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                                    placeholder={q.placeholder}
+                                                    className={`w-full bg-black/60 border ${errors[q.id] ? 'border-red-500' : 'border-white/15 focus:border-white'} rounded-lg px-3.5 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none transition-colors`}
+                                                />
+                                            )}
+                                            {errors[q.id] && (
+                                                <span className="text-xs text-red-500 mt-1 block">
+                                                    {errors[q.id]}
+                                                </span>
                                             )}
                                         </div>
-                                    ) : (
-                                        <input
-                                            type={q.type}
-                                            name={q.id}
-                                            value={formData.answers[q.id] || ''}
-                                            onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                                            placeholder={q.placeholder}
-                                            className={`w-full bg-black/50 border rounded-lg px-4 py-3 text-white focus:outline-none focus:border-white transition-colors ${errors[q.id] ? 'border-red-500' : 'border-white/20'}`}
-                                        />
-                                    )}
-                                    {errors[q.id] && (
-                                        <span
-                                            className="text-red-500 text-xs mt-1 cursor-pointer block"
-                                            onClick={() => setErrors(prev => ({ ...prev, [q.id]: '' }))}
+                                    ))}
+                                </motion.div>
+                            )}
+
+                            {/* Animated Submit Button */}
+                            <motion.button
+                                type="submit"
+                                disabled={isSubmitting}
+                                whileHover={!isSubmitting ? {
+                                    scale: 1.02,
+                                    y: -4,
+                                    boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.35)",
+                                    backgroundColor: "#ffffff"
+                                } : {}}
+                                whileTap={!isSubmitting ? { scale: 0.98 } : {}}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 300,
+                                    damping: 22
+                                }}
+                                className="group w-full bg-white text-black font-bold uppercase tracking-widest py-3.5 sm:py-4 rounded-lg cursor-pointer flex items-center justify-center gap-2 relative overflow-hidden transition-colors text-xs sm:text-sm disabled:opacity-75 disabled:cursor-not-allowed"
+                            >
+                                {isSubmitting ? (
+                                    <span>Submitting Application...</span>
+                                ) : (
+                                    <>
+                                        <span>Submit Application</span>
+                                        <motion.div
+                                            className="flex items-center justify-center"
+                                            variants={{
+                                                hover: { x: 4, rotate: -10 }
+                                            }}
+                                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
                                         >
-                                            {errors[q.id]}
-                                        </span>
-                                    )}
-                                </div>
-                            ))}
-                        </motion.div>
+                                            <Send size={18} className="group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-200" />
+                                        </motion.div>
+                                    </>
+                                )}
+                            </motion.button>
+
+                        </form>
                     )}
-
-                    {/* Animated Submit Button */}
-                    <motion.button
-                        type="submit"
-                        whileHover={{
-                            scale: 1.02,
-                            y: -4,
-                            boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.35)",
-                            backgroundColor: "#ffffff"
-                        }}
-                        whileTap={{ scale: 0.98 }}
-                        transition={{
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 22
-                        }}
-                        className="group w-full bg-white text-black font-bold uppercase tracking-widest py-4 rounded-lg cursor-pointer flex items-center justify-center gap-2 relative overflow-hidden transition-colors"
-                    >
-                        <span>Submit Application</span>
-                        <motion.div
-                            className="flex items-center justify-center"
-                            variants={{
-                                hover: { x: 4, rotate: -10 }
-                            }}
-                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                        >
-                            <Send size={18} className="group-hover:translate-x-1 group-hover:-rotate-12 transition-transform duration-200" />
-                        </motion.div>
-                    </motion.button>
-
-                </form>
-            </div>
+                </div>
         </motion.div>
     );
 };
