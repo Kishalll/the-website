@@ -184,6 +184,116 @@
   overflow: hidden;
   background: #000;
   min-width: 0;
+  position: relative;
+}
+
+/* ── Python runtime loading shimmer ─────────────────────────────── */
+.compiler-shimmer-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 8, 12, 0.82);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+
+/* Animated shimmer sweep across the whole overlay */
+.compiler-shimmer-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.05) 42%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.05) 58%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  animation: compiler-shimmer-sweep 1.6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes compiler-shimmer-sweep {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.compiler-shimmer-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.compiler-shimmer-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: compiler-shimmer-spin 0.9s linear infinite;
+}
+
+@keyframes compiler-shimmer-spin {
+  to { transform: rotate(360deg); }
+}
+
+.compiler-shimmer-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.compiler-shimmer-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: rgba(160, 160, 192, 1);
+}
+
+/* Skeleton lines with their own shimmer */
+.compiler-shimmer-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 260px;
+  margin-top: 10px;
+}
+
+.compiler-shimmer-bar {
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.compiler-shimmer-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  animation: compiler-shimmer-skeleton 1.4s ease-in-out infinite;
+}
+
+@keyframes compiler-shimmer-skeleton {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 .compiler-output-section {

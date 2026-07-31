@@ -144,6 +144,24 @@ export default function CompilerApp() {
             languageExtensions={getLanguageExtensions(language)}
             readOnly={isRunning}
           />
+
+          {/* Shimmer overlay while the Python runtime (Pyodide) is loading */}
+          {loadingRuntime === "python" && language === "python" && (
+            <div className="compiler-shimmer-overlay" role="status" aria-live="polite">
+              <div className="compiler-shimmer-content">
+                <div className="compiler-shimmer-spinner" aria-hidden="true" />
+                <div className="compiler-shimmer-title">Preparing Python Runtime</div>
+                <div className="compiler-shimmer-sub">
+                  Pyodide is downloading (~12MB)... first run may take a moment
+                </div>
+                <div className="compiler-shimmer-skeleton" aria-hidden="true">
+                  <div className="compiler-shimmer-bar" style={{ width: "72%" }} />
+                  <div className="compiler-shimmer-bar" style={{ width: "90%" }} />
+                  <div className="compiler-shimmer-bar" style={{ width: "58%" }} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="compiler-output-section">
