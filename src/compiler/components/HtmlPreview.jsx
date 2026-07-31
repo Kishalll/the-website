@@ -1,15 +1,14 @@
 /**
  * HTML/CSS live preview — renders content in a sandboxed iframe.
  */
-import { useRef, useEffect, useCallback, useState } from "react";
-import { RefreshCw, ExternalLink, Maximize2, Minimize2 } from "lucide-react";
+import { useRef, useEffect, useCallback } from "react";
+import { RefreshCw, ExternalLink } from "lucide-react";
 
 import { HtmlIcon, CssIcon } from "./LanguageIcons";
 
 export function HtmlPreview({ code, language, result }) {
   const iframeRef = useRef(null);
   const prevUrlRef = useRef("");
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const renderPreview = useCallback(() => {
     const iframe = iframeRef.current;
@@ -91,7 +90,7 @@ export function HtmlPreview({ code, language, result }) {
   }, [code, language]);
 
   return (
-    <div className={`compiler-panel ${isFullscreen ? "compiler-preview-fullscreen" : ""}`}>
+    <div className="compiler-panel">
       <div className="compiler-panel-header">
         <div className="flex items-center gap-2.5 shrink-0">
           {language === "css" ? <CssIcon size={22} className="shrink-0" /> : <HtmlIcon size={22} className="shrink-0" />}
@@ -105,10 +104,6 @@ export function HtmlPreview({ code, language, result }) {
           <button className="compiler-panel-btn" onClick={handleOpenNewTab} title="Open preview in new tab">
             <ExternalLink size={14} />
             <span>Open Tab</span>
-          </button>
-          <button className="compiler-panel-btn" onClick={() => setIsFullscreen(!isFullscreen)} title={isFullscreen ? "Exit Fullscreen" : "Fullscreen preview"}>
-            {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-            <span>{isFullscreen ? "Exit" : "Fullscreen"}</span>
           </button>
         </div>
       </div>

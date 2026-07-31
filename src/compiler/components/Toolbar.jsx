@@ -1,22 +1,20 @@
 /**
- * Toolbar — language selector, run button, fullscreen, font size controls.
+ * Toolbar — language selector, run button, font size controls.
  * ZBC-styled: dark glassmorphism with white/10 borders.
  */
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { LANGUAGES } from "../types/languages";
 import { LANGUAGE_ICON_MAP } from "./languageIconMap";
-import { Play, Maximize2, Minimize2, Minus, Plus, ChevronDown, Check } from "lucide-react";
+import { Play, Minus, Plus, ChevronDown, Check } from "lucide-react";
 
 export function Toolbar({
   language,
   isRunning,
-  isFullscreen,
   fontSize,
   loadingRuntime,
   onLanguageChange,
   onRun,
-  onFullscreenToggle,
   onFontSizeChange,
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -154,16 +152,6 @@ export function Toolbar({
         </div>
       </div>
       <div className="compiler-toolbar-right">
-        {/* Fullscreen toggle */}
-        <button
-          className="compiler-toolbar-btn"
-          onClick={onFullscreenToggle}
-          title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
-        >
-          {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-          <span className="hidden sm:inline ml-1">{isFullscreen ? "Exit" : "Full"}</span>
-        </button>
-
         {/* Run button */}
         <button
           className="compiler-toolbar-run"

@@ -15,10 +15,6 @@
   background: #000;
 }
 
-.compiler-app.compiler-fullscreen {
-  height: 100vh;
-}
-
 /* ── Toolbar ──────────────────────────────────────────────────────── */
 .compiler-toolbar {
   position: relative;
@@ -445,24 +441,6 @@
   background: #fff;
   display: block;
 }
-
-.compiler-preview-fullscreen {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  border-radius: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  background: #0a0a0a;
-  border: none;
-}
-
-.compiler-preview-fullscreen .compiler-preview-iframe {
-  flex: 1;
-  height: 100% !important;
-}
-
 
 /* ── Status Bar ──────────────────────────────────────────────────── */
 .compiler-statusbar {
