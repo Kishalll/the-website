@@ -16,7 +16,7 @@ import { StatusBar } from "./components/StatusBar";
 import { HtmlPreview } from "./components/HtmlPreview";
 
 import { useEditor } from "./hooks/useEditor";
-import { executeCode, preloadRuntime, isRuntimeLoaded } from "./services/api";
+import { executeCode, preloadRuntime, isRuntimePreloaded, cancelRuntimeLoad } from "./services/api";
 import { PREVIEW_LANGUAGES } from "./types/languages";
 import { RuntimeManager, JavaScriptRuntime, HtmlRuntime, CRuntime, CppLangRuntime } from "./runtime";
 
@@ -44,6 +44,10 @@ const LANG_EXTENSIONS = {
   cpp: [cpp()],
 };
 
+// Keep the loading shimmer visible for at least this long, even when Pyodide
+// is served from cache and would otherwise finish loading almost instantly.
+const MIN_RUNTIME_LOAD_DISPLAY_MS = 1000;
+
 function getLanguageExtensions(language) {
   return LANG_EXTENSIONS[language] ?? [];
 }
@@ -61,22 +65,45 @@ export default function CompilerApp() {
 
   const isPreviewLanguage = PREVIEW_LANGUAGES.has(language);
 
-  // ── Preload Pyodide when Python is selected ──
+  // ── Preload Pyodide when Python is selected; cancel it if the user
+  //    switches away before the download finishes ──
   useEffect(() => {
-    if (language === "python" && !isRuntimeLoaded("python")) {
+    if (language === "python" && !isRuntimePreloaded("python")) {
       setLoadingRuntime("python");
       setLoadProgress("Loading Python runtime (Pyodide ~12MB)...");
 
+      let active = true;
+      const startedAt = performance.now();
       preloadRuntime("python")
         .then(() => {
-          setLoadingRuntime(null);
-          setLoadProgress("");
+          if (!active) return;
+          // Hold the shimmer at least long enough to be noticed, even when
+          // Pyodide is cached and finishes loading almost immediately.
+          const elapsed = performance.now() - startedAt;
+          const remaining = Math.max(0, MIN_RUNTIME_LOAD_DISPLAY_MS - elapsed);
+          setTimeout(() => {
+            if (!active) return;
+            setLoadingRuntime(null);
+            setLoadProgress("");
+          }, remaining);
         })
         .catch((err) => {
+          if (!active) return;
+          // Cancelling (switching away / Cancel button) is expected, not an error.
+          if (err?.message === "Pyodide load cancelled") return;
           setLoadingRuntime(null);
           setLoadProgress("");
           console.error("Failed to preload Pyodide:", err);
         });
+
+      return () => {
+        // User switched away (or unmounted) mid-download — abort Pyodide
+        // so it stops eating bandwidth in the background.
+        active = false;
+        cancelRuntimeLoad("python");
+        setLoadingRuntime(null);
+        setLoadProgress("");
+      };
     }
   }, [language]);
 
@@ -105,6 +132,13 @@ export default function CompilerApp() {
   const handleClearOutput = useCallback(() => {
     setResult(null);
     setError(null);
+  }, []);
+
+  // Abort the in-progress Pyodide download (used by the shimmer Cancel button).
+  const handleCancelRuntimeLoad = useCallback(() => {
+    cancelRuntimeLoad("python");
+    setLoadingRuntime(null);
+    setLoadProgress("");
   }, []);
 
   // ── Keyboard shortcuts ──
@@ -159,6 +193,15 @@ export default function CompilerApp() {
                   <div className="compiler-shimmer-bar" style={{ width: "90%" }} />
                   <div className="compiler-shimmer-bar" style={{ width: "58%" }} />
                 </div>
+                <button
+                  type="button"
+                  className="compiler-shimmer-cancel"
+                  onClick={handleCancelRuntimeLoad}
+                  disabled={isRunning}
+                  title={isRunning ? "Can't cancel while code is running" : undefined}
+                >
+                  Cancel download
+                </button>
               </div>
             </div>
           )}

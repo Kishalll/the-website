@@ -77,15 +77,47 @@ export class RuntimeManager {
     return runtime;
   }
 
-  isLoaded(language) {
+  /**
+   * Kick off a cancellable warm-up for a runtime (e.g. downloading Pyodide's
+   * assets in the background so the actual load() resolves from cache). Falls
+   * back to a plain full load for runtimes without a dedicated preload.
+   */
+  async preload(language) {
+    const runtime = await this.getInstance(language);
+    if (runtime.isLoaded) return;
+    if (typeof runtime.preload === "function") {
+      await runtime.preload();
+    } else {
+      await this.ensureLoaded(language);
+    }
+  }
+
+  /**
+   * True once the runtime is fully loaded OR its assets have already been
+   * preloaded/cache-warmed (so callers can skip re-running preload).
+   */
+  isPreloaded(language) {
     const key = language.toLowerCase();
     const instance = this.instances.get(key);
-    return instance?.isLoaded ?? false;
+    return Boolean(instance && (instance.isLoaded || instance.cacheWarmed));
   }
 
   async execute(language, code, stdin) {
     const runtime = await this.ensureLoaded(language);
     return runtime.execute(code, stdin);
+  }
+
+  /**
+   * Abort an in-progress runtime load (e.g. when the user switches away
+   * from Python while Pyodide is still downloading). Safe to call any time.
+   */
+  cancelLoad(language) {
+    const key = language.toLowerCase();
+    const instance = this.instances.get(key);
+    if (instance?.cancelLoad) {
+      instance.cancelLoad();
+    }
+    this.loadPromises.delete(key);
   }
 
   reset(language) {
