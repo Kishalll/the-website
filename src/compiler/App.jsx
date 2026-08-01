@@ -54,7 +54,6 @@ export default function CompilerApp() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [fontSize, setFontSize] = useState(16);
   const [lineCount, setLineCount] = useState(1);
   const [loadingRuntime, setLoadingRuntime] = useState(null);
@@ -80,31 +79,6 @@ export default function CompilerApp() {
         });
     }
   }, [language]);
-
-  // ── Fullscreen ──
-  const toggleFullscreen = useCallback(() => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
-    } else {
-      document.exitFullscreen().catch(() => {});
-    }
-  }, []);
-
-  useEffect(() => {
-    const handler = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", handler);
-    return () => document.removeEventListener("fullscreenchange", handler);
-  }, []);
-
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.key === "Escape" && isFullscreen) {
-        document.exitFullscreen().catch(() => {});
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [isFullscreen]);
 
   // ── Track line count ──
   useEffect(() => {
@@ -149,16 +123,14 @@ export default function CompilerApp() {
 
   // ── Render ──
   return (
-    <div className={`compiler-app ${isFullscreen ? "compiler-fullscreen" : ""}`}>
+    <div className="compiler-app">
       <Toolbar
         language={language}
         isRunning={isRunning}
-        isFullscreen={isFullscreen}
         fontSize={fontSize}
         loadingRuntime={loadingRuntime}
         onLanguageChange={setLanguage}
         onRun={handleRun}
-        onFullscreenToggle={toggleFullscreen}
         onFontSizeChange={setFontSize}
       />
 
@@ -172,6 +144,24 @@ export default function CompilerApp() {
             languageExtensions={getLanguageExtensions(language)}
             readOnly={isRunning}
           />
+
+          {/* Shimmer overlay while the Python runtime (Pyodide) is loading */}
+          {loadingRuntime === "python" && language === "python" && (
+            <div className="compiler-shimmer-overlay" role="status" aria-live="polite">
+              <div className="compiler-shimmer-content">
+                <div className="compiler-shimmer-spinner" aria-hidden="true" />
+                <div className="compiler-shimmer-title">Preparing Python Runtime</div>
+                <div className="compiler-shimmer-sub">
+                  Pyodide is downloading (~12MB)... first run may take a moment
+                </div>
+                <div className="compiler-shimmer-skeleton" aria-hidden="true">
+                  <div className="compiler-shimmer-bar" style={{ width: "72%" }} />
+                  <div className="compiler-shimmer-bar" style={{ width: "90%" }} />
+                  <div className="compiler-shimmer-bar" style={{ width: "58%" }} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="compiler-output-section">

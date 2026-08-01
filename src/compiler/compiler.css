@@ -15,10 +15,6 @@
   background: #000;
 }
 
-.compiler-app.compiler-fullscreen {
-  height: 100vh;
-}
-
 /* ── Toolbar ──────────────────────────────────────────────────────── */
 .compiler-toolbar {
   position: relative;
@@ -176,6 +172,7 @@
   z-index: 1;
   display: flex;
   flex: 1;
+  min-height: 0; /* allow children to shrink & scroll instead of overflowing */
   overflow: hidden;
   gap: 1px;
   background: rgba(255, 255, 255, 0.06);
@@ -188,6 +185,116 @@
   overflow: hidden;
   background: #000;
   min-width: 0;
+  position: relative;
+}
+
+/* ── Python runtime loading shimmer ─────────────────────────────── */
+.compiler-shimmer-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 8, 12, 0.82);
+  backdrop-filter: blur(6px);
+  overflow: hidden;
+}
+
+/* Animated shimmer sweep across the whole overlay */
+.compiler-shimmer-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.05) 42%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.05) 58%,
+    transparent 70%
+  );
+  background-size: 250% 100%;
+  animation: compiler-shimmer-sweep 1.6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes compiler-shimmer-sweep {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.compiler-shimmer-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.compiler-shimmer-spinner {
+  width: 38px;
+  height: 38px;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: compiler-shimmer-spin 0.9s linear infinite;
+}
+
+@keyframes compiler-shimmer-spin {
+  to { transform: rotate(360deg); }
+}
+
+.compiler-shimmer-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.compiler-shimmer-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: rgba(160, 160, 192, 1);
+}
+
+/* Skeleton lines with their own shimmer */
+.compiler-shimmer-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 260px;
+  margin-top: 10px;
+}
+
+.compiler-shimmer-bar {
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.compiler-shimmer-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.18),
+    transparent
+  );
+  animation: compiler-shimmer-skeleton 1.4s ease-in-out infinite;
+}
+
+@keyframes compiler-shimmer-skeleton {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 .compiler-output-section {
@@ -200,6 +307,13 @@
   background: rgba(0, 0, 0, 0.95);
   gap: 8px;
   padding: 8px;
+}
+
+/* Panels inside the output column must never be flex-squeezed — the section
+   should scroll instead. Without this, short viewports (mobile) clip the
+   Output text and Statistics grid instead of scrolling. */
+.compiler-output-section > .compiler-panel {
+  flex-shrink: 0;
 }
 
 /* ── Editor ──────────────────────────────────────────────────────── */
@@ -446,24 +560,6 @@
   display: block;
 }
 
-.compiler-preview-fullscreen {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  border-radius: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  background: #0a0a0a;
-  border: none;
-}
-
-.compiler-preview-fullscreen .compiler-preview-iframe {
-  flex: 1;
-  height: 100% !important;
-}
-
-
 /* ── Status Bar ──────────────────────────────────────────────────── */
 .compiler-statusbar {
   display: flex;
@@ -540,10 +636,18 @@
     flex-direction: column;
   }
 
+  .compiler-editor-section {
+    flex: 0 0 auto;
+    height: 40vh;
+    min-height: 180px;
+  }
+
   .compiler-output-section {
+    flex: 1 1 auto;
+    min-height: 120px;
     width: 100%;
     max-width: 100%;
-    max-height: 45vh;
+    max-height: none;
   }
 
   .compiler-toolbar {
@@ -582,10 +686,6 @@
     font-size: 0.85rem;
   }
 
-  .compiler-output-section {
-    max-height: 40vh;
-  }
-
   .compiler-panel-content {
     max-height: 180px;
     font-size: 0.78rem;
@@ -596,9 +696,19 @@
   .compiler-toolbar-run span {
     display: none;
   }
+}
+
+/* Very short viewports (e.g. landscape phones) — keep the editor usable and
+   the output/stats area visible instead of clipping at the section floor.
+   Width-scoped to mobile so short desktop windows keep the row layout. */
+@media (max-width: 768px) and (max-height: 520px) {
+  .compiler-editor-section {
+    height: 35vh;
+    min-height: 130px;
+  }
 
   .compiler-output-section {
-    max-height: 35vh;
+    min-height: 80px;
   }
 }
 

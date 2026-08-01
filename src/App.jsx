@@ -24,11 +24,6 @@ const ScrollToTop = () => {
   const prevPathRef = React.useRef(pathname);
 
   React.useEffect(() => {
-    // Automatically exit fullscreen when navigating away
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    }
-
     const prevPath = prevPathRef.current;
     prevPathRef.current = pathname;
 
