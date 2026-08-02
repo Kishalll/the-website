@@ -70,7 +70,7 @@ export default function CompilerApp() {
   useEffect(() => {
     if (language === "python" && !isRuntimePreloaded("python")) {
       setLoadingRuntime("python");
-      setLoadProgress("Loading Python runtime (Pyodide ~12MB)...");
+      setLoadProgress("Loading Python runtime (Pyodide)...");
 
       let active = true;
       const startedAt = performance.now();
