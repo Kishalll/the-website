@@ -46,9 +46,21 @@ describe('Compiler RuntimeManager & Language Config', () => {
 });
 
 describe('Runtime cancellation', () => {
+  const originalFetch = globalThis.fetch;
+  const originalLoadPyodide = window.loadPyodide;
+
   afterEach(() => {
-    delete window.loadPyodide;
-    delete globalThis.fetch;
+    if (originalLoadPyodide === undefined) {
+      delete window.loadPyodide;
+    } else {
+      window.loadPyodide = originalLoadPyodide;
+    }
+
+    if (originalFetch === undefined) {
+      delete globalThis.fetch;
+    } else {
+      globalThis.fetch = originalFetch;
+    }
     // NOTE: do not delete AbortController — it's provided/polyfilled by
     // src/test/setup.js and the preload tests below rely on it.
   });
