@@ -51,14 +51,22 @@ export class PythonRuntime {
     if (this.preloadPromise) return this.preloadPromise;
 
     const generation = ++this.generation;
-    this.preloadPromise = this._preload().catch((err) => {
-      // Only clear the cached promise if this preload is still the current
-      // one, so a stale cancelled preload can't clobber a newer one.
-      if (generation === this.generation) {
-        this.preloadPromise = null;
-      }
-      throw err;
-    });
+    this.preloadPromise = this._preload()
+      .then(() => {
+        // If the warm-up didn't actually fetch anything (e.g. offline), allow a
+        // later call to retry instead of permanently caching a no-op preload.
+        if (generation === this.generation && !this.cacheWarmed) {
+          this.preloadPromise = null;
+        }
+      })
+      .catch((err) => {
+        // Only clear the cached promise if this preload is still the current
+        // one, so a stale cancelled preload can't clobber a newer one.
+        if (generation === this.generation) {
+          this.preloadPromise = null;
+        }
+        throw err;
+      });
     return this.preloadPromise;
   }
 
