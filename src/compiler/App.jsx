@@ -62,21 +62,31 @@ export default function CompilerApp() {
   const [lineCount, setLineCount] = useState(1);
   const [loadingRuntime, setLoadingRuntime] = useState(null);
   const [loadProgress, setLoadProgress] = useState("");
+  const [loadProgressPercent, setLoadProgressPercent] = useState("");
+  const [pythonDownloadCancelled, setPythonDownloadCancelled] = useState(false);
 
   const isPreviewLanguage = PREVIEW_LANGUAGES.has(language);
 
   // ── Preload Pyodide when Python is selected; cancel it if the user
   //    switches away before the download finishes ──
   useEffect(() => {
+    // Reset cancelled flag when switching languages or starting a new download
+    setPythonDownloadCancelled(false);
+
     if (language === "python" && !isRuntimePreloaded("python")) {
       setLoadingRuntime("python");
       setLoadProgress("Loading Python runtime (Pyodide)...");
 
       let active = true;
       const startedAt = performance.now();
-      preloadRuntime("python")
+      preloadRuntime("python", (percent) => {
+        if (active) {
+          setLoadProgressPercent(`${percent}%`);
+        }
+      })
         .then(() => {
           if (!active) return;
+          setPythonDownloadCancelled(false);
           // Hold the shimmer at least long enough to be noticed, even when
           // Pyodide is cached and finishes loading almost immediately.
           const elapsed = performance.now() - startedAt;
@@ -85,6 +95,7 @@ export default function CompilerApp() {
             if (!active) return;
             setLoadingRuntime(null);
             setLoadProgress("");
+            setLoadProgressPercent("");
           }, remaining);
         })
         .catch((err) => {
@@ -93,6 +104,7 @@ export default function CompilerApp() {
           if (err?.message === "Pyodide load cancelled") return;
           setLoadingRuntime(null);
           setLoadProgress("");
+          setLoadProgressPercent("");
           console.error("Failed to preload Pyodide:", err);
         });
 
@@ -103,6 +115,7 @@ export default function CompilerApp() {
         cancelRuntimeLoad("python");
         setLoadingRuntime(null);
         setLoadProgress("");
+        setLoadProgressPercent("");
       };
     }
   }, [language]);
@@ -139,6 +152,44 @@ export default function CompilerApp() {
     cancelRuntimeLoad("python");
     setLoadingRuntime(null);
     setLoadProgress("");
+    setLoadProgressPercent("");
+    setPythonDownloadCancelled(true);
+  }, []);
+
+  // Restart the Pyodide download after it was previously cancelled.
+  const handleRestartDownload = useCallback(() => {
+    setPythonDownloadCancelled(false);
+    setLoadingRuntime("python");
+    setLoadProgress("Loading Python runtime (Pyodide)...");
+    setLoadProgressPercent("0%");
+
+    let active = true;
+    const startedAt = performance.now();
+    preloadRuntime("python", (percent) => {
+      if (active) {
+        setLoadProgressPercent(`${percent}%`);
+      }
+    })
+      .then(() => {
+        if (!active) return;
+        const elapsed = performance.now() - startedAt;
+        const remaining = Math.max(0, MIN_RUNTIME_LOAD_DISPLAY_MS - elapsed);
+        setTimeout(() => {
+          if (!active) return;
+          setLoadingRuntime(null);
+          setLoadProgress("");
+          setLoadProgressPercent("");
+        }, remaining);
+      })
+      .catch((err) => {
+        if (!active) return;
+        if (err?.message === "Pyodide load cancelled") return;
+        setLoadingRuntime(null);
+        setLoadProgress("");
+        setLoadProgressPercent("");
+        setPythonDownloadCancelled(true);
+        console.error("Failed to preload Pyodide:", err);
+      });
   }, []);
 
   // ── Keyboard shortcuts ──
@@ -188,6 +239,9 @@ export default function CompilerApp() {
                 <div className="compiler-shimmer-sub">
                   Pyodide is downloading (~12MB)... first run may take a moment
                 </div>
+                <div className="compiler-shimmer-progress-container">
+                  <div className="compiler-shimmer-progress-bar" style={{ width: loadProgressPercent || "0%" }} />
+                </div>
                 <div className="compiler-shimmer-skeleton" aria-hidden="true">
                   <div className="compiler-shimmer-bar" style={{ width: "72%" }} />
                   <div className="compiler-shimmer-bar" style={{ width: "90%" }} />
@@ -201,6 +255,34 @@ export default function CompilerApp() {
                   title={isRunning ? "Can't cancel while code is running" : undefined}
                 >
                   Cancel download
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Download needed overlay — shown after user cancels the download */}
+          {pythonDownloadCancelled && language === "python" && !loadingRuntime && (
+            <div className="compiler-shimmer-overlay compiler-download-prompt" role="status" aria-live="polite">
+              <div className="compiler-shimmer-content">
+                <div className="compiler-download-icon" aria-hidden="true">
+                  🐍
+                </div>
+                <div className="compiler-shimmer-title">Python Libraries Not Downloaded</div>
+                <div className="compiler-shimmer-sub">
+                  Download the Python libraries to run Python code in your browser
+                </div>
+                <div className="compiler-shimmer-skeleton" aria-hidden="true">
+                  <div className="compiler-shimmer-bar" style={{ width: "72%" }} />
+                  <div className="compiler-shimmer-bar" style={{ width: "90%" }} />
+                  <div className="compiler-shimmer-bar" style={{ width: "58%" }} />
+                </div>
+                <button
+                  type="button"
+                  className="compiler-download-btn"
+                  onClick={handleRestartDownload}
+                  disabled={isRunning}
+                >
+                  ⬇ Download Python Libs
                 </button>
               </div>
             </div>
