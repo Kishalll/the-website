@@ -323,6 +323,64 @@
   to { transform: translateX(100%); }
 }
 
+/* Live progress bar for download */
+.compiler-shimmer-progress-container {
+  width: 260px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.compiler-shimmer-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80, #22d3ee);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Download prompt overlay (shown after cancel) */
+.compiler-download-prompt {
+  background: rgba(8, 8, 12, 0.92);
+}
+
+.compiler-download-icon {
+  font-size: 2.5rem;
+  margin-bottom: 4px;
+  filter: grayscale(0.6);
+}
+
+.compiler-download-btn {
+  margin-top: 12px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 200ms ease;
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.3);
+}
+
+.compiler-download-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #60a5fa, #3b82f6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+.compiler-download-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+
+.compiler-download-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .compiler-output-section {
   width: 400px;
   min-width: 280px;
