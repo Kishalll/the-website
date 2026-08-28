@@ -81,12 +81,13 @@ export class RuntimeManager {
    * Kick off a cancellable warm-up for a runtime (e.g. downloading Pyodide's
    * assets in the background so the actual load() resolves from cache). Falls
    * back to a plain full load for runtimes without a dedicated preload.
+   * @param {function} onProgress - Optional callback for progress updates (percent: number)
    */
-  async preload(language) {
+  async preload(language, onProgress) {
     const runtime = await this.getInstance(language);
     if (runtime.isLoaded) return;
     if (typeof runtime.preload === "function") {
-      await runtime.preload();
+      await runtime.preload(onProgress);
     } else {
       await this.ensureLoaded(language);
     }

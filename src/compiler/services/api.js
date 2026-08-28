@@ -24,8 +24,8 @@ export async function executeCode(sourceCode, language, stdin) {
   }
 }
 
-export async function preloadRuntime(language) {
-  await RuntimeManager.preload(language);
+export async function preloadRuntime(language, onProgress) {
+  await RuntimeManager.preload(language, onProgress);
 }
 
 export function isRuntimePreloaded(language) {
