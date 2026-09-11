@@ -24,10 +24,14 @@ export async function executeCode(sourceCode, language, stdin) {
   }
 }
 
-export async function preloadRuntime(language) {
-  await RuntimeManager.ensureLoaded(language);
+export async function preloadRuntime(language, onProgress) {
+  await RuntimeManager.preload(language, onProgress);
 }
 
-export function isRuntimeLoaded(language) {
-  return RuntimeManager.isLoaded(language);
+export function isRuntimePreloaded(language) {
+  return RuntimeManager.isPreloaded(language);
+}
+
+export function cancelRuntimeLoad(language) {
+  RuntimeManager.cancelLoad(language);
 }
