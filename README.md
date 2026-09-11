@@ -2,11 +2,6 @@
 
 Welcome to the official repository for the **Zero Bugs Club** website. This project is a modern, high-performance web application designed to showcase our community, events, and technical achievements.
 
-## 🚀 Live Demo
-Visit the live site: [https://zbc-website.netlify.app](https://zbcvitc.netlify.app/)
-
----
-
 ## 🛠️ Technology Stack
 This project is built using a modern frontend stack focused on performance and aesthetics:
 *   **Core:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
@@ -28,8 +23,8 @@ This project is built using a modern frontend stack focused on performance and a
 ### Installation
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/ZeroBugsClub/zbc-website.git
-    cd zbc-website
+    git clone https://github.com/Zero-Bugs-Club/the-website.git
+    cd the-website
     ```
 2.  Install dependencies:
     ```bash
