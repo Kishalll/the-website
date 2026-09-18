@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Terminal, Wrench, ArrowRight } from 'lucide-react';
+import { Terminal, Wrench, ArrowRight, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FogBackground from '../components/ui/FogBackground'; // Adjust path based on your folder structure
 
@@ -12,6 +12,14 @@ const tools = [
         description: 'Write and run Python, JavaScript, HTML/CSS, and C/C++ code directly in your browser. Multi-language support with syntax highlighting.',
         slug: '/tools/compiler',
         tags: ['Python', 'JavaScript', 'C++', 'HTML/CSS']
+    },
+    {
+        id: 'ffcs-planner',
+        label: 'FFCS Planner',
+        icon: Calendar,
+        description: 'Interactive timetable builder and clash detector to plan and optimize your course schedule.',
+        slug: '/tools/ffcs-planner',
+        tags: ['Academics', 'Timetable', 'Planner']
     }
 ];
 

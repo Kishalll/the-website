@@ -201,6 +201,12 @@ const RecruitmentPage = () => {
         if (Object.keys(formErrors).length === 0) {
             setIsSubmitting(true);
             try {
+                if (!supabase) {
+                    console.warn('Supabase is not configured. Submission cannot be processed.');
+                    alert('Submission failed: Supabase is not configured. Please check your environment configuration.');
+                    return;
+                }
+
                 const { error } = await supabase
                     .from('recruitment_applications')
                     .insert([
