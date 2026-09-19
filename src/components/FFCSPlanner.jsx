@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toJpeg } from 'html-to-image';
 import { 
     Calendar, Plus, Trash2, Edit2, X, AlertTriangle, Check, 
     BookOpen, User, Layers, Sparkles, Copy, Eye, Clock, 
@@ -255,7 +256,7 @@ const FFCSPlanner = () => {
         });
     };
 
-    // Download timetable matrix as JPEG
+    // Download timetable matrix as JPEG with exact colors, background, and fonts preserved
     const handleDownloadImage = async () => {
         const targetElement = tableContainerRef.current;
         if (!targetElement) return;
@@ -263,77 +264,32 @@ const FFCSPlanner = () => {
         try {
             setIsDownloading(true);
 
-            // Clone table container to prepare for clean SVG foreignObject rasterization
-            const clone = targetElement.cloneNode(true);
+            // Capture the full scrollable width and height of the timetable matrix
+            const fullWidth = targetElement.scrollWidth || 1120;
+            const fullHeight = targetElement.scrollHeight || 600;
 
-            // Measure dimensions
-            const width = targetElement.scrollWidth || 1200;
-            const height = targetElement.scrollHeight || 600;
-
-            // Embed fonts and inline styles
-            clone.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-            clone.style.width = `${width}px`;
-            clone.style.height = `${height}px`;
-            clone.style.backgroundColor = '#0a0a0a';
-            clone.style.padding = '16px';
-            clone.style.borderRadius = '4px';
-
-            const serializedHtml = new XMLSerializer().serializeToString(clone);
-
-            const svgString = `
-                <svg xmlns="http://www.w3.org/2000/svg" width="${width + 32}" height="${height + 32}">
-                    <style>
-                        * { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important; }
-                    </style>
-                    <rect width="100%" height="100%" fill="#0a0a0a"/>
-                    <foreignObject x="16" y="16" width="${width}" height="${height}">
-                        ${serializedHtml}
-                    </foreignObject>
-                </svg>
-            `;
-
-            const img = new Image();
-            const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-
-            await new Promise((resolve, reject) => {
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    // Render at high resolution (2x scale for crisp text)
-                    const scale = 2;
-                    canvas.width = (width + 32) * scale;
-                    canvas.height = (height + 32) * scale;
-                    const ctx = canvas.getContext('2d');
-                    ctx.scale(scale, scale);
-
-                    // Fill background
-                    ctx.fillStyle = '#0a0a0a';
-                    ctx.fillRect(0, 0, width + 32, height + 32);
-
-                    // Draw rendered image
-                    ctx.drawImage(img, 0, 0);
-
-                    // Convert to JPEG data url
-                    const jpegUrl = canvas.toDataURL('image/jpeg', 0.95);
-
-                    // Trigger download
-                    const a = document.createElement('a');
-                    const cleanName = (activeTimetable.name || 'timetable').replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
-                    a.download = `${cleanName}-ffcs.jpeg`;
-                    a.href = jpegUrl;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-
-                    URL.revokeObjectURL(url);
-                    resolve();
-                };
-                img.onerror = (err) => {
-                    URL.revokeObjectURL(url);
-                    reject(err);
-                };
-                img.src = url;
+            const jpegDataUrl = await toJpeg(targetElement, {
+                quality: 0.95,
+                backgroundColor: '#0a0a0a',
+                pixelRatio: 2, // Crisp high-DPI export
+                width: fullWidth,
+                height: fullHeight,
+                style: {
+                    // Ensure the full table width is rendered in the image without clipping
+                    width: `${fullWidth}px`,
+                    maxWidth: 'none',
+                    overflow: 'visible',
+                    backgroundColor: '#0a0a0a'
+                }
             });
+
+            const a = document.createElement('a');
+            const cleanName = (activeTimetable.name || 'timetable').replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
+            a.download = `${cleanName}-ffcs.jpeg`;
+            a.href = jpegDataUrl;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         } catch (err) {
             console.error('Failed to export timetable as image:', err);
             alert('Failed to generate image download. Please try again.');
