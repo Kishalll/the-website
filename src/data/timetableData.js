@@ -1,6 +1,6 @@
 // Official VIT Timetable Slot Definitions, Matrix, and Clash Utilities
 
-export const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
+export const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
 export const MORNING_THEORY_HOURS = [
   { start: '08:00 AM', end: '08:50 AM' },
@@ -36,9 +36,7 @@ export const AFTERNOON_LAB_HOURS = [
   { start: '06:30 PM', end: '07:20 PM' },
 ];
 
-// Grid definition: 5 rows (Days), each row has morning slots (columns 0..5) and afternoon slots (columns 6..11)
-// Cell object format:
-// { day: 'MON', col: 0, session: 'morning', theorySlot: 'A1', labSlot: 'L1', isExtramural: false }
+// Grid definition: 7 rows (Days Mon-Sun), each row has morning slots (columns 0..5) and afternoon slots (columns 6..11)
 export const TIMETABLE_GRID = [
   {
     day: 'MON',
@@ -124,6 +122,40 @@ export const TIMETABLE_GRID = [
       { col: 11, session: 'afternoon', theorySlot: null, labSlot: 'L60' },
     ],
   },
+  {
+    day: 'SAT',
+    slots: [
+      { col: 0, session: 'morning', theorySlot: 'X11', labSlot: 'L71' },
+      { col: 1, session: 'morning', theorySlot: 'X12', labSlot: 'L72' },
+      { col: 2, session: 'morning', theorySlot: 'Y11', labSlot: 'L73' },
+      { col: 3, session: 'morning', theorySlot: 'Y12', labSlot: 'L74' },
+      { col: 4, session: 'morning', theorySlot: 'S8', labSlot: 'L75' },
+      { col: 5, session: 'morning', theorySlot: 'S8', labSlot: 'L76' },
+      { col: 6, session: 'afternoon', theorySlot: 'X21', labSlot: 'L77' },
+      { col: 7, session: 'afternoon', theorySlot: 'Z21', labSlot: 'L78' },
+      { col: 8, session: 'afternoon', theorySlot: 'Y21', labSlot: 'L79' },
+      { col: 9, session: 'afternoon', theorySlot: 'W21', labSlot: 'L80' },
+      { col: 10, session: 'afternoon', theorySlot: 'W22', labSlot: 'L81' },
+      { col: 11, session: 'afternoon', theorySlot: 'Z22', labSlot: 'L82' },
+    ],
+  },
+  {
+    day: 'SUN',
+    slots: [
+      { col: 0, session: 'morning', theorySlot: 'Y11', labSlot: 'L83' },
+      { col: 1, session: 'morning', theorySlot: 'Y12', labSlot: 'L84' },
+      { col: 2, session: 'morning', theorySlot: 'X11', labSlot: 'L85' },
+      { col: 3, session: 'morning', theorySlot: 'X12', labSlot: 'L86' },
+      { col: 4, session: 'morning', theorySlot: 'S10', labSlot: 'L87' },
+      { col: 5, session: 'morning', theorySlot: 'S10', labSlot: 'L88' },
+      { col: 6, session: 'afternoon', theorySlot: 'Y21', labSlot: 'L89' },
+      { col: 7, session: 'afternoon', theorySlot: 'Z21', labSlot: 'L90' },
+      { col: 8, session: 'afternoon', theorySlot: 'X21', labSlot: 'L91' },
+      { col: 9, session: 'afternoon', theorySlot: 'W21', labSlot: 'L92' },
+      { col: 10, session: 'afternoon', theorySlot: 'W22', labSlot: 'L93' },
+      { col: 11, session: 'afternoon', theorySlot: 'Z22', labSlot: 'L94' },
+    ],
+  },
 ];
 
 // Map of each unique slot name to its exact occurrences on the grid: [{ day, col }]
@@ -159,6 +191,11 @@ export const LAB_PAIRS = [
   'L43+L44', 'L45+L46', 'L47+L48',
   'L49+L50', 'L51+L52', 'L53+L54',
   'L55+L56', 'L57+L58', 'L59+L60',
+  // Weekend Lab Pairs (SAT & SUN)
+  'L71+L72', 'L73+L74', 'L75+L76',
+  'L77+L78', 'L79+L80', 'L81+L82',
+  'L83+L84', 'L85+L86', 'L87+L88',
+  'L89+L90', 'L91+L92', 'L93+L94',
 ];
 
 // Helper to expand a slot string or combo into constituent atomic slots
@@ -191,24 +228,6 @@ export const getCellAt = (day, col) => {
 };
 
 // Official Theory Groups and their valid combinations according to VIT timetable
-// Group definitions:
-// A1: A1, TA1, TAA1 (A1+TA1+TAA1, A1+TA1, A1, TA1, TAA1)
-// B1: B1, TB1 (B1+TB1, B1, TB1) -> note TB1 exists on Mon, no TBB1 in morning
-// C1: C1, TC1 (C1+TC1, C1, TC1)
-// D1: D1, TD1 (D1+TD1, D1, TD1)
-// E1: E1, TE1 (E1+TE1, E1, TE1)
-// F1: F1, TF1 (F1+TF1, F1, TF1)
-// G1: G1, TG1 (G1+TG1, G1, TG1)
-// Afternoon Session 2:
-// A2: A2, TA2, TAA2 (A2+TA2+TAA2, A2+TA2, A2, TA2, TAA2)
-// B2: B2, TB2, TBB2 (B2+TB2+TBB2, B2+TB2, B2, TB2, TBB2)
-// C2: C2, TC2, TCC2 (C2+TC2+TCC2, C2+TC2, C2, TC2, TCC2)
-// D2: D2, TD2, TDD2 (D2+TD2+TDD2, D2+TD2, D2, TD2, TDD2)
-// E2: E2, TE2 (E2+TE2, E2, TE2)
-// F2: F2, TF2 (F2+TF2, F2, TF2)
-// G2: G2, TG2 (G2+TG2, G2, TG2)
-// Other standalone slots present in grid:
-// TCC1 (Thu 5), TDD1 (Fri 5)
 export const THEORY_SLOT_GROUPS = {
   // Morning 1
   A1: ['A1+TA1+TAA1', 'A1+TA1', 'A1', 'TA1', 'TAA1'],
@@ -229,6 +248,12 @@ export const THEORY_SLOT_GROUPS = {
   G2: ['G2+TG2', 'G2', 'TG2'],
 };
 
+// Weekend individual theory slots (X11, X12, Y11, Y12, S8, S10, X21, Y21, Z21, W21, W22, Z22)
+export const WEEKEND_THEORY_SLOTS = [
+  'X11', 'X12', 'Y11', 'Y12', 'S8', 'S10',
+  'X21', 'Z21', 'Y21', 'W21', 'W22', 'Z22',
+];
+
 // All permitted valid slot strings
 export const ALL_VALID_SLOTS = (() => {
   const list = new Set();
@@ -236,6 +261,7 @@ export const ALL_VALID_SLOTS = (() => {
     combos.forEach(c => list.add(c));
   });
   LAB_PAIRS.forEach(pair => list.add(pair));
+  WEEKEND_THEORY_SLOTS.forEach(s => list.add(s));
   return Array.from(list);
 })();
 
@@ -249,21 +275,34 @@ export const validateSlotString = (slotStr) => {
     if (!LAB_PAIRS.includes(normalized)) {
       return {
         isValid: false,
-        message: `Invalid lab slot '${normalized}'. Labs must be chosen as official adjacent pairs (e.g., L1+L2, L3+L4, L13+L14, etc.).`,
+        message: `Invalid lab slot '${normalized}'. Labs must be chosen as official adjacent pairs (e.g., L1+L2, L71+L72, L83+L84, etc.).`,
       };
     }
     return { isValid: true, normalized };
   }
 
-  // Otherwise it's a theory slot/combo
-  if (!ALL_VALID_SLOTS.includes(normalized)) {
-    return {
-      isValid: false,
-      message: `Invalid slot combination '${normalized}'. Only official slots and combinations are allowed (e.g., A1, A1+TA1, A1+TA1+TAA1, etc.).`,
-    };
+  // Check if standard valid slot/combo
+  if (ALL_VALID_SLOTS.includes(normalized)) {
+    return { isValid: true, normalized };
   }
 
-  return { isValid: true, normalized };
+  // For weekend theory or custom user combos like "Z21+Y22" or "X11+Y12"
+  const atomicParts = parseSlotString(normalized);
+  const allKnownAtomic = new Set();
+  Object.values(THEORY_SLOT_GROUPS).forEach(combos => {
+    combos.forEach(c => parseSlotString(c).forEach(p => allKnownAtomic.add(p)));
+  });
+  WEEKEND_THEORY_SLOTS.forEach(s => allKnownAtomic.add(s));
+
+  const allPartsKnown = atomicParts.every(p => allKnownAtomic.has(p));
+  if (allPartsKnown && atomicParts.length > 0) {
+    return { isValid: true, normalized };
+  }
+
+  return {
+    isValid: false,
+    message: `Invalid slot combination '${normalized}'. Only official slots and combinations are allowed (e.g., A1, A1+TA1, X11, X11+Y12, L71+L72, etc.).`,
+  };
 };
 
 // Given a clicked theory and lab slot from a cell, return smart suggested slot options for the modal
@@ -272,25 +311,30 @@ export const getAvailableOptionsForCell = (theorySlot, labSlot) => {
 
   // If cell has a theory slot, include all official combinations that contain this slot or its group
   if (theorySlot) {
-    Object.entries(THEORY_SLOT_GROUPS).forEach(([baseGroup, combos]) => {
-      // If the clicked slot matches the baseGroup or any atomic part in the combos
-      const matchesGroup = combos.some(combo => {
-        const parts = parseSlotString(combo);
-        return parts.includes(theorySlot);
+    // If it's a weekend theory slot, only suggest the clicked slot itself as the default option
+    if (WEEKEND_THEORY_SLOTS.includes(theorySlot)) {
+      options.push({ value: theorySlot, label: theorySlot, type: 'Theory' });
+    } else {
+      Object.entries(THEORY_SLOT_GROUPS).forEach(([_baseGroup, combos]) => {
+        // If the clicked slot matches the baseGroup or any atomic part in the combos
+        const matchesGroup = combos.some(combo => {
+          const parts = parseSlotString(combo);
+          return parts.includes(theorySlot);
+        });
+
+        if (matchesGroup) {
+          combos.forEach(combo => {
+            if (!options.some(o => o.value === combo)) {
+              options.push({ value: combo, label: combo, type: 'Theory' });
+            }
+          });
+        }
       });
 
-      if (matchesGroup) {
-        combos.forEach(combo => {
-          if (!options.some(o => o.value === combo)) {
-            options.push({ value: combo, label: combo, type: 'Theory' });
-          }
-        });
+      // Also allow standalone if not already listed
+      if (!options.some(o => o.value === theorySlot)) {
+        options.push({ value: theorySlot, label: theorySlot, type: 'Theory' });
       }
-    });
-
-    // Also allow standalone if not already listed
-    if (!options.some(o => o.value === theorySlot)) {
-      options.push({ value: theorySlot, label: theorySlot, type: 'Theory' });
     }
   }
 

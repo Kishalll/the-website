@@ -47,11 +47,11 @@ const FFCSPlanner = () => {
         return [defaultInitialTimetable];
     });
 
-    const [activeTimetableId, setActiveTimetableId] = useState(() => {
+        const [activeTimetableId, setActiveTimetableId] = useState(() => {
         try {
             const savedId = localStorage.getItem(ACTIVE_TIMETABLE_KEY);
             if (savedId) return savedId;
-        } catch (e) {
+        } catch {
             // ignore
         }
         return 'default-tt-1';
@@ -68,7 +68,9 @@ const FFCSPlanner = () => {
         return timetables.find(t => t.id === activeTimetableId) || timetables[0] || defaultInitialTimetable;
     }, [timetables, activeTimetableId]);
 
-    const activeCourses = activeTimetable.courses || [];
+    const activeCourses = useMemo(() => {
+        return activeTimetable.courses || [];
+    }, [activeTimetable]);
 
     // Sync to localStorage
     useEffect(() => {
@@ -82,7 +84,7 @@ const FFCSPlanner = () => {
     useEffect(() => {
         try {
             localStorage.setItem(ACTIVE_TIMETABLE_KEY, activeTimetableId);
-        } catch (e) {
+        } catch {
             // ignore
         }
     }, [activeTimetableId]);
@@ -1040,7 +1042,7 @@ const FFCSPlanner = () => {
                                         >
                                             {timetables.filter(t => t.id !== activeTimetableId).map(t => (
                                                 <option key={t.id} value={t.id}>
-                                                    {t.name} ({t.courses?.length || 0} courses)
+                                                    {t.name} ({t.courses?.length || 0} courses • {t.courses?.reduce((acc, c) => acc + (Number(c.credits) || 0), 0) || 0} credits)
                                                 </option>
                                             ))}
                                         </select>
@@ -1091,6 +1093,18 @@ const FFCSPlanner = () => {
 
                                     return (
                                         <div className="space-y-6">
+                                            {/* Summary Stats Comparison Bar */}
+                                            <div className="grid grid-cols-2 gap-3 p-3 bg-white/[0.03] border border-white/10 rounded-[2px] text-xs">
+                                                <div className="text-left">
+                                                    <span className="text-gray-400 block text-[11px] uppercase">{activeTimetable.name}</span>
+                                                    <span className="text-white font-bold">{activeCourses.length} Courses • {totalCredits} Credits</span>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span className="text-gray-400 block text-[11px] uppercase">{targetTt.name}</span>
+                                                    <span className="text-white font-bold">{targetCourses.length} Courses • {targetCredits} Credits</span>
+                                                </div>
+                                            </div>
+
                                             {/* Section 1: Similar / Shared Slot Combinations */}
                                             <div className="border border-white/10 bg-black/40 rounded-[2px] p-4">
                                                 <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10">
