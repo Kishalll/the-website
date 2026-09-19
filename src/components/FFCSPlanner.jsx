@@ -353,21 +353,21 @@ const FFCSPlanner = () => {
 
     return (
         <div className="flex-1 flex flex-col w-full text-white">
-            {/* Top Toolbar: Non-wrapping horizontal row */}
-            <div className="w-full overflow-x-auto pb-2 mb-6 scrollbar-thin">
-                <div className="flex items-center justify-between gap-4 bg-black/75 border border-white/10 p-3.5 rounded-[4px] backdrop-blur-md shadow-xl min-w-max">
+            {/* Top Toolbar: Flexible and responsive, no horizontal scrolling for buttons */}
+            <div className="w-full mb-6">
+                <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-4 bg-black/75 border border-white/10 p-2.5 sm:p-3.5 rounded-[4px] backdrop-blur-md shadow-xl">
                     {/* Left: Timetable Selector & Actions */}
-                    <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400">Timetable:</span>
+                    <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-gray-400 hidden xs:inline">Timetable:</span>
 
                         <select
                             value={activeTimetableId}
                             onChange={(e) => setActiveTimetableId(e.target.value)}
-                            className="bg-black border border-white/20 text-white rounded-[2px] px-3 py-1.5 text-xs font-medium focus:outline-none focus:border-white cursor-pointer"
+                            className="bg-black border border-white/20 text-white rounded-[2px] px-2.5 py-1.5 text-xs font-medium focus:outline-none focus:border-white cursor-pointer max-w-[140px] sm:max-w-[200px] truncate"
                         >
                             {timetables.map(tt => (
                                 <option key={tt.id} value={tt.id} className="bg-neutral-900 text-white">
-                                    {tt.name} ({tt.courses?.length || 0} courses)
+                                    {tt.name} ({tt.courses?.length || 0})
                                 </option>
                             ))}
                         </select>
@@ -404,7 +404,7 @@ const FFCSPlanner = () => {
                         <button
                             type="button"
                             onClick={handleCreateTimetable}
-                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer ml-1 shrink-0"
+                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
                             title="New Timetable"
                             aria-label="New Timetable"
                         >
@@ -414,7 +414,7 @@ const FFCSPlanner = () => {
                     </div>
 
                     {/* Right: Two separate stats buttons, Compare button, Add Course button */}
-                    <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5 flex-wrap">
                         {/* Separate Courses button */}
                         <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-[#d4d4d4] hover:border-[#737373] hover:bg-white/[0.04] font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none shrink-0" title="Enrolled Courses">
                             <BookOpen size={13} />
