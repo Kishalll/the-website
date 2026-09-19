@@ -1,20 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import FloatingLines from '../components/ui/FloatingLines';
-import { recruitmentConfig } from '../config/recruitment.config';
 
 const Hero = () => {
-    const navigate = useNavigate();
-
     const handleJoinClick = () => {
-        if (recruitmentConfig.isRecruiting) {
-            navigate('/recruitment');
-        } else {
-            alert("We aren't recruiting right now. Stay tuned for updates!");
-            navigate('/about');
-        }
+    window.open(
+        'https://zbc-recruitments26.vercel.app/',
+        '_blank',
+        'noopener,noreferrer'
+        );
     };
 
     return (
