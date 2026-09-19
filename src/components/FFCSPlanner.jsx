@@ -465,28 +465,28 @@ const FFCSPlanner = () => {
                             </th>
                             {/* Morning Theory 5 hours */}
                             {MORNING_THEORY_HOURS.map((h, i) => (
-                                <th key={`m-th-${i}`} className="p-2 border-r border-white/10 text-center font-mono text-purple-200/90 whitespace-pre-line leading-tight">
+                                <th key={`m-th-${i}`} className="p-2 border-r border-white/10 text-center  text-purple-200/90 whitespace-pre-line leading-tight">
                                     {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
                             {/* 6th lab period in morning: no theory lecture */}
-                            <th className="p-2 border-r border-white/10 text-center text-gray-600 font-mono text-[10px] bg-black/40">
+                            <th className="p-2 border-r border-white/10 text-center text-gray-600  text-[10px] bg-black/40">
                                 —
                             </th>
                             {/* Lunch Column Header after previous lab ends (after morning 6th lab 01:20 PM) */}
                             <th rowSpan={2} className="p-1 border-r border-white/15 bg-neutral-900/80 text-center text-xs font-bold tracking-widest text-gray-400 w-10">
-                                <div className="flex flex-col items-center justify-center py-2 space-y-1 font-mono text-[11px] text-amber-400/80">
+                                <div className="flex flex-col items-center justify-center py-2 space-y-1  text-[11px] text-amber-400/80">
                                     <span>L</span><span>U</span><span>N</span><span>C</span><span>H</span>
                                 </div>
                             </th>
                             {/* Afternoon Theory 5 hours */}
                             {AFTERNOON_THEORY_HOURS.map((h, i) => (
-                                <th key={`a-th-${i}`} className="p-2 border-r border-white/10 text-center font-mono text-purple-200/90 whitespace-pre-line leading-tight">
+                                <th key={`a-th-${i}`} className="p-2 border-r border-white/10 text-center  text-purple-200/90 whitespace-pre-line leading-tight">
                                     {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
                             {/* Evening 6th lab hour theory empty cell */}
-                            <th className="p-2 border-r border-white/15 text-center text-gray-600 font-mono text-[10px] bg-black/40">
+                            <th className="p-2 border-r border-white/15 text-center text-gray-600  text-[10px] bg-black/40">
                                 —
                             </th>
                         </tr>
@@ -498,13 +498,13 @@ const FFCSPlanner = () => {
                             </th>
                             {/* Morning Lab 6 hours */}
                             {MORNING_LAB_HOURS.map((h, i) => (
-                                <th key={`m-lh-${i}`} className="p-2 border-r border-white/10 text-center font-mono text-cyan-200/90 whitespace-pre-line leading-tight">
+                                <th key={`m-lh-${i}`} className="p-2 border-r border-white/10 text-center  text-cyan-200/90 whitespace-pre-line leading-tight">
                                     {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
                             {/* Afternoon Lab 6 hours */}
                             {AFTERNOON_LAB_HOURS.map((h, i) => (
-                                <th key={`a-lh-${i}`} className="p-2 border-r border-white/10 text-center font-mono text-cyan-200/90 whitespace-pre-line leading-tight">
+                                <th key={`a-lh-${i}`} className="p-2 border-r border-white/10 text-center  text-cyan-200/90 whitespace-pre-line leading-tight">
                                     {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
@@ -515,7 +515,7 @@ const FFCSPlanner = () => {
                         {TIMETABLE_GRID.map((row) => (
                             <tr key={row.day} className="hover:bg-white/[0.02] transition-colors">
                                 {/* Day Label */}
-                                <td className="p-3 border-r border-white/15 font-bold text-white text-center font-mono text-sm bg-black/60 tracking-wider">
+                                <td className="p-3 border-r border-white/15 font-bold text-white text-center  text-sm bg-black/60 tracking-wider">
                                     {row.day}
                                 </td>
 
@@ -553,11 +553,11 @@ const FFCSPlanner = () => {
                                                         {occupied.course.name || occupied.course.code}
                                                     </span>
                                                     {occupied.course.name && occupied.course.code && (
-                                                        <span className="text-[9px] font-mono text-gray-300 line-clamp-1 leading-none">
+                                                        <span className="text-[9px]  text-gray-300 line-clamp-1 leading-none">
                                                             {occupied.course.code}
                                                         </span>
                                                     )}
-                                                    <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
+                                                    <span className="text-[10px]  text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
                                                         {occupied.slot}
                                                     </span>
                                                 </div>
@@ -566,7 +566,7 @@ const FFCSPlanner = () => {
                                                     <span className="font-bold text-xs text-white/90">
                                                         {cell.theorySlot || '—'}
                                                     </span>
-                                                    <span className="text-[10px] font-mono text-[#d6b49c] group-hover:text-amber-200 transition-colors">
+                                                    <span className="text-[10px]  text-[#d6b49c] group-hover:text-amber-200 transition-colors">
                                                         {cell.labSlot}
                                                     </span>
                                                 </div>
@@ -576,7 +576,7 @@ const FFCSPlanner = () => {
                                 })}
 
                                 {/* Lunch Divider Column - exactly after previous lab ends (after 6th lab L6, L12, L18, L24, L30) */}
-                                <td className="p-1 border-r border-white/15 bg-neutral-900/60 text-center text-gray-600 font-mono text-xs">
+                                <td className="p-1 border-r border-white/15 bg-neutral-900/60 text-center text-gray-600  text-xs">
                                     •
                                 </td>
 
@@ -602,11 +602,11 @@ const FFCSPlanner = () => {
                                                         {occupied.course.name || occupied.course.code}
                                                     </span>
                                                     {occupied.course.name && occupied.course.code && (
-                                                        <span className="text-[9px] font-mono text-gray-300 line-clamp-1 leading-none">
+                                                        <span className="text-[9px]  text-gray-300 line-clamp-1 leading-none">
                                                             {occupied.course.code}
                                                         </span>
                                                     )}
-                                                    <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
+                                                    <span className="text-[10px]  text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
                                                         {occupied.slot}
                                                     </span>
                                                 </div>
@@ -615,7 +615,7 @@ const FFCSPlanner = () => {
                                                     <span className="font-bold text-xs text-white/90">
                                                         {cell.theorySlot || '—'}
                                                     </span>
-                                                    <span className="text-[10px] font-mono text-[#d6b49c] group-hover:text-amber-200 transition-colors">
+                                                    <span className="text-[10px]  text-[#d6b49c] group-hover:text-amber-200 transition-colors">
                                                         {cell.labSlot}
                                                     </span>
                                                 </div>
@@ -638,7 +638,7 @@ const FFCSPlanner = () => {
                             Enrolled Courses ({activeCourses.length})
                         </h3>
                     </div>
-                    <span className="text-xs text-gray-400 font-mono">Total Credits: {totalCredits}</span>
+                    <span className="text-xs text-gray-400 ">Total Credits: {totalCredits}</span>
                 </div>
 
                 {activeCourses.length === 0 ? (
@@ -655,12 +655,12 @@ const FFCSPlanner = () => {
                                 <div>
                                     <div className="flex items-start justify-between gap-2 mb-1.5">
                                         <h4 className="font-semibold text-sm text-white line-clamp-1">{c.name}</h4>
-                                        <span className="px-2 py-0.5 bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 font-mono text-[11px] rounded-[2px] shrink-0">
+                                        <span className="px-2 py-0.5 bg-emerald-950/90 border border-emerald-500/40 text-emerald-300  text-[11px] rounded-[2px] shrink-0">
                                             {c.slot}
                                         </span>
                                     </div>
                                     {c.code && (
-                                        <span className="text-xs font-mono text-gray-400 block mb-1">
+                                        <span className="text-xs  text-gray-400 block mb-1">
                                             {c.code}
                                         </span>
                                     )}
@@ -791,7 +791,7 @@ const FFCSPlanner = () => {
                                                         key={cr}
                                                         type="button"
                                                         onClick={() => setFormData(prev => ({ ...prev, credits: cr }))}
-                                                        className={`flex items-center justify-center rounded-[2px] text-xs font-mono font-bold transition-all duration-150 ease-in-out cursor-pointer ${
+                                                        className={`flex items-center justify-center rounded-[2px] text-xs  font-bold transition-all duration-150 ease-in-out cursor-pointer ${
                                                             isSelected
                                                                 ? 'bg-emerald-950/90 border border-emerald-500 text-emerald-200 shadow-[0_0_8px_rgba(16,185,129,0.2)]'
                                                                 : 'bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15]'
@@ -815,7 +815,7 @@ const FFCSPlanner = () => {
                                         value={formData.slot}
                                         onChange={(e) => setFormData(prev => ({ ...prev, slot: e.target.value.toUpperCase() }))}
                                         placeholder="e.g. C1+TC1+TCC1 or L13+L14"
-                                        className="w-full bg-black/70 border border-white/20 rounded-[2px] px-3.5 py-2 text-sm text-white font-mono uppercase placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                                        className="w-full bg-black/70 border border-white/20 rounded-[2px] px-3.5 py-2 text-sm text-white  uppercase placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
                                     />
                                     
                                     {/* Slot suggestions specifically for the clicked cell */}
@@ -833,7 +833,7 @@ const FFCSPlanner = () => {
                                                         slot: opt.value,
                                                         credits: opt.type === 'Lab' ? '1' : prev.credits
                                                     }))}
-                                                    className={`px-2.5 py-1 rounded-[2px] text-xs font-mono border transition-colors cursor-pointer ${
+                                                    className={`px-2.5 py-1 rounded-[2px] text-xs  border transition-colors cursor-pointer ${
                                                         formData.slot === opt.value 
                                                             ? 'bg-emerald-950/90 border-emerald-500 text-emerald-200 font-bold shadow-sm' 
                                                             : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10 hover:text-white'
@@ -962,11 +962,11 @@ const FFCSPlanner = () => {
                                     <div className="flex-1">
                                         <span className="text-xs text-gray-400 block mb-1">Active Timetable:</span>
                                         <span className="font-bold text-sm text-white">{activeTimetable.name}</span>
-                                        <span className="text-xs text-emerald-400 block font-mono mt-0.5">
+                                        <span className="text-xs text-emerald-400 block  mt-0.5">
                                             {activeCourses.length} Courses • {totalCredits} Credits
                                         </span>
                                     </div>
-                                    <span className="text-gray-500 font-mono text-sm">VS</span>
+                                    <span className="text-gray-500  text-sm">VS</span>
                                     <div className="flex-1">
                                         <span className="text-xs text-gray-400 block mb-1">Compare With:</span>
                                         <select
@@ -1036,27 +1036,27 @@ const FFCSPlanner = () => {
                                                             Shared Slot Combinations ({commonSlots.length})
                                                         </h4>
                                                     </div>
-                                                    <span className="text-[11px] text-gray-400 font-mono">Both timetables share these slots</span>
+                                                    <span className="text-[11px] text-gray-400 ">Both timetables share these slots</span>
                                                 </div>
 
                                                 {commonSlots.length === 0 ? (
-                                                    <div className="py-4 text-center text-xs text-gray-500 font-mono">
+                                                    <div className="py-4 text-center text-xs text-gray-500 ">
                                                         No overlapping slot combinations found between these two timetables.
                                                     </div>
                                                 ) : (
                                                     <div className="space-y-2">
                                                         {commonSlots.map(({ slot, activeCourse, targetCourse }) => (
                                                             <div key={slot} className="border border-white/10 bg-black/60 rounded-[2px] p-3 text-xs">
-                                                                <div className="inline-block mb-2 px-2 py-0.5 bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 font-mono text-[11px] font-bold rounded-[2px]">
+                                                                <div className="inline-block mb-2 px-2 py-0.5 bg-emerald-950/80 border border-emerald-500/40 text-emerald-300  text-[11px] font-bold rounded-[2px]">
                                                                     Slot: {slot}
                                                                 </div>
                                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-white/5">
                                                                     {/* Active TT Course & Faculty */}
                                                                     <div className="bg-neutral-900/60 p-2.5 border-l-2 border-emerald-500 rounded-[2px]">
-                                                                        <span className="text-[10px] text-gray-400 font-mono block uppercase">{activeTimetable.name}</span>
+                                                                        <span className="text-[10px] text-gray-400  block uppercase">{activeTimetable.name}</span>
                                                                         <div className="font-bold text-white text-xs mt-0.5">{activeCourse.name || activeCourse.code}</div>
                                                                         {activeCourse.code && activeCourse.name && (
-                                                                            <span className="text-[10px] text-gray-400 font-mono block">{activeCourse.code}</span>
+                                                                            <span className="text-[10px] text-gray-400  block">{activeCourse.code}</span>
                                                                         )}
                                                                         <div className="mt-1.5 text-[11px] text-gray-300">
                                                                             <span className="text-gray-500 font-medium">Faculty: </span>
@@ -1066,10 +1066,10 @@ const FFCSPlanner = () => {
 
                                                                     {/* Target TT Course & Faculty */}
                                                                     <div className="bg-neutral-900/60 p-2.5 border-l-2 border-cyan-500 rounded-[2px]">
-                                                                        <span className="text-[10px] text-gray-400 font-mono block uppercase">{targetTt.name}</span>
+                                                                        <span className="text-[10px] text-gray-400  block uppercase">{targetTt.name}</span>
                                                                         <div className="font-bold text-white text-xs mt-0.5">{targetCourse.name || targetCourse.code}</div>
                                                                         {targetCourse.code && targetCourse.name && (
-                                                                            <span className="text-[10px] text-gray-400 font-mono block">{targetCourse.code}</span>
+                                                                            <span className="text-[10px] text-gray-400  block">{targetCourse.code}</span>
                                                                         )}
                                                                         <div className="mt-1.5 text-[11px] text-gray-300">
                                                                             <span className="text-gray-500 font-medium">Faculty: </span>
@@ -1089,7 +1089,7 @@ const FFCSPlanner = () => {
                                                     <h4 className="text-xs font-bold uppercase tracking-wider text-white">
                                                         Distinct & Unique Courses
                                                     </h4>
-                                                    <span className="text-[11px] text-gray-400 font-mono">Courses taken uniquely in either timetable</span>
+                                                    <span className="text-[11px] text-gray-400 ">Courses taken uniquely in either timetable</span>
                                                 </div>
 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1097,19 +1097,19 @@ const FFCSPlanner = () => {
                                                     <div className="border border-white/10 bg-black/60 rounded-[2px] p-3">
                                                         <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
                                                             <span className="font-bold text-xs text-white">{activeTimetable.name} Only</span>
-                                                            <span className="text-[10px] font-mono text-gray-400">{activeOnlyCourses.length} unique</span>
+                                                            <span className="text-[10px]  text-gray-400">{activeOnlyCourses.length} unique</span>
                                                         </div>
                                                         {activeOnlyCourses.length === 0 ? (
-                                                            <div className="py-4 text-center text-xs text-gray-500 font-mono">No unique courses</div>
+                                                            <div className="py-4 text-center text-xs text-gray-500 ">No unique courses</div>
                                                         ) : (
                                                             <div className="space-y-2">
                                                                 {activeOnlyCourses.map(c => (
                                                                     <div key={c.id} className="p-2.5 bg-neutral-900/60 border border-white/5 rounded-[2px] text-xs">
                                                                         <div className="flex items-start justify-between gap-1">
                                                                             <span className="font-semibold text-white line-clamp-1">{c.name || c.code}</span>
-                                                                            <span className="px-1.5 py-0.2 bg-white/10 font-mono text-[10px] text-emerald-300 rounded-[2px] shrink-0 border border-white/10">{c.slot}</span>
+                                                                            <span className="px-1.5 py-0.2 bg-white/10  text-[10px] text-emerald-300 rounded-[2px] shrink-0 border border-white/10">{c.slot}</span>
                                                                         </div>
-                                                                        {c.code && c.name && <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{c.code}</span>}
+                                                                        {c.code && c.name && <span className="text-[10px] text-gray-400  block mt-0.5">{c.code}</span>}
                                                                         <div className="mt-1 text-[11px] text-gray-400">
                                                                             <span className="text-gray-500">Faculty: </span>
                                                                             <span>{c.teachers?.filter(Boolean).join(', ') || 'Not specified'}</span>
@@ -1124,19 +1124,19 @@ const FFCSPlanner = () => {
                                                     <div className="border border-white/10 bg-black/60 rounded-[2px] p-3">
                                                         <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
                                                             <span className="font-bold text-xs text-white">{targetTt.name} Only</span>
-                                                            <span className="text-[10px] font-mono text-gray-400">{targetOnlyCourses.length} unique</span>
+                                                            <span className="text-[10px]  text-gray-400">{targetOnlyCourses.length} unique</span>
                                                         </div>
                                                         {targetOnlyCourses.length === 0 ? (
-                                                            <div className="py-4 text-center text-xs text-gray-500 font-mono">No unique courses</div>
+                                                            <div className="py-4 text-center text-xs text-gray-500 ">No unique courses</div>
                                                         ) : (
                                                             <div className="space-y-2">
                                                                 {targetOnlyCourses.map(c => (
                                                                     <div key={c.id} className="p-2.5 bg-neutral-900/60 border border-white/5 rounded-[2px] text-xs">
                                                                         <div className="flex items-start justify-between gap-1">
                                                                             <span className="font-semibold text-white line-clamp-1">{c.name || c.code}</span>
-                                                                            <span className="px-1.5 py-0.2 bg-white/10 font-mono text-[10px] text-cyan-300 rounded-[2px] shrink-0 border border-white/10">{c.slot}</span>
+                                                                            <span className="px-1.5 py-0.2 bg-white/10  text-[10px] text-cyan-300 rounded-[2px] shrink-0 border border-white/10">{c.slot}</span>
                                                                         </div>
-                                                                        {c.code && c.name && <span className="text-[10px] text-gray-400 font-mono block mt-0.5">{c.code}</span>}
+                                                                        {c.code && c.name && <span className="text-[10px] text-gray-400  block mt-0.5">{c.code}</span>}
                                                                         <div className="mt-1 text-[11px] text-gray-400">
                                                                             <span className="text-gray-500">Faculty: </span>
                                                                             <span>{c.teachers?.filter(Boolean).join(', ') || 'Not specified'}</span>
