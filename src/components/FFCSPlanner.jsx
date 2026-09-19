@@ -549,9 +549,14 @@ const FFCSPlanner = () => {
                                         >
                                             {isBooked ? (
                                                 <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
-                                                    <span className="font-bold text-xs text-white tracking-tight line-clamp-1">
-                                                        {occupied.course.code || occupied.course.name}
+                                                    <span className="font-bold text-xs text-white tracking-tight line-clamp-1" title={occupied.course.name || occupied.course.code}>
+                                                        {occupied.course.name || occupied.course.code}
                                                     </span>
+                                                    {occupied.course.name && occupied.course.code && (
+                                                        <span className="text-[9px] font-mono text-gray-300 line-clamp-1 leading-none">
+                                                            {occupied.course.code}
+                                                        </span>
+                                                    )}
                                                     <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
                                                         {occupied.slot}
                                                     </span>
@@ -593,9 +598,14 @@ const FFCSPlanner = () => {
                                         >
                                             {isBooked ? (
                                                 <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
-                                                    <span className="font-bold text-xs text-white tracking-tight line-clamp-1">
-                                                        {occupied.course.code || occupied.course.name}
+                                                    <span className="font-bold text-xs text-white tracking-tight line-clamp-1" title={occupied.course.name || occupied.course.code}>
+                                                        {occupied.course.name || occupied.course.code}
                                                     </span>
+                                                    {occupied.course.name && occupied.course.code && (
+                                                        <span className="text-[9px] font-mono text-gray-300 line-clamp-1 leading-none">
+                                                            {occupied.course.code}
+                                                        </span>
+                                                    )}
                                                     <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
                                                         {occupied.slot}
                                                     </span>
