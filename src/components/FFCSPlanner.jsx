@@ -404,25 +404,27 @@ const FFCSPlanner = () => {
                         <button
                             type="button"
                             onClick={handleCreateTimetable}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer ml-1"
+                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer ml-1 shrink-0"
+                            title="New Timetable"
+                            aria-label="New Timetable"
                         >
                             <Plus size={14} />
-                            <span>New Timetable</span>
+                            <span className="hidden sm:inline">New Timetable</span>
                         </button>
                     </div>
 
                     {/* Right: Two separate stats buttons, Compare button, Add Course button */}
-                    <div className="flex items-center gap-2.5 shrink-0">
+                    <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
                         {/* Separate Courses button */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-[#d4d4d4] hover:border-[#737373] hover:bg-white/[0.04] font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none">
+                        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-[#d4d4d4] hover:border-[#737373] hover:bg-white/[0.04] font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none shrink-0" title="Enrolled Courses">
                             <BookOpen size={13} />
-                            <span>{activeCourses.length} {activeCourses.length === 1 ? 'Course' : 'Courses'}</span>
+                            <span>{activeCourses.length} <span className="hidden sm:inline">{activeCourses.length === 1 ? 'Course' : 'Courses'}</span></span>
                         </div>
 
                         {/* Separate Credits button */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-[#d4d4d4] hover:border-[#737373] hover:bg-white/[0.04] font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none">
+                        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-[#d4d4d4] hover:border-[#737373] hover:bg-white/[0.04] font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none shrink-0" title="Total Credits">
                             <Clock size={13} />
-                            <span>{totalCredits} Credits</span>
+                            <span>{totalCredits} <span className="hidden sm:inline">Credits</span><span className="sm:hidden">Cr</span></span>
                         </div>
 
                         {/* Compare button */}
@@ -434,10 +436,12 @@ const FFCSPlanner = () => {
                                     if (other) setCompareTargetId(other.id);
                                     setCompareModalOpen(true);
                                 }}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer"
+                                className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
+                                title="Compare Timetables"
+                                aria-label="Compare Timetables"
                             >
                                 <Eye size={13} />
-                                <span>Compare Timetables</span>
+                                <span className="hidden sm:inline">Compare Timetables</span>
                             </button>
                         )}
 
@@ -445,10 +449,12 @@ const FFCSPlanner = () => {
                         <button
                             type="button"
                             onClick={handleOpenAddModalManual}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer"
+                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
+                            title="Add Course"
+                            aria-label="Add Course"
                         >
                             <Plus size={14} />
-                            <span>Add Course</span>
+                            <span className="hidden sm:inline">Add Course</span>
                         </button>
                     </div>
                 </div>
