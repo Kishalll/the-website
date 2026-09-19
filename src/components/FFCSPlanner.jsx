@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Calendar, Plus, Trash2, Edit2, X, AlertTriangle, Check, 
     BookOpen, User, Layers, Sparkles, Copy, Eye, Clock, 
-    ChevronDown, CheckCircle2, ArrowRight
+    ChevronDown, CheckCircle2, ArrowRight, Download
 } from 'lucide-react';
 import {
     DAYS,
@@ -59,6 +59,8 @@ const FFCSPlanner = () => {
     // Comparison modal state
     const [compareModalOpen, setCompareModalOpen] = useState(false);
     const [compareTargetId, setCompareTargetId] = useState('');
+    const [isDownloading, setIsDownloading] = useState(false);
+    const tableContainerRef = useRef(null);
 
     // Active timetable
     const activeTimetable = useMemo(() => {
@@ -253,6 +255,93 @@ const FFCSPlanner = () => {
         });
     };
 
+    // Download timetable matrix as JPEG
+    const handleDownloadImage = async () => {
+        const targetElement = tableContainerRef.current;
+        if (!targetElement) return;
+
+        try {
+            setIsDownloading(true);
+
+            // Clone table container to prepare for clean SVG foreignObject rasterization
+            const clone = targetElement.cloneNode(true);
+
+            // Measure dimensions
+            const width = targetElement.scrollWidth || 1200;
+            const height = targetElement.scrollHeight || 600;
+
+            // Embed fonts and inline styles
+            clone.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+            clone.style.width = `${width}px`;
+            clone.style.height = `${height}px`;
+            clone.style.backgroundColor = '#0a0a0a';
+            clone.style.padding = '16px';
+            clone.style.borderRadius = '4px';
+
+            const serializedHtml = new XMLSerializer().serializeToString(clone);
+
+            const svgString = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="${width + 32}" height="${height + 32}">
+                    <style>
+                        * { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important; }
+                    </style>
+                    <rect width="100%" height="100%" fill="#0a0a0a"/>
+                    <foreignObject x="16" y="16" width="${width}" height="${height}">
+                        ${serializedHtml}
+                    </foreignObject>
+                </svg>
+            `;
+
+            const img = new Image();
+            const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            await new Promise((resolve, reject) => {
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    // Render at high resolution (2x scale for crisp text)
+                    const scale = 2;
+                    canvas.width = (width + 32) * scale;
+                    canvas.height = (height + 32) * scale;
+                    const ctx = canvas.getContext('2d');
+                    ctx.scale(scale, scale);
+
+                    // Fill background
+                    ctx.fillStyle = '#0a0a0a';
+                    ctx.fillRect(0, 0, width + 32, height + 32);
+
+                    // Draw rendered image
+                    ctx.drawImage(img, 0, 0);
+
+                    // Convert to JPEG data url
+                    const jpegUrl = canvas.toDataURL('image/jpeg', 0.95);
+
+                    // Trigger download
+                    const a = document.createElement('a');
+                    const cleanName = (activeTimetable.name || 'timetable').replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase();
+                    a.download = `${cleanName}-ffcs.jpeg`;
+                    a.href = jpegUrl;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+
+                    URL.revokeObjectURL(url);
+                    resolve();
+                };
+                img.onerror = (err) => {
+                    URL.revokeObjectURL(url);
+                    reject(err);
+                };
+                img.src = url;
+            });
+        } catch (err) {
+            console.error('Failed to export timetable as image:', err);
+            alert('Failed to generate image download. Please try again.');
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
     // Save or Update Course
     const handleSaveCourse = (e) => {
         e.preventDefault();
@@ -445,6 +534,19 @@ const FFCSPlanner = () => {
                             </button>
                         )}
 
+                        {/* Download JPEG button */}
+                        <button
+                            type="button"
+                            onClick={handleDownloadImage}
+                            disabled={isDownloading}
+                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0 disabled:opacity-50"
+                            title="Download Timetable as JPEG"
+                            aria-label="Download Timetable as JPEG"
+                        >
+                            <Download size={13} className={isDownloading ? 'animate-bounce' : ''} />
+                            <span className="hidden sm:inline">{isDownloading ? 'Exporting...' : 'Export JPEG'}</span>
+                        </button>
+
                         {/* Add Course button */}
                         <button
                             type="button"
@@ -461,7 +563,7 @@ const FFCSPlanner = () => {
             </div>
 
             {/* Main Timetable Matrix: Translucent 75% black background with spiky corners (rounded-[2px]) */}
-            <div className="w-full overflow-x-auto rounded-[2px] border border-white/15 shadow-2xl bg-black/75 backdrop-blur-md">
+            <div ref={tableContainerRef} className="w-full overflow-x-auto rounded-[2px] border border-white/15 shadow-2xl bg-black/75 backdrop-blur-md">
                 <table className="w-full border-collapse text-left min-w-[1080px] select-none">
                     <thead>
                         {/* Row 1: Theory Hours Header */}
