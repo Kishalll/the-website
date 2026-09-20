@@ -410,7 +410,7 @@ const FFCSPlanner = () => {
                         <select
                             value={activeTimetableId}
                             onChange={(e) => setActiveTimetableId(e.target.value)}
-                            className="bg-black border border-white/20 text-white rounded-[2px] px-2.5 py-1.5 text-xs font-medium focus:outline-none focus:border-white cursor-pointer max-w-[140px] sm:max-w-[200px] truncate"
+                            className="bg-black border border-white/15 text-white/80 rounded-[2px] px-2.5 py-1.5 text-xs font-medium outline-none focus:outline-none focus:ring-0 focus:border-[#f0f8ff] cursor-pointer max-w-[140px] sm:max-w-[200px] truncate transition-colors"
                         >
                             {timetables.map(tt => (
                                 <option key={tt.id} value={tt.id} className="bg-neutral-900 text-white">
@@ -451,7 +451,7 @@ const FFCSPlanner = () => {
                         <button
                             type="button"
                             onClick={handleCreateTimetable}
-                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
+                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-white/15 text-white/70 hover:text-white hover:border-[#a3a3a3] focus:border-[#f0f8ff] focus:outline-none focus:ring-0 hover:bg-white/[0.08] active:bg-white/[0.15] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
                             title="New Timetable"
                             aria-label="New Timetable"
                         >
@@ -463,15 +463,15 @@ const FFCSPlanner = () => {
                     {/* Right: Two separate stats buttons, Compare button, Add Course button */}
                     <div className="flex items-center gap-1.5 sm:gap-2.5 flex-wrap">
                         {/* Separate Courses button */}
-                        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-[#d4d4d4] hover:border-[#737373] hover:bg-white/[0.04] font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none shrink-0" title="Enrolled Courses">
+                        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-[2px] bg-black border border-white/15 text-white/70 hover:text-white hover:border-white/30 font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none shrink-0" title="Enrolled Courses">
                             <BookOpen size={13} />
                             <span>{activeCourses.length} <span className="hidden sm:inline">{activeCourses.length === 1 ? 'Course' : 'Courses'}</span></span>
                         </div>
 
                         {/* Separate Credits button */}
-                        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-[#d4d4d4] hover:border-[#737373] hover:bg-white/[0.04] font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none shrink-0" title="Total Credits">
+                        <div className="inline-flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-[2px] bg-black border border-white/15 text-white/70 hover:text-white hover:border-white/30 font-semibold text-xs tracking-wide uppercase shadow-sm transition-all duration-150 ease-in-out select-none shrink-0" title="Total Credits">
                             <Clock size={13} />
-                            <span>{totalCredits} <span className="hidden sm:inline">Credits</span><span className="sm:hidden">Cr</span></span>
+                            <span>{totalCredits} <span className="lowercase">creds</span></span>
                         </div>
 
                         {/* Compare button */}
@@ -483,12 +483,12 @@ const FFCSPlanner = () => {
                                     if (other) setCompareTargetId(other.id);
                                     setCompareModalOpen(true);
                                 }}
-                                className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
-                                title="Compare Timetables"
-                                aria-label="Compare Timetables"
+                                className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-white/15 text-white/70 hover:text-white hover:border-[#a3a3a3] focus:border-[#f0f8ff] focus:outline-none focus:ring-0 hover:bg-white/[0.08] active:bg-white/[0.15] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
+                                title="Compare"
+                                aria-label="Compare"
                             >
                                 <Eye size={13} />
-                                <span className="hidden sm:inline">Compare Timetables</span>
+                                <span className="hidden sm:inline">Compare</span>
                             </button>
                         )}
 
@@ -497,19 +497,19 @@ const FFCSPlanner = () => {
                             type="button"
                             onClick={handleDownloadImage}
                             disabled={isDownloading}
-                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0 disabled:opacity-50"
-                            title="Download Timetable as JPEG"
-                            aria-label="Download Timetable as JPEG"
+                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-white/15 text-white/70 hover:text-white hover:border-[#a3a3a3] focus:border-[#f0f8ff] focus:outline-none focus:ring-0 hover:bg-white/[0.08] active:bg-white/[0.15] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0 disabled:opacity-50"
+                            title="Export"
+                            aria-label="Export"
                         >
                             <Download size={13} className={isDownloading ? 'animate-bounce' : ''} />
-                            <span className="hidden sm:inline">{isDownloading ? 'Exporting...' : 'Export JPEG'}</span>
+                            <span className="hidden sm:inline">{isDownloading ? 'Exporting...' : 'Export'}</span>
                         </button>
 
                         {/* Add Course button */}
                         <button
                             type="button"
                             onClick={handleOpenAddModalManual}
-                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-[2px] bg-black border border-[#525252] text-[#8a8a8a] hover:text-white hover:border-[#a3a3a3] hover:bg-white/[0.08] active:bg-white/[0.15] hover:shadow-[0_0_8px_rgba(255,255,255,0.12)] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
+                            className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-[2px] bg-black border border-white/15 text-white/70 hover:text-white hover:border-[#a3a3a3] focus:border-[#f0f8ff] focus:outline-none focus:ring-0 hover:bg-white/[0.08] active:bg-white/[0.15] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
                             title="Add Course"
                             aria-label="Add Course"
                         >
@@ -704,7 +704,7 @@ const FFCSPlanner = () => {
                             Enrolled Courses ({activeCourses.length})
                         </h3>
                     </div>
-                    <span className="text-xs text-gray-400 ">Total Credits: {totalCredits}</span>
+                    <span className="text-xs text-gray-400 ">Total: {totalCredits} creds</span>
                 </div>
 
                 {activeCourses.length === 0 ? (
@@ -739,7 +739,7 @@ const FFCSPlanner = () => {
                                 </div>
 
                                 <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-white/5 text-xs text-gray-400">
-                                    <span>{c.credits} Credits</span>
+                                    <span>{c.credits} creds</span>
                                     <div className="flex items-center gap-2">
                                         <button
                                             type="button"
@@ -1029,7 +1029,7 @@ const FFCSPlanner = () => {
                                         <span className="text-xs text-gray-400 block mb-1">Active Timetable:</span>
                                         <span className="font-bold text-sm text-white">{activeTimetable.name}</span>
                                         <span className="text-xs text-emerald-400 block  mt-0.5">
-                                            {activeCourses.length} Courses • {totalCredits} Credits
+                                            {activeCourses.length} Courses • {totalCredits} creds
                                         </span>
                                     </div>
                                     <span className="text-gray-500  text-sm">VS</span>
@@ -1042,7 +1042,7 @@ const FFCSPlanner = () => {
                                         >
                                             {timetables.filter(t => t.id !== activeTimetableId).map(t => (
                                                 <option key={t.id} value={t.id}>
-                                                    {t.name} ({t.courses?.length || 0} courses • {t.courses?.reduce((acc, c) => acc + (Number(c.credits) || 0), 0) || 0} credits)
+                                                    {t.name} ({t.courses?.length || 0} courses • {t.courses?.reduce((acc, c) => acc + (Number(c.credits) || 0), 0) || 0} creds)
                                                 </option>
                                             ))}
                                         </select>
@@ -1097,11 +1097,11 @@ const FFCSPlanner = () => {
                                             <div className="grid grid-cols-2 gap-3 p-3 bg-white/[0.03] border border-white/10 rounded-[2px] text-xs">
                                                 <div className="text-left">
                                                     <span className="text-gray-400 block text-[11px] uppercase">{activeTimetable.name}</span>
-                                                    <span className="text-white font-bold">{activeCourses.length} Courses • {totalCredits} Credits</span>
+                                                    <span className="text-white font-bold">{activeCourses.length} Courses • {totalCredits} creds</span>
                                                 </div>
                                                 <div className="text-right">
                                                     <span className="text-gray-400 block text-[11px] uppercase">{targetTt.name}</span>
-                                                    <span className="text-white font-bold">{targetCourses.length} Courses • {targetCredits} Credits</span>
+                                                    <span className="text-white font-bold">{targetCourses.length} Courses • {targetCredits} creds</span>
                                                 </div>
                                             </div>
 
