@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toJpeg } from 'html-to-image';
 import { 
     Calendar, Plus, Trash2, Edit2, X, AlertTriangle, Check, 
-    BookOpen, User, Layers, Sparkles, Copy, Eye, Clock, 
+    BookOpen, User, Layers, Sparkles, Copy, Clock, 
     ChevronDown, CheckCircle2, ArrowRight, Download
 } from 'lucide-react';
 import {
@@ -57,9 +57,6 @@ const FFCSPlanner = () => {
         return 'default-tt-1';
     });
 
-    // Comparison modal state
-    const [compareModalOpen, setCompareModalOpen] = useState(false);
-    const [compareTargetId, setCompareTargetId] = useState('');
     const [isDownloading, setIsDownloading] = useState(false);
     const tableContainerRef = useRef(null);
 
@@ -473,24 +470,6 @@ const FFCSPlanner = () => {
                             <Clock size={13} />
                             <span>{totalCredits} <span className="lowercase">creds</span></span>
                         </div>
-
-                        {/* Compare button */}
-                        {timetables.length > 1 && (
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    const other = timetables.find(t => t.id !== activeTimetableId);
-                                    if (other) setCompareTargetId(other.id);
-                                    setCompareModalOpen(true);
-                                }}
-                                className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-[2px] bg-black border border-white/15 text-white/70 hover:text-white hover:border-[#a3a3a3] focus:border-[#f0f8ff] focus:outline-none focus:ring-0 hover:bg-white/[0.08] active:bg-white/[0.15] font-semibold text-xs tracking-wide uppercase transition-all duration-150 ease-in-out cursor-pointer shrink-0"
-                                title="Compare"
-                                aria-label="Compare"
-                            >
-                                <Eye size={13} />
-                                <span className="hidden sm:inline">Compare</span>
-                            </button>
-                        )}
 
                         {/* Download JPEG button */}
                         <button
@@ -994,242 +973,6 @@ const FFCSPlanner = () => {
                                     </div>
                                 </div>
                             </form>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
-            {/* Timetable Comparison Modal */}
-            <AnimatePresence>
-                {compareModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.98 }}
-                            className="bg-neutral-950 border border-white/20 rounded-[4px] w-full max-w-4xl overflow-hidden shadow-2xl flex flex-col max-h-[85vh]"
-                        >
-                            <div className="flex items-center justify-between p-5 border-b border-white/10 bg-white/[0.02]">
-                                <div className="flex items-center gap-2">
-                                    <Eye size={18} className="text-white" />
-                                    <h3 className="font-bold text-white text-base">Compare Timetables</h3>
-                                </div>
-                                <button
-                                    type="button"
-                                    onClick={() => setCompareModalOpen(false)}
-                                    className="p-1 text-gray-400 hover:text-white rounded-[2px] hover:bg-white/10 transition-colors"
-                                >
-                                    <X size={18} />
-                                </button>
-                            </div>
-
-                            <div className="p-5 overflow-y-auto space-y-6">
-                                <div className="flex items-center gap-4 bg-black/60 p-4 rounded-[2px] border border-white/10">
-                                    <div className="flex-1">
-                                        <span className="text-xs text-gray-400 block mb-1">Active Timetable:</span>
-                                        <span className="font-bold text-sm text-white">{activeTimetable.name}</span>
-                                        <span className="text-xs text-emerald-400 block  mt-0.5">
-                                            {activeCourses.length} Courses • {totalCredits} creds
-                                        </span>
-                                    </div>
-                                    <span className="text-gray-500  text-sm">VS</span>
-                                    <div className="flex-1">
-                                        <span className="text-xs text-gray-400 block mb-1">Compare With:</span>
-                                        <select
-                                            value={compareTargetId}
-                                            onChange={(e) => setCompareTargetId(e.target.value)}
-                                            className="bg-black border border-white/20 text-white rounded-[2px] px-3 py-1.5 text-xs font-medium focus:outline-none focus:border-white cursor-pointer w-full"
-                                        >
-                                            {timetables.filter(t => t.id !== activeTimetableId).map(t => (
-                                                <option key={t.id} value={t.id}>
-                                                    {t.name} ({t.courses?.length || 0} courses • {t.courses?.reduce((acc, c) => acc + (Number(c.credits) || 0), 0) || 0} creds)
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-
-                                {/* Comparison Details */}
-                                {(() => {
-                                    const targetTt = timetables.find(t => t.id === compareTargetId);
-                                    if (!targetTt) return null;
-                                    const targetCourses = targetTt.courses || [];
-                                    const targetCredits = targetCourses.reduce((acc, c) => acc + (Number(c.credits) || 0), 0);
-
-                                    // Identify common combinations vs distinct courses
-                                    // Normalize slots for matching (e.g. A1+TA1+TAA1)
-                                    const activeSlotsMap = new Map();
-                                    activeCourses.forEach(c => {
-                                        const key = (c.slot || '').trim().toUpperCase();
-                                        if (key) activeSlotsMap.set(key, c);
-                                    });
-
-                                    const targetSlotsMap = new Map();
-                                    targetCourses.forEach(c => {
-                                        const key = (c.slot || '').trim().toUpperCase();
-                                        if (key) targetSlotsMap.set(key, c);
-                                    });
-
-                                    const commonSlots = [];
-                                    activeSlotsMap.forEach((activeCourse, slot) => {
-                                        if (targetSlotsMap.has(slot)) {
-                                            commonSlots.push({
-                                                slot,
-                                                activeCourse,
-                                                targetCourse: targetSlotsMap.get(slot)
-                                            });
-                                        }
-                                    });
-
-                                    const activeOnlyCourses = activeCourses.filter(c => {
-                                        const key = (c.slot || '').trim().toUpperCase();
-                                        return !targetSlotsMap.has(key);
-                                    });
-
-                                    const targetOnlyCourses = targetCourses.filter(c => {
-                                        const key = (c.slot || '').trim().toUpperCase();
-                                        return !activeSlotsMap.has(key);
-                                    });
-
-                                    return (
-                                        <div className="space-y-6">
-                                            {/* Summary Stats Comparison Bar */}
-                                            <div className="grid grid-cols-2 gap-3 p-3 bg-white/[0.03] border border-white/10 rounded-[2px] text-xs">
-                                                <div className="text-left">
-                                                    <span className="text-gray-400 block text-[11px] uppercase">{activeTimetable.name}</span>
-                                                    <span className="text-white font-bold">{activeCourses.length} Courses • {totalCredits} creds</span>
-                                                </div>
-                                                <div className="text-right">
-                                                    <span className="text-gray-400 block text-[11px] uppercase">{targetTt.name}</span>
-                                                    <span className="text-white font-bold">{targetCourses.length} Courses • {targetCredits} creds</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Section 1: Similar / Shared Slot Combinations */}
-                                            <div className="border border-white/10 bg-black/40 rounded-[2px] p-4">
-                                                <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="w-2 h-2 bg-emerald-400 rounded-none"></span>
-                                                        <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                                                            Shared Slot Combinations ({commonSlots.length})
-                                                        </h4>
-                                                    </div>
-                                                    <span className="text-[11px] text-gray-400 ">Both timetables share these slots</span>
-                                                </div>
-
-                                                {commonSlots.length === 0 ? (
-                                                    <div className="py-4 text-center text-xs text-gray-500 ">
-                                                        No overlapping slot combinations found between these two timetables.
-                                                    </div>
-                                                ) : (
-                                                    <div className="space-y-2">
-                                                        {commonSlots.map(({ slot, activeCourse, targetCourse }) => (
-                                                            <div key={slot} className="border border-white/10 bg-black/60 rounded-[2px] p-3 text-xs">
-                                                                <div className="inline-block mb-2 px-2 py-0.5 bg-emerald-950/80 border border-emerald-500/40 text-emerald-300  text-[11px] font-bold rounded-[2px]">
-                                                                    Slot: {slot}
-                                                                </div>
-                                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 border-t border-white/5">
-                                                                    {/* Active TT Course & Faculty */}
-                                                                    <div className="bg-neutral-900/60 p-2.5 border-l-2 border-emerald-500 rounded-[2px]">
-                                                                        <span className="text-[10px] text-gray-400  block uppercase">{activeTimetable.name}</span>
-                                                                        <div className="font-bold text-white text-xs mt-0.5">{activeCourse.name || activeCourse.code}</div>
-                                                                        {activeCourse.code && activeCourse.name && (
-                                                                            <span className="text-[10px] text-gray-400  block">{activeCourse.code}</span>
-                                                                        )}
-                                                                        <div className="mt-1.5 text-[11px] text-gray-300">
-                                                                            <span className="text-gray-500 font-medium">Faculty: </span>
-                                                                            <span>{activeCourse.teachers?.filter(Boolean).join(', ') || 'Not specified'}</span>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    {/* Target TT Course & Faculty */}
-                                                                    <div className="bg-neutral-900/60 p-2.5 border-l-2 border-cyan-500 rounded-[2px]">
-                                                                        <span className="text-[10px] text-gray-400  block uppercase">{targetTt.name}</span>
-                                                                        <div className="font-bold text-white text-xs mt-0.5">{targetCourse.name || targetCourse.code}</div>
-                                                                        {targetCourse.code && targetCourse.name && (
-                                                                            <span className="text-[10px] text-gray-400  block">{targetCourse.code}</span>
-                                                                        )}
-                                                                        <div className="mt-1.5 text-[11px] text-gray-300">
-                                                                            <span className="text-gray-500 font-medium">Faculty: </span>
-                                                                            <span>{targetCourse.teachers?.filter(Boolean).join(', ') || 'Not specified'}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* Section 2: Distinct / Uncommon Courses */}
-                                            <div className="border border-white/10 bg-black/40 rounded-[2px] p-4">
-                                                <div className="pb-2.5 mb-3 border-b border-white/10">
-                                                    <h4 className="text-xs font-bold uppercase tracking-wider text-white">
-                                                        Distinct & Unique Courses
-                                                    </h4>
-                                                    <span className="text-[11px] text-gray-400 ">Courses taken uniquely in either timetable</span>
-                                                </div>
-
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    {/* Active Timetable Unique Courses */}
-                                                    <div className="border border-white/10 bg-black/60 rounded-[2px] p-3">
-                                                        <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
-                                                            <span className="font-bold text-xs text-white">{activeTimetable.name} Only</span>
-                                                            <span className="text-[10px]  text-gray-400">{activeOnlyCourses.length} unique</span>
-                                                        </div>
-                                                        {activeOnlyCourses.length === 0 ? (
-                                                            <div className="py-4 text-center text-xs text-gray-500 ">No unique courses</div>
-                                                        ) : (
-                                                            <div className="space-y-2">
-                                                                {activeOnlyCourses.map(c => (
-                                                                    <div key={c.id} className="p-2.5 bg-neutral-900/60 border border-white/5 rounded-[2px] text-xs">
-                                                                        <div className="flex items-start justify-between gap-1">
-                                                                            <span className="font-semibold text-white line-clamp-1">{c.name || c.code}</span>
-                                                                            <span className="px-1.5 py-0.2 bg-white/10  text-[10px] text-emerald-300 rounded-[2px] shrink-0 border border-white/10">{c.slot}</span>
-                                                                        </div>
-                                                                        {c.code && c.name && <span className="text-[10px] text-gray-400  block mt-0.5">{c.code}</span>}
-                                                                        <div className="mt-1 text-[11px] text-gray-400">
-                                                                            <span className="text-gray-500">Faculty: </span>
-                                                                            <span>{c.teachers?.filter(Boolean).join(', ') || 'Not specified'}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-
-                                                    {/* Target Timetable Unique Courses */}
-                                                    <div className="border border-white/10 bg-black/60 rounded-[2px] p-3">
-                                                        <div className="flex items-center justify-between mb-2 pb-1.5 border-b border-white/10">
-                                                            <span className="font-bold text-xs text-white">{targetTt.name} Only</span>
-                                                            <span className="text-[10px]  text-gray-400">{targetOnlyCourses.length} unique</span>
-                                                        </div>
-                                                        {targetOnlyCourses.length === 0 ? (
-                                                            <div className="py-4 text-center text-xs text-gray-500 ">No unique courses</div>
-                                                        ) : (
-                                                            <div className="space-y-2">
-                                                                {targetOnlyCourses.map(c => (
-                                                                    <div key={c.id} className="p-2.5 bg-neutral-900/60 border border-white/5 rounded-[2px] text-xs">
-                                                                        <div className="flex items-start justify-between gap-1">
-                                                                            <span className="font-semibold text-white line-clamp-1">{c.name || c.code}</span>
-                                                                            <span className="px-1.5 py-0.2 bg-white/10  text-[10px] text-cyan-300 rounded-[2px] shrink-0 border border-white/10">{c.slot}</span>
-                                                                        </div>
-                                                                        {c.code && c.name && <span className="text-[10px] text-gray-400  block mt-0.5">{c.code}</span>}
-                                                                        <div className="mt-1 text-[11px] text-gray-400">
-                                                                            <span className="text-gray-500">Faculty: </span>
-                                                                            <span>{c.teachers?.filter(Boolean).join(', ') || 'Not specified'}</span>
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })()}
-                            </div>
                         </motion.div>
                     </div>
                 )}
