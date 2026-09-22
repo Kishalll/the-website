@@ -15,6 +15,7 @@ import PersonDetailPage from './pages/PersonDetailPage';
 import DomainsPage from './pages/DomainsPage';
 import ToolsPage from './pages/ToolsPage';
 import CompilerPage from './pages/CompilerPage';
+import FFCSPlannerPage from './pages/FFCSPlannerPage';
 // import GalleryPage from './pages/GalleryPage'; // Unlinked but file retained
 
 // Scroll to top on route change with smart About page scroll restoration
@@ -73,6 +74,7 @@ function App() {
               <Route path="/domains" element={<DomainsPage />} />
               <Route path="/tools" element={<ToolsPage />} />
               <Route path="/tools/compiler" element={<CompilerPage />} />
+              <Route path="/tools/ffcs-planner" element={<FFCSPlannerPage />} />
               {/* Gallery route removed completely so it's inaccessible via URL or slug */}
             </Routes>
           </AnimatePresence>
