@@ -395,6 +395,13 @@ const FFCSPlanner = () => {
         };
     }, []);
 
+    const allAvailableSlotOptions = useMemo(() => {
+        return [
+            ...allSelectableSlots.theory.map(s => ({ value: s, label: s, type: 'Theory' })),
+            ...allSelectableSlots.lab.map(s => ({ value: s, label: s, type: 'Lab' }))
+        ];
+    }, [allSelectableSlots]);
+
     return (
         <div className="flex-1 flex flex-col w-full text-white">
             {/* Top Toolbar: Flexible and responsive, no horizontal scrolling for buttons */}
@@ -731,7 +738,11 @@ const FFCSPlanner = () => {
                                                     credits: c.credits || '3',
                                                     teachers: c.teachers?.length ? [...c.teachers] : ['']
                                                 });
-                                                setModalSlotOptions(allSelectableSlots.theory.slice(0, 8).map(s => ({ value: s, label: s, type: 'Theory' })));
+                                                const parts = parseSlotString(c.slot);
+                                                const theoryPart = parts.find(p => !p.startsWith('L'));
+                                                const labPart = parts.find(p => p.startsWith('L'));
+                                                const cellOptions = getAvailableOptionsForCell(theoryPart || null, labPart || null);
+                                                setModalSlotOptions(cellOptions.length > 0 ? cellOptions : allAvailableSlotOptions);
                                                 setFormErrors({});
                                                 setModalMode('edit');
                                                 setModalOpen(true);
@@ -858,9 +869,9 @@ const FFCSPlanner = () => {
                                     <input
                                         type="text"
                                         value={formData.slot}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, slot: e.target.value.toUpperCase() }))}
-                                        placeholder="e.g. C1+TC1+TCC1 or L13+L14"
-                                        className="w-full bg-black/70 border border-white/20 rounded-[2px] px-3.5 py-2 text-sm text-white  uppercase placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                                        readOnly
+                                        placeholder="Select a slot combination below"
+                                        className="w-full bg-black/70 border border-white/20 rounded-[2px] px-3.5 py-2 text-sm text-white uppercase placeholder-gray-500 focus:outline-none cursor-default select-none caret-transparent focus:border-white/40 transition-colors"
                                     />
                                     
                                     {/* Slot suggestions specifically for the clicked cell */}
@@ -869,7 +880,7 @@ const FFCSPlanner = () => {
                                             {modalSlotOptions.length > 0 ? 'Combinations for this slot:' : 'Available Slot Combinations:'}
                                         </span>
                                         <div className="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto pr-1">
-                                            {(modalSlotOptions.length > 0 ? modalSlotOptions : allSelectableSlots.theory.slice(0, 10).map(s => ({ value: s, label: s, type: 'Theory' }))).map(opt => (
+                                            {(modalSlotOptions.length > 0 ? modalSlotOptions : allAvailableSlotOptions).map(opt => (
                                                 <button
                                                     key={opt.value}
                                                     type="button"
