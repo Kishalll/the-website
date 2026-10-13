@@ -1,0 +1,58 @@
+{
+  "images": [
+    {
+      "name": "Bytecode Bash",
+      "type": "Workshop",
+      "desc": "Full-stack build night — 6 hours, 14 shipped demos.",
+      "image": "bytecode-bash.webp"
+    },
+    {
+      "name": "HackNight 24h",
+      "type": "Hackathon",
+      "desc": "Overnight sprint that turned ideas into working prototypes.",
+      "image": "hacknight.webp"
+    },
+    {
+      "name": "Open Source Sprint",
+      "type": "Community",
+      "desc": "First merged pull requests — worlds changed, bugs squashed.",
+      "image": "opensource-sprint.webp"
+    },
+    {
+      "name": "Systems 101",
+      "type": "Workshop",
+      "desc": "Low-level fundamentals: memory, concurrency, and networking.",
+      "image": "workshop-systems.webp"
+    },
+    {
+      "name": "CTF Finals",
+      "type": "Competition",
+      "desc": "Capture-the-flag showdown across crypto, web, and pwn.",
+      "image": "ctf-finals.webp"
+    },
+    {
+      "name": "48h Game Jam",
+      "type": "Hackathon",
+      "desc": "Playable worlds designed, coded, and shipped in a weekend.",
+      "image": "gamejam.webp"
+    },
+    {
+      "name": "Cloud Native Day",
+      "type": "Workshop",
+      "desc": "Containers, CI/CD, and shipping to production with confidence.",
+      "image": "cloud-native.webp"
+    },
+    {
+      "name": "Robotics Lab",
+      "type": "Lab",
+      "desc": "Bridging software and hardware with embedded controllers.",
+      "image": "robotics-lab.webp"
+    },
+    {
+      "name": "Demo Day",
+      "type": "Showcase",
+      "desc": "Semester wrap-up: teams present the products they built.",
+      "image": "demo-day.webp"
+    }
+  ]
+}
