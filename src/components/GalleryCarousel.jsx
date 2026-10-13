@@ -70,15 +70,15 @@ const Slide = ({ image, isActive, reducedMotion }) => {
 
 const Caption = ({ image, reducedMotion }) => (
     <motion.div
-        initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
-        animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-        exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
-        transition={{ duration: 0.5, ease: easeOutShrink }}
-        className="pointer-events-none max-w-xl"
+        initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 24, filter: 'blur(10px)' }}
+        animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+        exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -18, filter: 'blur(10px)' }}
+        transition={{ duration: 0.8, ease: easeOutShrink }}
+        className="pointer-events-none absolute inset-x-0 bottom-0 max-w-xl"
     >
         <span
-            className="mb-3 inline-block rounded-full border px-3 py-1 text-xs font-mono uppercase tracking-widest"
-            style={{ borderColor: `${image.accent}66`, color: image.accent }}
+            className="mb-3 inline-block rounded-full border bg-black/60 px-3 py-1 text-xs font-mono uppercase tracking-widest backdrop-blur-sm"
+            style={{ borderColor: `${image.accent}99`, color: image.accent }}
         >
             {image.tag}
         </span>
@@ -93,7 +93,7 @@ const EdgeZone = ({ side, onActivate }) => {
     const isLeft = side === 'left';
     const [hovered, setHovered] = useState(false);
     const straight = 'M 2 0 Q 2 90 2 180';
-    const bent = isLeft ? 'M 2 0 Q -26 90 2 180' : 'M 2 0 Q 30 90 2 180';
+    const pointy = isLeft ? 'M 26 2 L -24 90 L 26 178' : 'M -26 2 L 24 90 L -26 178';
 
     return (
         <button
@@ -116,9 +116,10 @@ const EdgeZone = ({ side, onActivate }) => {
                     stroke="currentColor"
                     strokeWidth={2}
                     strokeLinecap="round"
+                    strokeLinejoin="miter"
                     initial={false}
-                    animate={{ d: hovered ? bent : straight }}
-                    transition={{ type: 'spring', stiffness: 220, damping: 22 }}
+                    animate={{ d: hovered ? pointy : straight, strokeWidth: hovered ? 3.5 : 2 }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                     className="text-white/40 transition-colors duration-300 group-hover:text-white"
                 />
             </svg>
@@ -137,10 +138,10 @@ const Thumbnail = ({ image, isActive, onSelect }) => {
             onClick={onSelect}
             aria-label={`Show ${image.title}`}
             aria-current={isActive}
-            className={`relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-300 ${
+            className={`group/thumb relative h-14 w-20 flex-shrink-0 overflow-hidden rounded-lg border transition-all duration-500 ease-out ${
                 isActive
-                    ? 'border-white opacity-100'
-                    : 'border-white/20 opacity-45 hover:opacity-90'
+                    ? 'scale-105 border-white shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_8px_24px_rgba(0,0,0,0.55)] opacity-100'
+                    : 'border-white/20 opacity-45 hover:scale-[1.03] hover:border-white/70 hover:opacity-90'
             }`}
         >
             <img
@@ -158,16 +159,21 @@ const Thumbnail = ({ image, isActive, onSelect }) => {
                     className="absolute inset-0 h-full w-full object-cover"
                 />
             )}
+            <span className="pointer-events-none absolute inset-0 rounded-lg ring-white/60 transition-all duration-500 group-hover/thumb:ring-1 group-focus-visible/thumb:ring-1" />
         </button>
     );
 };
 
-const GalleryCarousel = ({ images, autoPlayInterval = 5000 }) => {
+const GalleryCarousel = ({ images, autoPlayInterval = 2500 }) => {
     const count = images.length;
     const [[index, direction], setState] = useState([0, 0]);
     const [isPlaying, setIsPlaying] = useState(true);
     const [inView, setInView] = useState(() => typeof IntersectionObserver === 'undefined');
     const containerRef = useRef(null);
+    const thumbStripRef = useRef(null);
+    const wheelAccum = useRef(0);
+    const wheelLock = useRef(false);
+    const wheelLockTimer = useRef(null);
     const reducedMotion = useReducedMotion();
     const slideVariants = buildSlideVariants(reducedMotion);
 
@@ -199,8 +205,25 @@ const GalleryCarousel = ({ images, autoPlayInterval = 5000 }) => {
     useEffect(() => {
         if (!inView) return;
         preloadImage(images[(index + 1) % count].src).catch(() => {});
+        preloadImage(images[(index + 2) % count].src).catch(() => {});
         preloadImage(images[(index - 1 + count) % count].src).catch(() => {});
     }, [index, inView, images, count]);
+
+    // Warm the remaining images in the background once the carousel is visible so
+    // neighboring slides and the thumbnail strip never pop in while browsing.
+    useEffect(() => {
+        if (!inView) return undefined;
+        let cancelled = false;
+        const timers = images.map((image, i) =>
+            setTimeout(() => {
+                if (!cancelled) preloadImage(image.src).catch(() => {});
+            }, 150 * (i + 1))
+        );
+        return () => {
+            cancelled = true;
+            timers.forEach(clearTimeout);
+        };
+    }, [inView, images]);
 
     useEffect(() => {
         if (!inView || !isPlaying || reducedMotion) return undefined;
@@ -214,10 +237,55 @@ const GalleryCarousel = ({ images, autoPlayInterval = 5000 }) => {
         else if (power > 80) paginate(-1);
     };
 
+    const handleWheel = useCallback(
+        (event) => {
+            const { deltaX, deltaY } = event;
+            // Only hijack predominantly-horizontal gestures (trackpads/shift+wheel);
+            // vertical page scrolling is left completely untouched.
+            if (Math.abs(deltaX) <= Math.abs(deltaY) || Math.abs(deltaX) < 2) return;
+
+            event.preventDefault();
+
+            if (wheelLock.current) return;
+            wheelAccum.current += deltaX;
+            if (Math.abs(wheelAccum.current) < 50) return;
+
+            paginate(wheelAccum.current > 0 ? 1 : -1);
+            wheelAccum.current = 0;
+            wheelLock.current = true;
+            if (wheelLockTimer.current) clearTimeout(wheelLockTimer.current);
+            wheelLockTimer.current = setTimeout(() => {
+                wheelLock.current = false;
+            }, 280);
+        },
+        [paginate]
+    );
+
     const handleKeyDown = (event) => {
-        if (event.key === 'ArrowRight') paginate(1);
-        else if (event.key === 'ArrowLeft') paginate(-1);
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            paginate(1);
+        } else if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            paginate(-1);
+        } else if (event.key === ' ' || event.key === 'Spacebar') {
+            event.preventDefault();
+            setIsPlaying((prev) => !prev);
+        }
     };
+
+    const handleThumbWheel = useCallback((event) => {
+        const strip = thumbStripRef.current;
+        if (!strip) return;
+        // Map any wheel gesture (mouse wheel or trackpad) to horizontal strip scroll.
+        const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+        if (delta === 0) return;
+        const atStart = strip.scrollLeft <= 0;
+        const atEnd = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 1;
+        if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
+        event.preventDefault();
+        strip.scrollLeft += delta;
+    }, []);
 
     if (count === 0) return null;
 
@@ -231,10 +299,7 @@ const GalleryCarousel = ({ images, autoPlayInterval = 5000 }) => {
             aria-label="Club gallery"
             tabIndex={0}
             onKeyDown={handleKeyDown}
-            onMouseEnter={() => setIsPlaying(false)}
-            onMouseLeave={() => setIsPlaying(true)}
-            onFocus={() => setIsPlaying(false)}
-            onBlur={() => setIsPlaying(true)}
+            onWheel={handleWheel}
             className="relative h-[100svh] w-full select-none overflow-hidden bg-black outline-none"
         >
             <motion.div
@@ -278,7 +343,7 @@ const GalleryCarousel = ({ images, autoPlayInterval = 5000 }) => {
             </div>
 
             <div className="absolute left-6 right-6 bottom-28 z-20 sm:left-12 sm:right-12 sm:bottom-32">
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                     <Caption key={active.id} image={active} reducedMotion={reducedMotion} />
                 </AnimatePresence>
             </div>
@@ -287,8 +352,10 @@ const GalleryCarousel = ({ images, autoPlayInterval = 5000 }) => {
                 {String(index + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
             </div>
 
-            <EdgeZone side="left" onActivate={() => paginate(-1)} />
-            <EdgeZone side="right" onActivate={() => paginate(1)} />
+            <div className="absolute inset-0 z-20">
+                <EdgeZone side="left" onActivate={() => paginate(-1)} />
+                <EdgeZone side="right" onActivate={() => paginate(1)} />
+            </div>
 
             <button
                 type="button"
@@ -299,7 +366,11 @@ const GalleryCarousel = ({ images, autoPlayInterval = 5000 }) => {
                 {isPlaying ? <Pause size={16} /> : <Play size={16} />}
             </button>
 
-            <div className="absolute bottom-6 left-1/2 z-30 flex max-w-[60%] -translate-x-1/2 gap-3 overflow-x-auto pb-1 sm:max-w-[55%]">
+            <div
+                ref={thumbStripRef}
+                onWheel={handleThumbWheel}
+                className="absolute bottom-6 left-1/2 z-30 flex max-w-[60%] -translate-x-1/2 gap-3 overflow-x-auto overscroll-contain pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:max-w-[55%]"
+            >
                 {images.map((image, i) => (
                     <Thumbnail
                         key={image.id}
