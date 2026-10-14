@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import QRCodeStyling from 'qr-code-styling';
 import FogBackground from '../components/ui/FogBackground';
+import InAppColorPicker from '../components/ui/InAppColorPicker';
 
 const DOT_TYPES = [
   { value: 'rounded', label: 'Rounded' },
@@ -489,93 +490,53 @@ const QRCodePage = () => {
               {/* 3. Colors Tab */}
               {activeTab === 'colors' && (
                 <div className="space-y-6">
-                  {/* Foreground pattern color */}
-                  <div className="p-4 rounded-xl border border-white/10 bg-white/5 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-gray-200">Gradient Fill</span>
-                      <button
-                        type="button"
-                        onClick={() => setUseGradient(!useGradient)}
-                        className={`w-11 h-6 rounded-full transition-colors relative flex items-center px-1 ${
-                          useGradient ? 'bg-white' : 'bg-neutral-800'
+                  {/* Gradient fill toggle */}
+                  <div className="p-4 rounded-2xl border border-white/10 bg-white/5 flex items-center justify-between">
+                    <div>
+                      <div className="text-xs font-semibold text-gray-200">Gradient Fill</div>
+                      <div className="text-[11px] text-gray-400">Blend two colors across the QR pattern</div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setUseGradient(!useGradient)}
+                      className={`w-11 h-6 rounded-full transition-colors relative flex items-center px-1 ${
+                        useGradient ? 'bg-white' : 'bg-neutral-800'
+                      }`}
+                    >
+                      <span
+                        className={`w-4 h-4 rounded-full transition-transform ${
+                          useGradient ? 'bg-black translate-x-5' : 'bg-gray-400 translate-x-0'
                         }`}
-                      >
-                        <span
-                          className={`w-4 h-4 rounded-full transition-transform ${
-                            useGradient ? 'bg-black translate-x-5' : 'bg-gray-400 translate-x-0'
-                          }`}
-                        />
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] text-gray-400 mb-1.5">
-                          {useGradient ? 'Start Color' : 'Dots Color'}
-                        </label>
-                        <div className="flex items-center gap-2 bg-black/60 border border-white/10 rounded-xl p-2">
-                          <input
-                            type="color"
-                            value={dotsColor}
-                            onChange={(e) => setDotsColor(e.target.value)}
-                            className="w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent"
-                          />
-                          <input
-                            type="text"
-                            value={dotsColor}
-                            onChange={(e) => setDotsColor(e.target.value)}
-                            className="w-full bg-transparent text-xs text-white uppercase font-mono focus:outline-none"
-                          />
-                        </div>
-                      </div>
-
-                      {useGradient && (
-                        <div>
-                          <label className="block text-[11px] text-gray-400 mb-1.5">
-                            End Color
-                          </label>
-                          <div className="flex items-center gap-2 bg-black/60 border border-white/10 rounded-xl p-2">
-                            <input
-                              type="color"
-                              value={gradientColor}
-                              onChange={(e) => setGradientColor(e.target.value)}
-                              className="w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent"
-                            />
-                            <input
-                              type="text"
-                              value={gradientColor}
-                              onChange={(e) => setGradientColor(e.target.value)}
-                              className="w-full bg-transparent text-xs text-white uppercase font-mono focus:outline-none"
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                      />
+                    </button>
                   </div>
 
-                  {/* Background color */}
-                  <div className="p-4 rounded-xl border border-white/10 bg-white/5">
-                    <label className="block text-xs font-medium text-gray-200 mb-2">
-                      Background Color
-                    </label>
-                    <div className="flex items-center gap-2 bg-black/60 border border-white/10 rounded-xl p-2">
-                      <input
-                        type="color"
-                        value={bgColor}
-                        onChange={(e) => setBgColor(e.target.value)}
-                        className="w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent"
-                      />
-                      <input
-                        type="text"
-                        value={bgColor}
-                        onChange={(e) => setBgColor(e.target.value)}
-                        className="w-full bg-transparent text-xs text-white uppercase font-mono focus:outline-none"
-                      />
-                    </div>
-                    <p className="text-[11px] text-gray-500 mt-2">
-                      Ensure strong contrast between the pattern and background color for dependable scanning.
-                    </p>
-                  </div>
+                  {/* Pattern Color Picker */}
+                  <InAppColorPicker
+                    label={useGradient ? 'Pattern Start Color' : 'Pattern (Dots) Color'}
+                    color={dotsColor}
+                    onChange={setDotsColor}
+                  />
+
+                  {/* Secondary Gradient End Color Picker */}
+                  {useGradient && (
+                    <InAppColorPicker
+                      label="Pattern End Color"
+                      color={gradientColor}
+                      onChange={setGradientColor}
+                    />
+                  )}
+
+                  {/* Background Color Picker */}
+                  <InAppColorPicker
+                    label="Background Color"
+                    color={bgColor}
+                    onChange={setBgColor}
+                  />
+
+                  <p className="text-[11px] text-gray-500 text-center">
+                    Ensure strong contrast between the pattern and background color for dependable scanning.
+                  </p>
                 </div>
               )}
 
