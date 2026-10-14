@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Terminal, Wrench, ArrowRight, Calendar } from 'lucide-react';
+import { Terminal, Wrench, ArrowRight, Calendar, QrCode } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FogBackground from '../components/ui/FogBackground'; // Adjust path based on your folder structure
 
@@ -20,6 +20,14 @@ const tools = [
         description: 'Interactive timetable builder and clash detector to plan and optimize your course schedule.',
         slug: '/tools/ffcs-planner',
         tags: ['Academics', 'Timetable', 'Planner']
+    },
+    {
+        id: 'qr-code',
+        label: 'QR Code Generator',
+        icon: QrCode,
+        description: 'Create customizable QR codes with custom colors, dot patterns, corner shapes, and custom logos.',
+        slug: '/tools/qr-code-generator',
+        tags: ['Design', 'Customization', 'Export']
     }
 ];
 
