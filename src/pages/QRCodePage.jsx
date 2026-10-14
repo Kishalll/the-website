@@ -65,32 +65,7 @@ const QRCodePage = () => {
     const qr = new QRCodeStyling({
       width: 280,
       height: 280,
-      type: 'canvas',
-      data: data,
-      dotsOptions: {
-        color: dotsColor,
-        type: dotsType
-      },
-      backgroundOptions: {
-        color: bgColor
-      },
-      cornersSquareOptions: {
-        color: dotsColor,
-        type: cornerSquareType
-      },
-      cornersDotOptions: {
-        color: dotsColor,
-        type: cornerDotType
-      },
-      imageOptions: {
-        crossOrigin: 'anonymous',
-        margin: logoMargin,
-        imageSize: logoSize,
-        hideBackgroundDots: true
-      },
-      qrOptions: {
-        errorCorrectionLevel: logoUrl ? 'H' : errorCorrection
-      }
+      type: 'canvas'
     });
 
     qrCodeInstanceRef.current = qr;

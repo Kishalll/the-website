@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Check, ChevronDown, ChevronUp, Copy } from 'lucide-react';
 
 // Common curated palette swatches
@@ -106,6 +106,7 @@ export const InAppColorPicker = ({
   label = 'Color',
   swatches = DEFAULT_SWATCHES
 }) => {
+  const [prevColor, setPrevColor] = useState(color);
   const [hsv, setHsv] = useState(() => {
     const rgb = hexToRgb(color) || [0, 0, 0];
     return rgbToHsv(rgb[0], rgb[1], rgb[2]);
@@ -117,14 +118,15 @@ export const InAppColorPicker = ({
   const satValRef = useRef(null);
   const hueRef = useRef(null);
 
-  // Sync external color changes
-  useEffect(() => {
+  // Sync external color changes during render
+  if (color !== prevColor) {
+    setPrevColor(color);
     setHexInput(color);
     const rgb = hexToRgb(color);
     if (rgb) {
       setHsv(rgbToHsv(rgb[0], rgb[1], rgb[2]));
     }
-  }, [color]);
+  }
 
   const updateColorFromHsv = (newHsv) => {
     setHsv(newHsv);
