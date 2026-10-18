@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { GalleryVerticalEnd, Loader2 } from 'lucide-react';
-import GalleryCarousel from '../components/GalleryCarousel';
+import DomeGallery from '../components/DomeGallery';
 import { loadGalleryImages } from '../lib/gallery';
 
 const GalleryPage = () => {
@@ -9,20 +9,34 @@ const GalleryPage = () => {
     const [status, setStatus] = useState('loading');
 
     useEffect(() => {
-        const controller = new AbortController();
+        let cancelled = false;
 
-        loadGalleryImages(controller.signal)
+        loadGalleryImages()
             .then((list) => {
+                if (cancelled) return;
                 setImages(list);
                 setStatus(list.length ? 'ready' : 'empty');
             })
-            .catch((error) => {
-                if (error.name === 'AbortError') return;
-                setStatus('error');
+            .catch(() => {
+                if (!cancelled) setStatus('error');
             });
 
-        return () => controller.abort();
+        return () => {
+            cancelled = true;
+        };
     }, []);
+
+    const domeImages = useMemo(
+        () =>
+            images.map((image) => ({
+                src: image.src,
+                alt: image.title,
+                title: image.title,
+                tag: image.tag,
+                caption: image.caption,
+            })),
+        [images]
+    );
 
     return (
         <motion.div
@@ -31,7 +45,20 @@ const GalleryPage = () => {
             exit={{ opacity: 0 }}
             className="relative min-h-screen w-full overflow-hidden bg-black"
         >
-            {status === 'ready' && <GalleryCarousel images={images} />}
+            {status === 'ready' && (
+                <div className="h-[100svh] w-full">
+                    <DomeGallery
+                        images={domeImages}
+                        minSlots={12}
+                        autoRotate
+                        padFactor={0.16}
+                        overlayBlurColor="#000000"
+                        imageBorderRadius="8px"
+                        openedImageBorderRadius="12px"
+                        grayscale
+                    />
+                </div>
+            )}
 
             {status === 'loading' && (
                 <div className="flex h-[100svh] w-full items-center justify-center text-gray-400">
