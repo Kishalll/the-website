@@ -261,7 +261,7 @@ describe('DomeGallery', () => {
         expect(overlay).toBeInTheDocument();
         expect(overlay.querySelector('img').getAttribute('src')).toBe('/gallery/alpha.webp');
         expect(overlay.querySelector('img').getAttribute('alt')).toBe('Alpha Bash');
-        expect(overlay.querySelector('.enlarge__title').textContent).toBe('Alpha Bash');
+        expect(overlay.querySelector('.enlarge__title')).toBeNull();
         expect(overlay.querySelector('.enlarge__tag').textContent).toBe('Workshop');
         expect(overlay.querySelector('.enlarge__caption').textContent).toContain('build night');
 

@@ -273,8 +273,9 @@ const Lightbox = ({ isOpen, onClose, images, currentIndex }) => {
                                                 {String(currentIndex + 1).padStart(2, '0')} / {String(images.length).padStart(2, '0')}
                                             </span>
                                         </div>
-                                        <h3 className="text-lg sm:text-xl font-bold text-white mb-1">{activeImage.title}</h3>
-                                        <p className="text-sm text-gray-300 line-clamp-2">{activeImage.caption}</p>
+                                        {activeImage.caption && (
+                                            <p className="text-sm text-gray-300 line-clamp-2">{activeImage.caption}</p>
+                                        )}
                                         {zoom > 1 && (
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); }}

@@ -725,7 +725,7 @@ export default function DomeGallery({
                 img.alt = title || el.querySelector('img')?.alt || '';
                 overlay.appendChild(img);
             }
-            if (title || tag || caption) {
+            if (tag || caption) {
                 const meta = document.createElement('div');
                 meta.className = 'enlarge__meta';
                 if (tag) {
@@ -733,12 +733,6 @@ export default function DomeGallery({
                     tagEl.className = 'enlarge__tag';
                     tagEl.textContent = tag;
                     meta.appendChild(tagEl);
-                }
-                if (title) {
-                    const titleEl = document.createElement('h2');
-                    titleEl.className = 'enlarge__title';
-                    titleEl.textContent = title;
-                    meta.appendChild(titleEl);
                 }
                 if (caption) {
                     const captionEl = document.createElement('p');
