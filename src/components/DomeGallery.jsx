@@ -9,6 +9,7 @@ const DEFAULTS = {
     dragSensitivity: 20,
     enlargeTransitionMs: 300,
     minSlots: 12,
+    slotsPerRing: 21,
     autoRotate: true,
     tileGap: 14,
     ringCount: 3,
@@ -183,27 +184,22 @@ function layoutAt(ringIndex, n, ringImages, radius, gap) {
     return { items, tallest: Math.max(...heights), gapEff, y: 0 };
 }
 
-// The donut: every ring shares one radius (site width), each ring picks its own
-// slot count so tiles fit the vertical cap, and rings are stacked with even
-// vertical spacing around the middle ring.
+// The donut: every ring shares one radius (site width). Slot count is normalized
+// across all devices to match standard desktop/laptop density (~20 to 23 per ring,
+// ~60 to 69 total across 3 rings), with responsive scaling zooming out smaller viewports
+// to comfortably fit the complete panorama.
 function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRing = null) {
     const count = Math.max(1, Math.round(ringCount));
     const radius = Math.max(MIN_RING_RADIUS, viewport.w * RING_WIDTH_FACTOR);
-    const capH = Math.max(80, viewport.h * 0.28);
     const minPerRing = Math.max(3, Math.ceil(minSlots / count));
+    const targetSlots = slotsPerRing ?? DEFAULTS.slotsPerRing;
 
     const rings = [];
     let tallestAll = 0;
     for (let r = 0; r < count; r++) {
         const ringImages = uniqueImages.filter((_, i) => i % count === r);
-        let n = slotsPerRing ? Math.max(3, slotsPerRing) : Math.max(minPerRing, ringImages.length, 3);
+        let n = Math.max(targetSlots, minPerRing, ringImages.length, 3);
         let layout = layoutAt(r, n, ringImages, radius, gap);
-        if (!slotsPerRing) {
-            while (layout.tallest > capH && n < MAX_RING_SLOTS) {
-                n += 1;
-                layout = layoutAt(r, n, ringImages, radius, gap);
-            }
-        }
         tallestAll = Math.max(tallestAll, layout.tallest);
         rings.push(layout);
     }
@@ -244,7 +240,7 @@ export default function DomeGallery({
     dragSensitivity = DEFAULTS.dragSensitivity,
     enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
     minSlots = DEFAULTS.minSlots,
-    slotsPerRing = null,
+    slotsPerRing = DEFAULTS.slotsPerRing,
     autoRotate = DEFAULTS.autoRotate,
     tileGap = DEFAULTS.tileGap,
     ringCount = DEFAULTS.ringCount,
