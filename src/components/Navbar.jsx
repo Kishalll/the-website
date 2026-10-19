@@ -18,8 +18,8 @@ const Navbar = ({ onContactClick }) => {
     const navLinks = [
         { name: 'About', href: '/about' },
         { name: 'Domains', href: '/domains' },
-        { name: 'Gallery', href: '/gallery' },
         { name: 'Tools', href: '/tools' },
+        { name: 'Gallery', href: '/gallery' },
     ];
 
     return (
