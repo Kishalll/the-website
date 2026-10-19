@@ -184,13 +184,15 @@ function layoutAt(ringIndex, n, ringImages, radius, gap) {
     return { items, tallest: Math.max(...heights), gapEff, y: 0 };
 }
 
-// The donut: every ring shares one radius (site width). Slot count is normalized
-// across all devices to match standard desktop/laptop density (~20 to 23 per ring,
-// ~60 to 69 total across 3 rings), with responsive scaling zooming out smaller viewports
-// to comfortably fit the complete panorama.
+// The donut: on vertical screens (phones/portrait), size radius and spacing so each
+// ring spans 1/3rd of the screen height, fitting the rings from top to bottom.
+// On horizontal screens (desktop/landscape), size radius to fit viewport width.
 function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRing = null) {
     const count = Math.max(1, Math.round(ringCount));
-    const radius = Math.max(MIN_RING_RADIUS, viewport.w * RING_WIDTH_FACTOR);
+    const isVertical = viewport.h > viewport.w;
+    const radius = isVertical
+        ? Math.max(MIN_RING_RADIUS, viewport.h * 1.15)
+        : Math.max(MIN_RING_RADIUS, viewport.w * RING_WIDTH_FACTOR);
     const minPerRing = Math.max(3, Math.ceil(minSlots / count));
     const targetSlots = slotsPerRing ?? DEFAULTS.slotsPerRing;
 
@@ -204,11 +206,10 @@ function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRi
         rings.push(layout);
     }
 
-    // Vertical space between rings = one band's height plus the clear gap; the
-    // gap is cut by 25% so the three rings read as a tight stack (tiles still
-    // never overlap, since spacing stays above tallestAll).
+    // On vertical screens, space rings evenly so each occupies 1/3rd of the viewport height.
+    // On horizontal screens, use tight stacking derived from tile height + clear gap.
     const clearGap = tallestAll * 0.16 + 8;
-    const spacing = tallestAll + clearGap * 0.75;
+    const spacing = isVertical ? viewport.h / count : tallestAll + clearGap * 0.75;
     rings.forEach((ring, r) => {
         ring.y = (r - (count - 1) / 2) * spacing;
     });

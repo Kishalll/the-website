@@ -182,6 +182,14 @@ main.sphere-main {
     height: auto;
     width: 100%;
   }
+
+  .edge-fade--top {
+    height: 10vh;
+  }
+
+  .edge-fade--bottom {
+    height: 12vh;
+  }
 }
 
 .viewer .scrim {

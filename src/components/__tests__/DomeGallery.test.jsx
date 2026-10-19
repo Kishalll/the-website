@@ -274,4 +274,23 @@ describe('DomeGallery', () => {
             expect(overlay.style.height).toBe('640px');
         });
     });
+
+    it('spaces rings to span 1/3rd of the viewport height each on vertical screens', () => {
+        const origW = window.innerWidth;
+        const origH = window.innerHeight;
+        window.innerWidth = 390;
+        window.innerHeight = 844;
+        try {
+            const { container } = render(<DomeGallery images={images} minSlots={12} />);
+            const rings = getRings(container);
+            expect(rings).toHaveLength(RING_COUNT);
+            const offsets = rings.map((el) => parseFloat(el.style.getPropertyValue('--ring-y')));
+            expect(offsets[1]).toBe(0);
+            expect(offsets[0]).toBeCloseTo(-844 / 3, 0);
+            expect(offsets[2]).toBeCloseTo(844 / 3, 0);
+        } finally {
+            window.innerWidth = origW;
+            window.innerHeight = origH;
+        }
+    });
 });
