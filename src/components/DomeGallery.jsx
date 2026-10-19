@@ -196,12 +196,7 @@ function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRi
     let tallestAll = 0;
     for (let r = 0; r < count; r++) {
         const ringImages = uniqueImages.filter((_, i) => i % count === r);
-        let n;
-        if (slotsPerRing && slotsPerRing > 0) {
-            n = Math.max(3, Math.min(slotsPerRing, MAX_RING_SLOTS));
-        } else {
-            n = Math.max(minPerRing, ringImages.length, 3);
-        }
+        let n = slotsPerRing ? Math.max(3, slotsPerRing) : Math.max(minPerRing, ringImages.length, 3);
         let layout = layoutAt(r, n, ringImages, radius, gap);
         if (!slotsPerRing) {
             while (layout.tallest > capH && n < MAX_RING_SLOTS) {
@@ -249,6 +244,7 @@ export default function DomeGallery({
     dragSensitivity = DEFAULTS.dragSensitivity,
     enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
     minSlots = DEFAULTS.minSlots,
+    slotsPerRing = null,
     autoRotate = DEFAULTS.autoRotate,
     tileGap = DEFAULTS.tileGap,
     ringCount = DEFAULTS.ringCount,
@@ -258,7 +254,6 @@ export default function DomeGallery({
     imageBorderRadius = '30px',
     openedImageBorderRadius = '30px',
     grayscale = true,
-    slotsPerRing = null,
 }) {
     const rootRef = useRef(null);
     const mainRef = useRef(null);
