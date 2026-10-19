@@ -15,6 +15,7 @@ describe('Navbar Component', () => {
     expect(screen.getByText('ZBC')).toBeInTheDocument();
     expect(screen.getByText('About')).toBeInTheDocument();
     expect(screen.getByText('Domains')).toBeInTheDocument();
+    expect(screen.getByText('Gallery')).toBeInTheDocument();
     expect(screen.getByText('Tools')).toBeInTheDocument();
     expect(screen.getByText('Contact')).toBeInTheDocument();
   });
