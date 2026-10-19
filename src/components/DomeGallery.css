@@ -108,7 +108,6 @@ main.sphere-main {
   position: absolute;
   display: block;
   inset: 1px;
-  /* a vvk design */
   border-radius: min(var(--tile-radius, 12px), calc(var(--item-h) * 0.2));
   background: var(--overlay-blur-color, #120f17);
   overflow: hidden;
