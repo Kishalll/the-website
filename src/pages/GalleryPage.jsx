@@ -26,22 +26,17 @@ const GalleryPage = () => {
         };
     }, []);
 
-    const domeImages = useMemo(() => {
-        if (!images.length) return [];
-        // Ensure constant 30 images: take first 30 or cycle if fewer
-        const list = [];
-        for (let i = 0; i < 30; i++) {
-            const img = images[i % images.length];
-            list.push({
-                src: img.src,
-                alt: img.title,
-                title: img.title,
-                tag: img.tag,
-                caption: img.caption,
-            });
-        }
-        return list;
-    }, [images]);
+    const domeImages = useMemo(
+        () =>
+            images.map((image) => ({
+                src: image.src,
+                alt: image.title,
+                title: image.title,
+                tag: image.tag,
+                caption: image.caption,
+            })),
+        [images]
+    );
 
     return (
         <motion.div
@@ -54,8 +49,7 @@ const GalleryPage = () => {
                 <div className="h-[100svh] w-full">
                     <DomeGallery
                         images={domeImages}
-                        ringCount={3}
-                        slotsPerRing={10}
+                        minSlots={12}
                         autoRotate
                         padFactor={0.16}
                         overlayBlurColor="#000000"
