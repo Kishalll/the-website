@@ -186,7 +186,7 @@ function layoutAt(ringIndex, n, ringImages, radius, gap) {
 // The donut: every ring shares one radius (site width), each ring picks its own
 // slot count so tiles fit the vertical cap, and rings are stacked with even
 // vertical spacing around the middle ring.
-function buildRings(uniqueImages, minSlots, viewport, gap, ringCount) {
+function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRing = null) {
     const count = Math.max(1, Math.round(ringCount));
     const radius = Math.max(MIN_RING_RADIUS, viewport.w * RING_WIDTH_FACTOR);
     const capH = Math.max(80, viewport.h * 0.28);
@@ -196,11 +196,18 @@ function buildRings(uniqueImages, minSlots, viewport, gap, ringCount) {
     let tallestAll = 0;
     for (let r = 0; r < count; r++) {
         const ringImages = uniqueImages.filter((_, i) => i % count === r);
-        let n = Math.max(minPerRing, ringImages.length, 3);
+        let n;
+        if (slotsPerRing && slotsPerRing > 0) {
+            n = Math.max(3, Math.min(slotsPerRing, MAX_RING_SLOTS));
+        } else {
+            n = Math.max(minPerRing, ringImages.length, 3);
+        }
         let layout = layoutAt(r, n, ringImages, radius, gap);
-        while (layout.tallest > capH && n < MAX_RING_SLOTS) {
-            n += 1;
-            layout = layoutAt(r, n, ringImages, radius, gap);
+        if (!slotsPerRing) {
+            while (layout.tallest > capH && n < MAX_RING_SLOTS) {
+                n += 1;
+                layout = layoutAt(r, n, ringImages, radius, gap);
+            }
         }
         tallestAll = Math.max(tallestAll, layout.tallest);
         rings.push(layout);
@@ -251,6 +258,7 @@ export default function DomeGallery({
     imageBorderRadius = '30px',
     openedImageBorderRadius = '30px',
     grayscale = true,
+    slotsPerRing = null,
 }) {
     const rootRef = useRef(null);
     const mainRef = useRef(null);
@@ -293,8 +301,8 @@ export default function DomeGallery({
         h: typeof window !== 'undefined' && window.innerHeight ? window.innerHeight : 768,
     }));
     const { rings, radius } = useMemo(
-        () => buildRings(uniqueImages, minSlots, viewport, tileGap, ringCount),
-        [uniqueImages, minSlots, viewport, tileGap, ringCount]
+        () => buildRings(uniqueImages, minSlots, viewport, tileGap, ringCount, slotsPerRing),
+        [uniqueImages, minSlots, viewport, tileGap, ringCount, slotsPerRing]
     );
 
     const [motion] = useState(() => makeMotion(ringCount));

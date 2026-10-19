@@ -49,7 +49,9 @@ const GalleryPage = () => {
                 <div className="h-[100svh] w-full">
                     <DomeGallery
                         images={domeImages}
-                        minSlots={12}
+                        ringCount={3}
+                        slotsPerRing={10}
+                        minSlots={30}
                         autoRotate
                         padFactor={0.16}
                         overlayBlurColor="#000000"
