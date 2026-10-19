@@ -344,6 +344,10 @@ export default function DomeGallery({
                 const mainR = mainRef.current.getBoundingClientRect();
 
                 const hasCustomSize = openedImageWidth && openedImageHeight;
+                const enImg = enlargedOverlay.querySelector('img');
+                const natW = enImg?.naturalWidth || 0;
+                const natH = enImg?.naturalHeight || 0;
+
                 if (hasCustomSize) {
                     const tempDiv = document.createElement('div');
                     tempDiv.style.cssText = `position: absolute; width: ${openedImageWidth}; height: ${openedImageHeight}; visibility: hidden;`;
@@ -351,18 +355,56 @@ export default function DomeGallery({
                     const tempRect = tempDiv.getBoundingClientRect();
                     document.body.removeChild(tempDiv);
 
+                    let targetW = `${tempRect.width}px`;
+                    let targetH = `${tempRect.height}px`;
+                    let centeredW = tempRect.width;
+                    let centeredH = tempRect.height;
+                    if (natW > 0 && natH > 0) {
+                        const imgAspect = natW / natH;
+                        const boxAspect = tempRect.width / tempRect.height;
+                        if (imgAspect >= boxAspect) {
+                            centeredW = tempRect.width;
+                            centeredH = Math.round(tempRect.width / imgAspect);
+                        } else {
+                            centeredH = tempRect.height;
+                            centeredW = Math.round(tempRect.height * imgAspect);
+                        }
+                        targetW = `${centeredW}px`;
+                        targetH = `${centeredH}px`;
+                    }
+
                     const centeredLeft =
-                        frameR.left - mainR.left + (frameR.width - tempRect.width) / 2;
+                        frameR.left - mainR.left + (frameR.width - centeredW) / 2;
                     const centeredTop =
-                        frameR.top - mainR.top + (frameR.height - tempRect.height) / 2;
+                        frameR.top - mainR.top + (frameR.height - centeredH) / 2;
 
                     enlargedOverlay.style.left = `${centeredLeft}px`;
                     enlargedOverlay.style.top = `${centeredTop}px`;
+                    enlargedOverlay.style.width = targetW;
+                    enlargedOverlay.style.height = targetH;
                 } else {
-                    enlargedOverlay.style.left = `${frameR.left - mainR.left}px`;
-                    enlargedOverlay.style.top = `${frameR.top - mainR.top}px`;
-                    enlargedOverlay.style.width = `${frameR.width}px`;
-                    enlargedOverlay.style.height = `${frameR.height}px`;
+                    let centeredW = frameR.width;
+                    let centeredH = frameR.height;
+                    if (natW > 0 && natH > 0) {
+                        const imgAspect = natW / natH;
+                        const boxAspect = frameR.width / frameR.height;
+                        if (imgAspect >= boxAspect) {
+                            centeredW = frameR.width;
+                            centeredH = Math.round(frameR.width / imgAspect);
+                        } else {
+                            centeredH = frameR.height;
+                            centeredW = Math.round(frameR.height * imgAspect);
+                        }
+                    }
+                    const centeredLeft =
+                        frameR.left - mainR.left + (frameR.width - centeredW) / 2;
+                    const centeredTop =
+                        frameR.top - mainR.top + (frameR.height - centeredH) / 2;
+
+                    enlargedOverlay.style.left = `${centeredLeft}px`;
+                    enlargedOverlay.style.top = `${centeredTop}px`;
+                    enlargedOverlay.style.width = `${centeredW}px`;
+                    enlargedOverlay.style.height = `${centeredH}px`;
                 }
             }
         });
@@ -772,19 +814,39 @@ export default function DomeGallery({
                     overlay.style.width = tempWidth;
                     overlay.style.height = tempHeight;
                     const newRect = overlay.getBoundingClientRect();
+                    const enImg = overlay.querySelector('img');
+                    const natW = enImg?.naturalWidth || el.querySelector('img')?.naturalWidth || 0;
+                    const natH = enImg?.naturalHeight || el.querySelector('img')?.naturalHeight || 0;
+                    let targetW = tempWidth;
+                    let targetH = tempHeight;
+                    let centeredW = newRect.width;
+                    let centeredH = newRect.height;
+                    if (natW > 0 && natH > 0) {
+                        const imgAspect = natW / natH;
+                        const boxAspect = newRect.width / newRect.height;
+                        if (imgAspect >= boxAspect) {
+                            centeredW = newRect.width;
+                            centeredH = Math.round(newRect.width / imgAspect);
+                        } else {
+                            centeredH = newRect.height;
+                            centeredW = Math.round(newRect.height * imgAspect);
+                        }
+                        targetW = `${centeredW}px`;
+                        targetH = `${centeredH}px`;
+                    }
                     overlay.style.width = frameR.width + 'px';
                     overlay.style.height = frameR.height + 'px';
                     void overlay.offsetWidth;
                     overlay.style.transition = `left ${enlargeTransitionMs}ms ease, top ${enlargeTransitionMs}ms ease, width ${enlargeTransitionMs}ms ease, height ${enlargeTransitionMs}ms ease`;
                     const centeredLeft =
-                        frameR.left - mainR.left + (frameR.width - newRect.width) / 2;
+                        frameR.left - mainR.left + (frameR.width - centeredW) / 2;
                     const centeredTop =
-                        frameR.top - mainR.top + (frameR.height - newRect.height) / 2;
+                        frameR.top - mainR.top + (frameR.height - centeredH) / 2;
                     requestAnimationFrame(() => {
                         overlay.style.left = `${centeredLeft}px`;
                         overlay.style.top = `${centeredTop}px`;
-                        overlay.style.width = tempWidth;
-                        overlay.style.height = tempHeight;
+                        overlay.style.width = targetW;
+                        overlay.style.height = targetH;
                     });
                     const cleanupSecond = () => {
                         overlay.removeEventListener('transitionend', cleanupSecond);

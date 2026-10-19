@@ -293,4 +293,47 @@ describe('DomeGallery', () => {
             window.innerHeight = origH;
         }
     });
+
+    it('preserves the original uploaded image aspect ratio in the enlarged preview', async () => {
+        const rect = {
+            left: 0,
+            top: 0,
+            right: 1040,
+            bottom: 760,
+            width: 1040,
+            height: 760,
+            x: 0,
+            y: 0,
+            toJSON: () => {},
+        };
+        vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(rect);
+
+        const { container } = render(
+            <DomeGallery
+                images={images}
+                minSlots={12}
+                openedImageWidth="1040px"
+                openedImageHeight="760px"
+            />
+        );
+
+        const btn = screen.getAllByRole('button', { name: 'Alpha Bash' })[0];
+        const tileImg = btn.querySelector('img');
+        Object.defineProperty(tileImg, 'naturalWidth', { value: 1600, configurable: true });
+        Object.defineProperty(tileImg, 'naturalHeight', { value: 900, configurable: true });
+
+        fireEvent.click(btn);
+
+        const overlay = container.querySelector('.viewer .enlarge');
+        expect(overlay).toBeInTheDocument();
+
+        const ev = new Event('transitionend', { bubbles: true });
+        ev.propertyName = 'transform';
+        fireEvent(overlay, ev);
+        await waitFor(() => {
+            const w = parseFloat(overlay.style.width);
+            const h = parseFloat(overlay.style.height);
+            expect(w / h).toBeCloseTo(1600 / 900, 2);
+        });
+    });
 });
