@@ -20,6 +20,8 @@ import {
     checkSlotClash,
     getAvailableOptionsForCell,
     validateSlotString,
+    getCreditsForSlot,
+    getSlotForCredits,
 } from '../data/timetableData';
 
 const STORAGE_KEY = 'zbc_ffcs_timetables_v1';
@@ -204,13 +206,14 @@ const FFCSPlanner = () => {
             // Empty cell: calculate options that specifically contain the clicked slot or its group and lab pair
             const cellOptions = getAvailableOptionsForCell(cell.theorySlot, cell.labSlot);
             const defaultSlot = cellOptions.length > 0 ? cellOptions[0].value : (cell.theorySlot || cell.labSlot || '');
+            const initialCredits = getCreditsForSlot(defaultSlot, cellOptions[0]?.type);
             
             setEditingCourseId(null);
             setFormData({
                 code: '',
                 name: '',
                 slot: defaultSlot,
-                credits: defaultSlot.startsWith('L') ? '1' : '3',
+                credits: initialCredits,
                 teachers: ['']
             });
             setModalSlotOptions(cellOptions);
@@ -221,15 +224,16 @@ const FFCSPlanner = () => {
     };
 
     const handleOpenAddModalManual = () => {
+        const defaultSlot = 'A1+TA1+TAA1';
         setEditingCourseId(null);
         setFormData({
             code: '',
             name: '',
-            slot: 'A1+TA1+TAA1',
-            credits: '3',
+            slot: defaultSlot,
+            credits: getCreditsForSlot(defaultSlot, 'Theory'),
             teachers: ['']
         });
-        setModalSlotOptions([]);
+        setModalSlotOptions(allAvailableSlotOptions);
         setFormErrors({});
         setModalMode('add');
         setModalOpen(true);
@@ -846,7 +850,15 @@ const FFCSPlanner = () => {
                                                     <button
                                                         key={cr}
                                                         type="button"
-                                                        onClick={() => setFormData(prev => ({ ...prev, credits: cr }))}
+                                                        onClick={() => {
+                                                            const currentOptions = modalSlotOptions.length > 0 ? modalSlotOptions : allAvailableSlotOptions;
+                                                            const autoSlot = getSlotForCredits(cr, currentOptions, formData.slot);
+                                                            setFormData(prev => ({
+                                                                ...prev,
+                                                                credits: cr,
+                                                                slot: autoSlot
+                                                            }));
+                                                        }}
                                                         className={`flex items-center justify-center rounded-[2px] text-xs  font-bold transition-all duration-150 ease-in-out cursor-pointer ${
                                                             isSelected
                                                                 ? 'bg-emerald-950/90 border border-emerald-500 text-emerald-200 shadow-[0_0_8px_rgba(16,185,129,0.2)]'
@@ -884,11 +896,14 @@ const FFCSPlanner = () => {
                                                 <button
                                                     key={opt.value}
                                                     type="button"
-                                                    onClick={() => setFormData(prev => ({ 
-                                                        ...prev, 
-                                                        slot: opt.value,
-                                                        credits: opt.type === 'Lab' ? '1' : prev.credits
-                                                    }))}
+                                                    onClick={() => {
+                                                        const autoCredits = getCreditsForSlot(opt.value, opt.type);
+                                                        setFormData(prev => ({ 
+                                                            ...prev, 
+                                                            slot: opt.value,
+                                                            credits: autoCredits
+                                                        }));
+                                                    }}
                                                     className={`px-2.5 py-1 rounded-[2px] text-xs  border transition-colors cursor-pointer ${
                                                         formData.slot === opt.value 
                                                             ? 'bg-emerald-950/90 border-emerald-500 text-emerald-200 font-bold shadow-sm' 
