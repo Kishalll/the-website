@@ -1,6 +1,6 @@
 // Official VIT Timetable Slot Definitions, Matrix, and Clash Utilities
 
-export const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+export const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
 
 export const MORNING_THEORY_HOURS = [
   { start: '08:00 AM', end: '08:50 AM' },
@@ -122,40 +122,6 @@ export const TIMETABLE_GRID = [
       { col: 11, session: 'afternoon', theorySlot: null, labSlot: 'L60' },
     ],
   },
-  {
-    day: 'SAT',
-    slots: [
-      { col: 0, session: 'morning', theorySlot: 'X11', labSlot: 'L71' },
-      { col: 1, session: 'morning', theorySlot: 'X12', labSlot: 'L72' },
-      { col: 2, session: 'morning', theorySlot: 'Y11', labSlot: 'L73' },
-      { col: 3, session: 'morning', theorySlot: 'Y12', labSlot: 'L74' },
-      { col: 4, session: 'morning', theorySlot: 'S8', labSlot: 'L75' },
-      { col: 5, session: 'morning', theorySlot: 'S8', labSlot: 'L76' },
-      { col: 6, session: 'afternoon', theorySlot: 'X21', labSlot: 'L77' },
-      { col: 7, session: 'afternoon', theorySlot: 'Z21', labSlot: 'L78' },
-      { col: 8, session: 'afternoon', theorySlot: 'Y21', labSlot: 'L79' },
-      { col: 9, session: 'afternoon', theorySlot: 'W21', labSlot: 'L80' },
-      { col: 10, session: 'afternoon', theorySlot: 'W22', labSlot: 'L81' },
-      { col: 11, session: 'afternoon', theorySlot: 'Z22', labSlot: 'L82' },
-    ],
-  },
-  {
-    day: 'SUN',
-    slots: [
-      { col: 0, session: 'morning', theorySlot: 'Y11', labSlot: 'L83' },
-      { col: 1, session: 'morning', theorySlot: 'Y12', labSlot: 'L84' },
-      { col: 2, session: 'morning', theorySlot: 'X11', labSlot: 'L85' },
-      { col: 3, session: 'morning', theorySlot: 'X12', labSlot: 'L86' },
-      { col: 4, session: 'morning', theorySlot: 'S10', labSlot: 'L87' },
-      { col: 5, session: 'morning', theorySlot: 'S10', labSlot: 'L88' },
-      { col: 6, session: 'afternoon', theorySlot: 'Y21', labSlot: 'L89' },
-      { col: 7, session: 'afternoon', theorySlot: 'Z21', labSlot: 'L90' },
-      { col: 8, session: 'afternoon', theorySlot: 'X21', labSlot: 'L91' },
-      { col: 9, session: 'afternoon', theorySlot: 'W21', labSlot: 'L92' },
-      { col: 10, session: 'afternoon', theorySlot: 'W22', labSlot: 'L93' },
-      { col: 11, session: 'afternoon', theorySlot: 'Z22', labSlot: 'L94' },
-    ],
-  },
 ];
 
 // Map of each unique slot name to its exact occurrences on the grid: [{ day, col }]
@@ -191,11 +157,6 @@ export const LAB_PAIRS = [
   'L43+L44', 'L45+L46', 'L47+L48',
   'L49+L50', 'L51+L52', 'L53+L54',
   'L55+L56', 'L57+L58', 'L59+L60',
-  // Weekend Lab Pairs (SAT & SUN)
-  'L71+L72', 'L73+L74', 'L75+L76',
-  'L77+L78', 'L79+L80', 'L81+L82',
-  'L83+L84', 'L85+L86', 'L87+L88',
-  'L89+L90', 'L91+L92', 'L93+L94',
 ];
 
 // Helper to expand a slot string or combo into constituent atomic slots
@@ -248,11 +209,7 @@ export const THEORY_SLOT_GROUPS = {
   G2: ['G2+TG2', 'G2', 'TG2'],
 };
 
-// Weekend individual theory slots (X11, X12, Y11, Y12, S8, S10, X21, Y21, Z21, W21, W22, Z22)
-export const WEEKEND_THEORY_SLOTS = [
-  'X11', 'X12', 'Y11', 'Y12', 'S8', 'S10',
-  'X21', 'Z21', 'Y21', 'W21', 'W22', 'Z22',
-];
+export const WEEKEND_THEORY_SLOTS = [];
 
 // All permitted valid slot strings
 export const ALL_VALID_SLOTS = (() => {

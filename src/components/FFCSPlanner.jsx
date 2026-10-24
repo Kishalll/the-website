@@ -409,8 +409,8 @@ const FFCSPlanner = () => {
     return (
         <div className="flex-1 flex flex-col w-full text-white">
             {/* Top Toolbar: Flexible and responsive, no horizontal scrolling for buttons */}
-            <div className="w-full mb-6">
-                <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-4 bg-black/75 border border-white/10 p-2.5 sm:p-3.5 rounded-[4px] backdrop-blur-md shadow-xl">
+            <div className="w-full mb-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 bg-black/75 border border-white/10 p-2 sm:p-2.5 rounded-[4px] backdrop-blur-md shadow-xl">
                     {/* Left: Timetable Selector & Actions */}
                     <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                         <span className="text-xs font-semibold uppercase tracking-wider text-gray-400 hidden xs:inline">Timetable:</span>
@@ -512,56 +512,76 @@ const FFCSPlanner = () => {
 
             {/* Main Timetable Matrix: Translucent 75% black background with spiky corners (rounded-[2px]) */}
             <div ref={tableContainerRef} className="w-full overflow-x-auto rounded-[2px] border border-white/15 shadow-2xl bg-black/75 backdrop-blur-md">
-                <table className="w-full border-collapse text-left min-w-[1080px] select-none">
+                <table className="w-full border-collapse text-left min-w-[1080px] select-none table-fixed">
+                    <colgroup>
+                        {/* Day column: fixed width */}
+                        <col className="w-[56px] sm:w-[64px]" />
+                        {/* 6 morning period columns: equally distributed */}
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        {/* Lunch column: fixed narrow width */}
+                        <col className="w-[26px] sm:w-[30px]" />
+                        {/* 6 afternoon period columns: equally distributed */}
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                        <col />
+                    </colgroup>
                     <thead>
                         {/* Row 1: Theory Hours Header */}
-                        <tr className="border-b border-white/15 bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-purple-950/40 text-[11px]">
-                            <th className="p-2 border-r border-white/15 font-bold text-gray-300 text-center w-16 uppercase tracking-wider bg-black/40">
+                        <tr className="border-b border-white/15 bg-gradient-to-r from-purple-950/40 via-indigo-950/30 to-purple-950/40 text-[11px] sm:text-xs">
+                            <th className="py-1.5 px-1.5 border-r border-white/15 font-bold text-gray-300 text-center uppercase tracking-wider bg-black/40">
                                 THEORY<br />HOURS
                             </th>
                             {/* Morning Theory 5 hours */}
                             {MORNING_THEORY_HOURS.map((h, i) => (
-                                <th key={`m-th-${i}`} className="p-2 border-r border-white/10 text-center  text-purple-200/90 whitespace-pre-line leading-tight">
-                                    {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
+                                <th key={`m-th-${i}`} className="py-1.5 px-0.5 border-r border-white/10 text-center text-purple-200/90 whitespace-pre-line leading-tight">
+                                    {h.start}<br /><span className="text-gray-400 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
                             {/* 6th lab period in morning: no theory lecture */}
-                            <th className="p-2 border-r border-white/10 text-center text-gray-600  text-[10px] bg-black/40">
+                            <th className="py-1.5 px-0.5 border-r border-white/10 text-center text-gray-600 text-xs bg-black/40">
                                 —
                             </th>
                             {/* Lunch Column Header after previous lab ends (after morning 6th lab 01:20 PM) */}
-                            <th rowSpan={2} className="p-1 border-r border-white/15 bg-neutral-900/80 text-center text-xs font-bold tracking-widest text-gray-400 w-10">
-                                <div className="flex flex-col items-center justify-center py-2 space-y-1  text-[11px] text-amber-400/80">
+                            <th rowSpan={2} className="p-1 border-r border-white/15 bg-neutral-900/80 text-center text-[10px] font-bold tracking-widest text-gray-400">
+                                <div className="flex flex-col items-center justify-center py-1 space-y-0.5 text-[10px] font-bold text-amber-400/80">
                                     <span>L</span><span>U</span><span>N</span><span>C</span><span>H</span>
                                 </div>
                             </th>
                             {/* Afternoon Theory 5 hours */}
                             {AFTERNOON_THEORY_HOURS.map((h, i) => (
-                                <th key={`a-th-${i}`} className="p-2 border-r border-white/10 text-center  text-purple-200/90 whitespace-pre-line leading-tight">
-                                    {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
+                                <th key={`a-th-${i}`} className="py-1.5 px-0.5 border-r border-white/10 text-center text-purple-200/90 whitespace-pre-line leading-tight">
+                                    {h.start}<br /><span className="text-gray-400 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
                             {/* Evening 6th lab hour theory empty cell */}
-                            <th className="p-2 border-r border-white/15 text-center text-gray-600  text-[10px] bg-black/40">
+                            <th className="py-1.5 px-0.5 border-r border-white/15 text-center text-gray-600 text-xs bg-black/40">
                                 —
                             </th>
                         </tr>
 
                         {/* Row 2: Lab Hours Header */}
-                        <tr className="border-b border-white/15 bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-cyan-950/40 text-[11px]">
-                            <th className="p-2 border-r border-white/15 font-bold text-gray-300 text-center uppercase tracking-wider bg-black/40">
+                        <tr className="border-b border-white/15 bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-cyan-950/40 text-[11px] sm:text-xs">
+                            <th className="py-1.5 px-1.5 border-r border-white/15 font-bold text-gray-300 text-center uppercase tracking-wider bg-black/40">
                                 LAB<br />HOURS
                             </th>
                             {/* Morning Lab 6 hours */}
                             {MORNING_LAB_HOURS.map((h, i) => (
-                                <th key={`m-lh-${i}`} className="p-2 border-r border-white/10 text-center  text-cyan-200/90 whitespace-pre-line leading-tight">
-                                    {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
+                                <th key={`m-lh-${i}`} className="py-1.5 px-0.5 border-r border-white/10 text-center text-cyan-200/90 whitespace-pre-line leading-tight">
+                                    {h.start}<br /><span className="text-gray-400 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
                             {/* Afternoon Lab 6 hours */}
                             {AFTERNOON_LAB_HOURS.map((h, i) => (
-                                <th key={`a-lh-${i}`} className="p-2 border-r border-white/10 text-center  text-cyan-200/90 whitespace-pre-line leading-tight">
-                                    {h.start}<br /><span className="text-gray-500 text-[9px]">to</span><br />{h.end}
+                                <th key={`a-lh-${i}`} className="py-1.5 px-0.5 border-r border-white/10 text-center text-cyan-200/90 whitespace-pre-line leading-tight">
+                                    {h.start}<br /><span className="text-gray-400 text-[9px]">to</span><br />{h.end}
                                 </th>
                             ))}
                         </tr>
@@ -571,7 +591,7 @@ const FFCSPlanner = () => {
                         {TIMETABLE_GRID.map((row) => (
                             <tr key={row.day} className="hover:bg-white/[0.02] transition-colors">
                                 {/* Day Label */}
-                                <td className="p-3 border-r border-white/15 font-bold text-white text-center  text-sm bg-black/60 tracking-wider">
+                                <td className="py-2.5 px-2.5 border-r border-white/15 font-extrabold text-white text-center text-sm sm:text-base bg-black/60 tracking-wider truncate">
                                     {row.day}
                                 </td>
 
@@ -582,7 +602,7 @@ const FFCSPlanner = () => {
                                             <td
                                                 key={`${row.day}-${cell.col}`}
                                                 colSpan={cell.colSpan || 2}
-                                                className="p-2.5 text-center border-r border-white/10 bg-[#3b2318]/40 text-amber-300/90 font-semibold italic text-xs tracking-wider border-dashed border-amber-600/30"
+                                                className="p-2.5 text-center border-r border-white/10 bg-[#3b2318]/40 text-amber-300/90 font-semibold italic text-xs tracking-wider border-dashed border-amber-600/30 overflow-hidden truncate"
                                             >
                                                 Extramural
                                             </td>
@@ -593,49 +613,66 @@ const FFCSPlanner = () => {
                                     const occupied = cellOccupancy[key];
                                     const isBooked = Boolean(occupied);
 
+                                    const facultyName = Array.isArray(occupied?.course?.teachers)
+                                        ? occupied.course.teachers.filter(Boolean)[0]
+                                        : '';
+                                    const fullFaculty = Array.isArray(occupied?.course?.teachers)
+                                        ? occupied.course.teachers.filter(Boolean).join(', ')
+                                        : '';
+                                    const courseTitle = occupied?.course?.name || occupied?.course?.code || '';
+                                    const subText = occupied?.course?.name && occupied?.course?.code
+                                        ? (facultyName ? `${occupied.course.code} • ${facultyName}` : occupied.course.code)
+                                        : (facultyName || '');
+                                    const tooltipTitle = isBooked
+                                        ? `${courseTitle}${occupied.course?.name && occupied.course?.code ? ` (${occupied.course.code})` : ''}${fullFaculty ? ` — Faculty: ${fullFaculty}` : ''}${occupied.slot ? ` [${occupied.slot}]` : ''}`
+                                        : `${cell.theorySlot || ''} ${cell.labSlot || ''}`.trim();
+
                                     return (
                                         <td
                                             key={`${row.day}-${cell.col}`}
                                             onClick={() => handleCellClick(row.day, cell.col, cell)}
-                                            className={`p-2 border-r border-white/10 text-center transition-all duration-200 cursor-pointer relative group ${
+                                            title={tooltipTitle}
+                                            className={`py-2 px-1 sm:px-1.5 border-r border-white/10 text-center transition-all duration-200 cursor-pointer relative group h-[58px] sm:h-[62px] max-w-0 overflow-hidden ${
                                                 isBooked 
                                                     ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-100 hover:bg-emerald-900/80 shadow-inner' 
                                                     : 'bg-[#2a1d17]/30 hover:bg-[#3d2a20]/50 text-gray-200 hover:text-white'
                                             }`}
                                         >
                                             {isBooked ? (
-                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
-                                                    <span className="font-bold text-xs text-white tracking-tight line-clamp-1" title={occupied.course.name || occupied.course.code}>
-                                                        {occupied.course.name || occupied.course.code}
+                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5 h-full w-full min-w-0 overflow-hidden">
+                                                    <span className="font-bold text-xs sm:text-[13px] text-white tracking-tight truncate w-full max-w-full block text-center leading-tight">
+                                                        {courseTitle}
                                                     </span>
-                                                    {occupied.course.name && occupied.course.code && (
-                                                        <span className="text-[9px]  text-gray-300 line-clamp-1 leading-none">
-                                                            {occupied.course.code}
+                                                    {subText && (
+                                                        <span className="text-[9px] text-gray-400 truncate w-full max-w-full block text-center leading-none font-medium">
+                                                            {subText}
                                                         </span>
                                                     )}
-                                                    <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/90 px-1.5 py-0.5 rounded-[2px] border border-emerald-500/40">
-                                                        {occupied.slot}
-                                                    </span>
-                                                    {occupied.slot?.startsWith('L') ? (
-                                                        cell.theorySlot && (
-                                                            <span className="text-[10px] font-semibold text-white/80 group-hover:text-white transition-colors leading-none">
-                                                                {cell.theorySlot}
-                                                            </span>
-                                                        )
-                                                    ) : (
-                                                        cell.labSlot && (
-                                                            <span className="text-[10px] font-semibold text-[#d6b49c] group-hover:text-amber-200 transition-colors leading-none">
-                                                                {cell.labSlot}
-                                                            </span>
-                                                        )
-                                                    )}
+                                                    <div className="flex items-center justify-center gap-1 w-full min-w-0 overflow-hidden">
+                                                        <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/90 px-1.5 py-0.5 rounded-[2px] border border-emerald-500/40 truncate shrink-0 max-w-[70%]">
+                                                            {occupied.slot}
+                                                        </span>
+                                                        {occupied.slot?.startsWith('L') ? (
+                                                            cell.theorySlot && (
+                                                                <span className="text-[10px] font-semibold text-white/80 group-hover:text-white transition-colors leading-none shrink-0">
+                                                                    {cell.theorySlot}
+                                                                </span>
+                                                            )
+                                                        ) : (
+                                                            cell.labSlot && (
+                                                                <span className="text-[11px] font-bold text-[#d6b49c] group-hover:text-amber-200 transition-colors leading-none shrink-0">
+                                                                    {cell.labSlot}
+                                                                </span>
+                                                            )
+                                                        )}
+                                                    </div>
                                                 </div>
                                             ) : (
-                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
-                                                    <span className="font-bold text-xs text-white/90">
+                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5 h-full w-full min-w-0 overflow-hidden">
+                                                    <span className="font-extrabold text-sm text-white/90 truncate block w-full text-center">
                                                         {cell.theorySlot || '—'}
                                                     </span>
-                                                    <span className="text-[10px]  text-[#d6b49c] group-hover:text-amber-200 transition-colors">
+                                                    <span className="text-[11px] font-semibold text-[#d6b49c] group-hover:text-amber-200 transition-colors truncate block w-full text-center">
                                                         {cell.labSlot}
                                                     </span>
                                                 </div>
@@ -645,7 +682,7 @@ const FFCSPlanner = () => {
                                 })}
 
                                 {/* Lunch Divider Column - exactly after previous lab ends (after 6th lab L6, L12, L18, L24, L30) */}
-                                <td className="p-1 border-r border-white/15 bg-neutral-900/60 text-center text-gray-600  text-xs">
+                                <td className="p-1 border-r border-white/15 bg-neutral-900/60 text-center text-gray-600 text-xs overflow-hidden">
                                     •
                                 </td>
 
@@ -655,49 +692,66 @@ const FFCSPlanner = () => {
                                     const occupied = cellOccupancy[key];
                                     const isBooked = Boolean(occupied);
 
+                                    const facultyName = Array.isArray(occupied?.course?.teachers)
+                                        ? occupied.course.teachers.filter(Boolean)[0]
+                                        : '';
+                                    const fullFaculty = Array.isArray(occupied?.course?.teachers)
+                                        ? occupied.course.teachers.filter(Boolean).join(', ')
+                                        : '';
+                                    const courseTitle = occupied?.course?.name || occupied?.course?.code || '';
+                                    const subText = occupied?.course?.name && occupied?.course?.code
+                                        ? (facultyName ? `${occupied.course.code} • ${facultyName}` : occupied.course.code)
+                                        : (facultyName || '');
+                                    const tooltipTitle = isBooked
+                                        ? `${courseTitle}${occupied.course?.name && occupied.course?.code ? ` (${occupied.course.code})` : ''}${fullFaculty ? ` — Faculty: ${fullFaculty}` : ''}${occupied.slot ? ` [${occupied.slot}]` : ''}`
+                                        : `${cell.theorySlot || ''} ${cell.labSlot || ''}`.trim();
+
                                     return (
                                         <td
                                             key={`${row.day}-${cell.col}`}
                                             onClick={() => handleCellClick(row.day, cell.col, cell)}
-                                            className={`p-2 border-r border-white/10 text-center transition-all duration-200 cursor-pointer relative group ${
+                                            title={tooltipTitle}
+                                            className={`py-2 px-1 sm:px-1.5 border-r border-white/10 text-center transition-all duration-200 cursor-pointer relative group h-[58px] sm:h-[62px] max-w-0 overflow-hidden ${
                                                 isBooked 
                                                     ? 'bg-emerald-950/80 border-emerald-500/40 text-emerald-100 hover:bg-emerald-900/80 shadow-inner' 
                                                     : 'bg-[#2a1d17]/30 hover:bg-[#3d2a20]/50 text-gray-200 hover:text-white'
                                             }`}
                                         >
                                             {isBooked ? (
-                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
-                                                    <span className="font-bold text-xs text-white tracking-tight line-clamp-1" title={occupied.course.name || occupied.course.code}>
-                                                        {occupied.course.name || occupied.course.code}
+                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5 h-full w-full min-w-0 overflow-hidden">
+                                                    <span className="font-bold text-xs sm:text-[13px] text-white tracking-tight truncate w-full max-w-full block text-center leading-tight">
+                                                        {courseTitle}
                                                     </span>
-                                                    {occupied.course.name && occupied.course.code && (
-                                                        <span className="text-[9px]  text-gray-300 line-clamp-1 leading-none">
-                                                            {occupied.course.code}
+                                                    {subText && (
+                                                        <span className="text-[9px] text-gray-400 truncate w-full max-w-full block text-center leading-none font-medium">
+                                                            {subText}
                                                         </span>
                                                     )}
-                                                    <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/90 px-1.5 py-0.5 rounded-[2px] border border-emerald-500/40">
-                                                        {occupied.slot}
-                                                    </span>
-                                                    {occupied.slot?.startsWith('L') ? (
-                                                        cell.theorySlot && (
-                                                            <span className="text-[10px] font-semibold text-white/80 group-hover:text-white transition-colors leading-none">
-                                                                {cell.theorySlot}
-                                                            </span>
-                                                        )
-                                                    ) : (
-                                                        cell.labSlot && (
-                                                            <span className="text-[10px] font-semibold text-[#d6b49c] group-hover:text-amber-200 transition-colors leading-none">
-                                                                {cell.labSlot}
-                                                            </span>
-                                                        )
-                                                    )}
+                                                    <div className="flex items-center justify-center gap-1 w-full min-w-0 overflow-hidden">
+                                                        <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/90 px-1.5 py-0.5 rounded-[2px] border border-emerald-500/40 truncate shrink-0 max-w-[70%]">
+                                                            {occupied.slot}
+                                                        </span>
+                                                        {occupied.slot?.startsWith('L') ? (
+                                                            cell.theorySlot && (
+                                                                <span className="text-[10px] font-semibold text-white/80 group-hover:text-white transition-colors leading-none shrink-0">
+                                                                    {cell.theorySlot}
+                                                                </span>
+                                                            )
+                                                        ) : (
+                                                            cell.labSlot && (
+                                                                <span className="text-[11px] font-bold text-[#d6b49c] group-hover:text-amber-200 transition-colors leading-none shrink-0">
+                                                                    {cell.labSlot}
+                                                                </span>
+                                                            )
+                                                        )}
+                                                    </div>
                                                 </div>
                                             ) : (
-                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
-                                                    <span className="font-bold text-xs text-white/90">
+                                                <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5 h-full w-full min-w-0 overflow-hidden">
+                                                    <span className="font-extrabold text-sm text-white/90 truncate block w-full text-center">
                                                         {cell.theorySlot || '—'}
                                                     </span>
-                                                    <span className="text-[10px]  text-[#d6b49c] group-hover:text-amber-200 transition-colors">
+                                                    <span className="text-[11px] font-semibold text-[#d6b49c] group-hover:text-amber-200 transition-colors truncate block w-full text-center">
                                                         {cell.labSlot}
                                                     </span>
                                                 </div>
@@ -732,24 +786,24 @@ const FFCSPlanner = () => {
                         {activeCourses.map((c) => (
                             <div 
                                 key={c.id} 
-                                className="bg-black/80 border border-white/10 hover:border-emerald-500/50 p-3.5 rounded-[2px] flex flex-col justify-between transition-colors shadow-sm relative group"
+                                className="bg-black/80 border border-white/10 hover:border-emerald-500/50 p-3.5 rounded-[2px] flex flex-col justify-between transition-colors shadow-sm relative group overflow-hidden"
                             >
-                                <div>
-                                    <div className="flex items-start justify-between gap-2 mb-1.5">
-                                        <h4 className="font-semibold text-sm text-white line-clamp-1">{c.name}</h4>
-                                        <span className="px-2 py-0.5 bg-emerald-950/90 border border-emerald-500/40 text-emerald-300  text-[11px] rounded-[2px] shrink-0">
+                                <div className="min-w-0">
+                                    <div className="flex items-start justify-between gap-2 mb-1.5 min-w-0">
+                                        <h4 className="font-semibold text-sm text-white truncate flex-1 min-w-0" title={c.name}>{c.name}</h4>
+                                        <span className="px-2 py-0.5 bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 text-[11px] rounded-[2px] shrink-0">
                                             {c.slot}
                                         </span>
                                     </div>
                                     {c.code && (
-                                        <span className="text-xs  text-gray-400 block mb-1">
+                                        <span className="text-xs text-gray-400 block mb-1 truncate" title={c.code}>
                                             {c.code}
                                         </span>
                                     )}
                                     {Array.isArray(c.teachers) && c.teachers.length > 0 && (
-                                        <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
+                                        <div className="flex items-center gap-1 text-xs text-gray-400 mt-1 min-w-0">
                                             <User size={13} className="shrink-0 text-gray-500" />
-                                            <span className="line-clamp-1">{c.teachers.join(', ')}</span>
+                                            <span className="truncate flex-1" title={c.teachers.join(', ')}>{c.teachers.join(', ')}</span>
                                         </div>
                                     )}
                                 </div>
