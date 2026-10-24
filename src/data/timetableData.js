@@ -1,6 +1,6 @@
 // Official VIT Timetable Slot Definitions, Matrix, and Clash Utilities
 
-export const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+export const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
 
 export const MORNING_THEORY_HOURS = [
   { start: '08:00 AM', end: '08:50 AM' },
@@ -122,40 +122,6 @@ export const TIMETABLE_GRID = [
       { col: 11, session: 'afternoon', theorySlot: null, labSlot: 'L60' },
     ],
   },
-  {
-    day: 'SAT',
-    slots: [
-      { col: 0, session: 'morning', theorySlot: 'X11', labSlot: 'L71' },
-      { col: 1, session: 'morning', theorySlot: 'X12', labSlot: 'L72' },
-      { col: 2, session: 'morning', theorySlot: 'Y11', labSlot: 'L73' },
-      { col: 3, session: 'morning', theorySlot: 'Y12', labSlot: 'L74' },
-      { col: 4, session: 'morning', theorySlot: 'S8', labSlot: 'L75' },
-      { col: 5, session: 'morning', theorySlot: 'S8', labSlot: 'L76' },
-      { col: 6, session: 'afternoon', theorySlot: 'X21', labSlot: 'L77' },
-      { col: 7, session: 'afternoon', theorySlot: 'Z21', labSlot: 'L78' },
-      { col: 8, session: 'afternoon', theorySlot: 'Y21', labSlot: 'L79' },
-      { col: 9, session: 'afternoon', theorySlot: 'W21', labSlot: 'L80' },
-      { col: 10, session: 'afternoon', theorySlot: 'W22', labSlot: 'L81' },
-      { col: 11, session: 'afternoon', theorySlot: 'Z22', labSlot: 'L82' },
-    ],
-  },
-  {
-    day: 'SUN',
-    slots: [
-      { col: 0, session: 'morning', theorySlot: 'Y11', labSlot: 'L83' },
-      { col: 1, session: 'morning', theorySlot: 'Y12', labSlot: 'L84' },
-      { col: 2, session: 'morning', theorySlot: 'X11', labSlot: 'L85' },
-      { col: 3, session: 'morning', theorySlot: 'X12', labSlot: 'L86' },
-      { col: 4, session: 'morning', theorySlot: 'S10', labSlot: 'L87' },
-      { col: 5, session: 'morning', theorySlot: 'S10', labSlot: 'L88' },
-      { col: 6, session: 'afternoon', theorySlot: 'Y21', labSlot: 'L89' },
-      { col: 7, session: 'afternoon', theorySlot: 'Z21', labSlot: 'L90' },
-      { col: 8, session: 'afternoon', theorySlot: 'X21', labSlot: 'L91' },
-      { col: 9, session: 'afternoon', theorySlot: 'W21', labSlot: 'L92' },
-      { col: 10, session: 'afternoon', theorySlot: 'W22', labSlot: 'L93' },
-      { col: 11, session: 'afternoon', theorySlot: 'Z22', labSlot: 'L94' },
-    ],
-  },
 ];
 
 // Map of each unique slot name to its exact occurrences on the grid: [{ day, col }]
@@ -191,11 +157,6 @@ export const LAB_PAIRS = [
   'L43+L44', 'L45+L46', 'L47+L48',
   'L49+L50', 'L51+L52', 'L53+L54',
   'L55+L56', 'L57+L58', 'L59+L60',
-  // Weekend Lab Pairs (SAT & SUN)
-  'L71+L72', 'L73+L74', 'L75+L76',
-  'L77+L78', 'L79+L80', 'L81+L82',
-  'L83+L84', 'L85+L86', 'L87+L88',
-  'L89+L90', 'L91+L92', 'L93+L94',
 ];
 
 // Helper to expand a slot string or combo into constituent atomic slots
@@ -248,11 +209,7 @@ export const THEORY_SLOT_GROUPS = {
   G2: ['G2+TG2', 'G2', 'TG2'],
 };
 
-// Weekend individual theory slots (X11, X12, Y11, Y12, S8, S10, X21, Y21, Z21, W21, W22, Z22)
-export const WEEKEND_THEORY_SLOTS = [
-  'X11', 'X12', 'Y11', 'Y12', 'S8', 'S10',
-  'X21', 'Z21', 'Y21', 'W21', 'W22', 'Z22',
-];
+export const WEEKEND_THEORY_SLOTS = [];
 
 // All permitted valid slot strings
 export const ALL_VALID_SLOTS = (() => {
@@ -389,3 +346,84 @@ export const checkSlotClash = (newSlotStr, existingCourses, ignoreCourseId = nul
     conflicts,
   };
 };
+
+// Map a slot string to credits according to VIT FFCS rules:
+// - 3-slot combinations (e.g. D1+TD1+TDD1, A1+TA1+TAA1) -> 4 credits
+// - 2-slot combinations (e.g. D1+TD1, B1+TB1) -> 3 credits
+// - 1-slot base theory slots (e.g. D1, A1, B1, C1) -> 2 credits
+// - 1-slot tutorial/extension slots (e.g. TD1, TDD1, TA1, TAA1) -> 1 credit
+// - Lab slot pairs (e.g. L15+L16) -> 1 credit
+export const getCreditsForSlot = (slotStr, type = null) => {
+  if (!slotStr) return '4';
+  const parts = parseSlotString(slotStr);
+  const isLab = type === 'Lab' || parts.some(p => p.startsWith('L'));
+  if (isLab) {
+    return '1';
+  }
+  if (parts.length >= 3) {
+    return '4';
+  }
+  if (parts.length === 2) {
+    return '3';
+  }
+  if (parts.length === 1) {
+    const single = parts[0].toUpperCase();
+    // Tutorial slots like TA1, TAA1, TB1, TBB1, TC1, TCC1, TD1, TDD1, TE1, TF1, TG1 start with 'T'
+    if (single.startsWith('T')) {
+      return '1';
+    }
+    // Base theory slots like D1, A1, B1, C1, E1, F1, G1 or weekend slots like X11, Y11, S8 are 2 credits
+    return '2';
+  }
+  return '2';
+};
+
+// Given targetCredits ('1', '2', '3', '4'), available options, and current slot,
+// find the best matching slot combination.
+export const getSlotForCredits = (targetCredits, availableOptions = [], currentSlot = '') => {
+  if (!availableOptions || availableOptions.length === 0) return currentSlot;
+  const targetStr = String(targetCredits);
+  const currentParts = parseSlotString(currentSlot);
+  const currentIsLab = currentParts.some(p => p.startsWith('L'));
+
+  // If currentSlot already matches targetCredits, keep it
+  const currentOption = availableOptions.find(o => o.value === currentSlot);
+  if (currentOption && getCreditsForSlot(currentOption.value, currentOption.type) === targetStr) {
+    return currentSlot;
+  }
+
+  // Find all options matching targetCredits
+  const matching = availableOptions.filter(opt => {
+    return getCreditsForSlot(opt.value, opt.type) === targetStr;
+  });
+
+  if (matching.length > 0) {
+    // If target is 1 credit:
+    if (targetStr === '1') {
+      if (currentIsLab) {
+        // If already in Lab mode, prefer Lab option
+        const labMatch = matching.find(o => o.type === 'Lab' || o.value.startsWith('L'));
+        if (labMatch) return labMatch.value;
+      } else {
+        // If in Theory mode, prefer tutorial slot (starts with 'T')
+        const tutMatch = matching.find(o => !o.value.startsWith('L') && parseSlotString(o.value)[0]?.startsWith('T'));
+        if (tutMatch) return tutMatch.value;
+      }
+    }
+    return matching[0].value;
+  }
+
+  // If target is 4 and no 4-credit (3-slot) combo exists in this group, pick the highest theory combo available
+  if (targetStr === '4' || targetStr === '3') {
+    const theoryOptions = availableOptions.filter(o => o.type !== 'Lab' && !o.value.startsWith('L'));
+    if (theoryOptions.length > 0) {
+      const sorted = [...theoryOptions].sort((a, b) => {
+        return parseSlotString(b.value).length - parseSlotString(a.value).length;
+      });
+      return sorted[0].value;
+    }
+  }
+
+  return availableOptions[0]?.value || currentSlot;
+};
+
