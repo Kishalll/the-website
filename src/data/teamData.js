@@ -36,26 +36,8 @@ export const boardMembers = [
         ]
     },
     {
-        slug: 'm-mano-karthik',
-        name: 'M Mano Karthik',
-        role: 'Secretary',
-        image: '',
-        noteFrom: 'Faculty Coordinator',
-        note: 'Meticulous administration, documentation, and official communication across university channels.',
-        contributions: [
-            'Handled official documentation, permissions, and administrative workflows.',
-            'Maintained clear communication channels across all team departments.',
-            'Oversaw recruitment drives and member onboarding logistics.'
-        ],
-        socials: [
-            { platform: 'linkedin', url: '#' },
-            { platform: 'github', url: '#' },
-            { platform: 'instagram', url: '#' }
-        ]
-    },
-    {
-        slug: 'divyashri-rajaraman',
-        name: 'Divyashri Rajaraman',
+        slug: 'bhavya-shree',
+        name: 'Bhavya Shree',
         role: 'Co-secretary',
         image: '',
         noteFrom: 'Faculty Coordinator',

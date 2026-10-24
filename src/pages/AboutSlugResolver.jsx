@@ -1,7 +1,6 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import DepartmentPage from './DepartmentPage';
-import PersonDetailPage from './PersonDetailPage';
 import { getDepartmentBySlug } from '../data/teamData';
 
 const AboutSlugResolver = () => {
@@ -12,7 +11,8 @@ const AboutSlugResolver = () => {
         return <DepartmentPage />;
     }
 
-    return <PersonDetailPage />;
+    // Personal slugs temporarily disabled - redirect to /about
+    return <Navigate to="/about" replace />;
 };
 
 export default AboutSlugResolver;

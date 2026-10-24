@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight } from 'lucide-react';
 import FogBackground from '../components/ui/FogBackground';
@@ -129,13 +128,11 @@ const AboutPage = () => {
     );
 };
 
-const TeamMemberCard = ({ name, role, onClick, socials }) => (
+const TeamMemberCard = ({ name, role, socials }) => (
     <motion.div
-        onClick={onClick}
         whileHover={{
-            y: -6,
-            scale: 1.02,
-            boxShadow: "0px 10px 25px 2px rgba(255, 255, 255, 0.15)",
+            y: -4,
+            boxShadow: "0px 8px 20px 2px rgba(255, 255, 255, 0.08)",
             zIndex: 20
         }}
         transition={{
@@ -144,15 +141,15 @@ const TeamMemberCard = ({ name, role, onClick, socials }) => (
             damping: 25,
             boxShadow: { duration: 0.25 }
         }}
-        className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-[#111111] hover:border-white/30 transition-colors cursor-pointer group w-full max-w-sm mx-auto relative shadow-xl z-10"
+        className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-[#111111] hover:border-white/20 transition-colors cursor-default w-full max-w-sm mx-auto relative shadow-xl z-10"
     >
-        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative shadow-inner">
+        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 overflow-hidden relative shadow-inner">
             <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
         </div>
-        <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 transition-colors">{name}</h3>
+        <h3 className="text-xl font-bold text-white mb-1">{name}</h3>
         <p className="text-sm text-blue-400 font-mono tracking-wide mb-4 uppercase">{role}</p>
 
-        <div className="flex gap-4" onClick={(e) => e.stopPropagation()}>
+        <div className="flex gap-4">
             {socials ? (
                 socials.map((social, index) => (
                     <a key={index} href={social.href || '#'} className="text-gray-400 hover:text-white transition-colors">
@@ -171,18 +168,9 @@ const TeamMemberCard = ({ name, role, onClick, socials }) => (
 );
 
 const TeamHierarchy = () => {
-    const navigate = useNavigate();
-
-    const handleNavigate = (path) => {
-        const currentY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
-        sessionStorage.setItem('about_locked_y', currentY.toString());
-        navigate(path);
-    };
-
     const president = boardMembers.find(m => m.slug === 'manvi-chadha');
     const vicePresident = boardMembers.find(m => m.slug === 'kishal-p');
-    const secretary = boardMembers.find(m => m.slug === 'm-mano-karthik');
-    const coSecretary = boardMembers.find(m => m.slug === 'divyashri-rajaraman');
+    const coSecretary = boardMembers.find(m => m.slug === 'bhavya-shree');
 
     return (
         <div className="flex flex-col gap-12 items-center">
@@ -191,7 +179,6 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={president.name}
                         role={president.role}
-                        onClick={() => handleNavigate(`/about/${president.slug}`)}
                     />
                 </div>
             )}
@@ -201,27 +188,18 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={vicePresident.name}
                         role={vicePresident.role}
-                        onClick={() => handleNavigate(`/about/${vicePresident.slug}`)}
                     />
                 </div>
             )}
 
-            <div className="w-full flex justify-center gap-8 flex-wrap p-2">
-                {secretary && (
-                    <TeamMemberCard
-                        name={secretary.name}
-                        role={secretary.role}
-                        onClick={() => handleNavigate(`/about/${secretary.slug}`)}
-                    />
-                )}
-                {coSecretary && (
+            {coSecretary && (
+                <div className="w-full flex justify-center gap-8 flex-wrap p-2">
                     <TeamMemberCard
                         name={coSecretary.name}
                         role={coSecretary.role}
-                        onClick={() => handleNavigate(`/about/${coSecretary.slug}`)}
                     />
-                )}
-            </div>
+                </div>
+            )}
 
             <div className="w-full">
                 <h3 className="text-center text-white font-bold text-2xl md:text-3xl tracking-tight mb-8">
@@ -233,28 +211,16 @@ const TeamHierarchy = () => {
                             <TeamMemberCard
                                 name={dept.lead.name}
                                 role={`${dept.name} Lead`}
-                                onClick={() => handleNavigate(`/about/${dept.slug}/${dept.lead.slug}`)}
                             />
-                            <motion.button
-                                onClick={() => handleNavigate(`/about/${dept.slug}`)}
-                                whileHover={{
-                                    y: -3,
-                                    scale: 1.02,
-                                    boxShadow: "0px 8px 20px 2px rgba(255, 255, 255, 0.2)",
-                                    zIndex: 20
-                                }}
-                                whileTap={{ scale: 0.98 }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 300,
-                                    damping: 25,
-                                    boxShadow: { duration: 0.25 }
-                                }}
-                                className="w-full py-2.5 px-4 rounded-xl border border-white/15 bg-[#1a1a1a] hover:bg-white hover:text-black font-semibold text-sm flex items-center justify-center gap-2 group cursor-pointer shadow-md text-white transition-colors duration-300 z-10"
+                            <button
+                                type="button"
+                                disabled
+                                className="w-full py-2.5 px-4 rounded-xl border border-white/10 bg-[#141414] text-gray-500 font-semibold text-sm flex items-center justify-center gap-2 shadow-sm cursor-not-allowed opacity-60 z-10 select-none"
+                                title="Temporarily unavailable"
                             >
                                 View members
-                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                            </motion.button>
+                                <ArrowRight size={16} />
+                            </button>
                         </div>
                     ))}
                 </div>
@@ -268,7 +234,6 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={facultyCoordinator.name}
                         role={facultyCoordinator.role}
-                        onClick={() => handleNavigate(`/about/${facultyCoordinator.slug}`)}
                         socials={[
                             { icon: <Linkedin size={18} />, href: "#" },
                             { icon: <Mail size={18} />, href: "mailto:zbcvitc@gmail.com" }

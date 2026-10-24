@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 import Navbar from './components/Navbar';
@@ -71,7 +71,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about/:slug" element={<AboutSlugResolver />} />
-              <Route path="/about/:dept/:name" element={<PersonDetailPage />} />
+              <Route path="/about/:dept/:name" element={<Navigate to="/about" replace />} />
               <Route path="/domains" element={<DomainsPage />} />
               <Route path="/tools" element={<ToolsPage />} />
               <Route path="/tools/compiler" element={<CompilerPage />} />
