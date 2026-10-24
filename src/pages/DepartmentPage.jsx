@@ -71,42 +71,39 @@ const DepartmentPage = () => {
                     </p>
                 </div>
 
-                {/* Clickable Lead Card Section with Spring Hover Animation */}
+                {/* Lead Card Section */}
                 <div className="mb-12">
                     <h2 className="text-center text-white font-bold mb-4 text-xl md:text-2xl tracking-wide">
                         Department Lead
                     </h2>
                     <motion.div
-                        onClick={() => navigate(`/about/${deptSlug}/${lead.slug}`)}
                         whileHover={{
-                            y: -8,
-                            scale: 1.02,
-                            boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.2)",
+                            y: -4,
+                            boxShadow: "0px 8px 20px 2px rgba(255, 255, 255, 0.1)",
                             zIndex: 10
                         }}
                         transition={{
                             y: { type: "spring", stiffness: 300, damping: 25 },
-                            scale: { type: "spring", stiffness: 300, damping: 25 },
                             boxShadow: { duration: 0.25 }
                         }}
-                        className="flex flex-col items-center p-8 rounded-2xl border border-white/15 bg-gradient-to-b from-zinc-900 to-neutral-950 hover:border-white/40 transition-colors cursor-pointer group w-full max-w-md mx-auto shadow-2xl relative"
+                        className="flex flex-col items-center p-8 rounded-2xl border border-white/15 bg-gradient-to-b from-zinc-900 to-neutral-950 hover:border-white/30 transition-colors cursor-default w-full max-w-md mx-auto shadow-2xl relative"
                     >
                         {/* Square Avatar */}
-                        <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-neutral-800 mb-5 border-2 border-white/20 group-hover:border-white/60 transition-colors overflow-hidden relative shadow-lg">
+                        <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl bg-neutral-800 mb-5 border-2 border-white/20 overflow-hidden relative shadow-lg">
                             {lead.image ? (
                                 <img src={lead.image} alt={lead.name} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
                             )}
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300">
+                        <h3 className="text-2xl font-bold text-white mb-1">
                             {lead.name}
                         </h3>
                         <p className="text-sm text-blue-400 font-mono tracking-wide mb-4 uppercase font-semibold">
                             {lead.role}
                         </p>
 
-                        <div className="flex gap-4" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex gap-4">
                             {lead.socials?.map((social, index) => (
                                 <a
                                     key={index}
@@ -120,7 +117,7 @@ const DepartmentPage = () => {
                     </motion.div>
                 </div>
 
-                {/* Members Section with Spring Hover Animation */}
+                {/* Members Section */}
                 <div>
                     <h2 className="text-center text-white font-bold mb-6 text-xl md:text-2xl tracking-wide">
                         Members
@@ -133,29 +130,26 @@ const DepartmentPage = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     whileHover={{
-                                        y: -8,
-                                        scale: 1.02,
-                                        boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.2)",
+                                        y: -4,
+                                        boxShadow: "0px 8px 20px 2px rgba(255, 255, 255, 0.1)",
                                         zIndex: 10
                                     }}
                                     transition={{
                                         delay: index * 0.05,
                                         y: { type: "spring", stiffness: 300, damping: 25 },
-                                        scale: { type: "spring", stiffness: 300, damping: 25 },
                                         boxShadow: { duration: 0.25 }
                                     }}
-                                    onClick={() => navigate(`/about/${deptSlug}/${member.slug}`)}
-                                    className="flex flex-col items-center p-6 rounded-2xl border border-white/15 bg-gradient-to-b from-zinc-900 to-neutral-950 hover:border-white/30 transition-colors cursor-pointer group w-full max-w-sm shadow-md relative"
+                                    className="flex flex-col items-center p-6 rounded-2xl border border-white/15 bg-gradient-to-b from-zinc-900 to-neutral-950 hover:border-white/20 transition-colors cursor-default w-full max-w-sm shadow-md relative"
                                 >
                                     {/* Square Avatar */}
-                                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-neutral-800 mb-4 border-2 border-white/10 group-hover:border-white/50 transition-colors overflow-hidden relative shadow-md">
+                                    <div className="w-24 h-24 md:w-28 md:h-28 rounded-xl bg-neutral-800 mb-4 border-2 border-white/10 overflow-hidden relative shadow-md">
                                         {member.image ? (
                                             <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
                                         ) : (
                                             <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
                                         )}
                                     </div>
-                                    <h3 className="text-xl font-bold text-white mb-1 group-hover:text-blue-400 group-hover:translate-x-1 transition-all duration-300">
+                                    <h3 className="text-xl font-bold text-white mb-1">
                                         {member.name}
                                     </h3>
                                     <p className="text-xs text-blue-400 font-mono tracking-wide mb-4 uppercase">
