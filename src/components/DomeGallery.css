@@ -1,0 +1,320 @@
+.sphere-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  --radius: 520px;
+  --item-w: 220px;
+  --item-h: 140px;
+  --viewer-pad: 72px;
+}
+
+.sphere-root * {
+  box-sizing: border-box;
+}
+
+.sphere,
+.ring,
+.item,
+.item__image {
+  transform-style: preserve-3d;
+}
+
+/* One horizontal band of the donut. Fills the stage box (zero-sized, centered),
+   so its tiles keep the same centering as before while the ring itself gets its
+   vertical offset and its own random spin. */
+.ring {
+  position: absolute;
+  inset: 0;
+  transform: translateY(var(--ring-y, 0px)) rotateY(var(--ring-spin, 0deg));
+  will-change: transform;
+}
+
+main.sphere-main {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  background: var(--overlay-blur-color, #120f17);
+}
+
+.stage {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  perspective: calc(var(--radius) * 2);
+  perspective-origin: 50% 50%;
+  contain: layout paint size;
+}
+
+.sphere {
+  transform: translateZ(calc(var(--radius) * -1));
+  will-change: transform;
+}
+
+.overlay,
+.overlay--blur {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.overlay {
+  background-image: radial-gradient(
+    ellipse 118% 104% at 50% 50%,
+    rgba(235, 235, 235, 0) 80%,
+    var(--overlay-blur-color, #120F17) 100%
+  );
+}
+
+.overlay--blur {
+  -webkit-mask-image: radial-gradient(
+    ellipse 118% 104% at 50% 50%,
+    rgba(235, 235, 235, 0) 84%,
+    var(--overlay-blur-color, #120F17) 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 118% 104% at 50% 50%,
+    rgba(235, 235, 235, 0) 84%,
+    var(--overlay-blur-color, #120F17) 100%
+  );
+  backdrop-filter: blur(3px);
+}
+
+.item {
+  width: var(--item-w);
+  height: var(--item-h);
+  position: absolute;
+  top: -999px;
+  bottom: -999px;
+  left: -999px;
+  right: -999px;
+  margin: auto;
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  transition: transform 300ms;
+  transform: rotateY(calc(var(--angle) * 1deg + var(--rot-y-delta, 0deg)))
+    translateZ(var(--radius))
+    rotateX(var(--rot-x-delta, 0deg));
+}
+
+.item__image {
+  position: absolute;
+  display: block;
+  inset: 1px;
+  border-radius: min(var(--tile-radius, 12px), calc(var(--item-h) * 0.2));
+  background: var(--overlay-blur-color, #120f17);
+  overflow: hidden;
+  backface-visibility: hidden;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  pointer-events: auto;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.item__image:focus {
+  outline: none;
+}
+
+.item__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  backface-visibility: hidden;
+  filter: var(--image-filter, none);
+  transition: filter 450ms ease, transform 450ms ease;
+}
+
+.item__image:hover,
+.item__image:focus-visible {
+  transform: translateZ(0) scale(1.12);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+  z-index: 5;
+}
+
+.item__image:hover img,
+.item__image:focus-visible img {
+  filter: none;
+  transform: scale(1.06);
+}
+
+.item--placeholder .item__image--placeholder {
+  cursor: default;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.item--placeholder .item__image--placeholder:hover {
+  transform: translateZ(0);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.viewer {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--viewer-pad);
+}
+
+.viewer .frame {
+  height: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--enlarge-radius, 32px);
+  display: flex;
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .viewer .frame {
+    height: auto;
+    width: 100%;
+  }
+
+  .edge-fade--top {
+    height: 10vh;
+  }
+
+  .edge-fade--bottom {
+    height: 12vh;
+  }
+}
+
+.viewer .scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 500ms ease;
+  backdrop-filter: blur(3px);
+}
+
+.sphere-root[data-enlarging='true'] .viewer .scrim {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.viewer .enlarge {
+  position: absolute;
+  z-index: 30;
+  border-radius: var(--enlarge-radius, 32px);
+  overflow: hidden;
+  transition:
+    transform 500ms ease,
+    opacity 500ms ease;
+  transform-origin: top left;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.viewer .enlarge img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: none;
+}
+
+/* Caption bar inside the preview card: tag badge, title and description,
+   sitting over the bottom of the big image. */
+.viewer .enlarge__meta {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 72px 28px 24px;
+  pointer-events: none;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.5) 55%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.viewer .enlarge__tag {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+.viewer .enlarge__title {
+  margin: 0;
+  font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+  font-weight: 650;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.viewer .enlarge__caption {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.sphere-root .enlarge-closing img {
+  filter: none;
+}
+
+.edge-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20vh;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.28) 52%,
+    rgba(0, 0, 0, 0.68) 80%,
+    var(--overlay-blur-color, #000) 100%
+  );
+}
+
+.edge-fade--top {
+  top: 0;
+  transform: rotate(180deg);
+}
+
+.edge-fade--bottom {
+  bottom: 0;
+  height: 40vh;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 34%,
+    rgba(0, 0, 0, 0.4) 62%,
+    rgba(0, 0, 0, 0.78) 85%,
+    var(--overlay-blur-color, #000) 100%
+  );
+}
+
+body.dg-scroll-lock {
+  overflow: hidden;
+}
