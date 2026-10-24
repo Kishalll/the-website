@@ -613,9 +613,22 @@ const FFCSPlanner = () => {
                                                             {occupied.course.code}
                                                         </span>
                                                     )}
-                                                    <span className="text-[10px]  text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
+                                                    <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/90 px-1.5 py-0.5 rounded-[2px] border border-emerald-500/40">
                                                         {occupied.slot}
                                                     </span>
+                                                    {occupied.slot?.startsWith('L') ? (
+                                                        cell.theorySlot && (
+                                                            <span className="text-[10px] font-semibold text-white/80 group-hover:text-white transition-colors leading-none">
+                                                                {cell.theorySlot}
+                                                            </span>
+                                                        )
+                                                    ) : (
+                                                        cell.labSlot && (
+                                                            <span className="text-[10px] font-semibold text-[#d6b49c] group-hover:text-amber-200 transition-colors leading-none">
+                                                                {cell.labSlot}
+                                                            </span>
+                                                        )
+                                                    )}
                                                 </div>
                                             ) : (
                                                 <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
@@ -662,9 +675,22 @@ const FFCSPlanner = () => {
                                                             {occupied.course.code}
                                                         </span>
                                                     )}
-                                                    <span className="text-[10px]  text-emerald-300 bg-emerald-950/90 px-1.5 py-0.2 rounded-[2px] border border-emerald-500/40">
+                                                    <span className="text-[10px] font-bold text-emerald-300 bg-emerald-950/90 px-1.5 py-0.5 rounded-[2px] border border-emerald-500/40">
                                                         {occupied.slot}
                                                     </span>
+                                                    {occupied.slot?.startsWith('L') ? (
+                                                        cell.theorySlot && (
+                                                            <span className="text-[10px] font-semibold text-white/80 group-hover:text-white transition-colors leading-none">
+                                                                {cell.theorySlot}
+                                                            </span>
+                                                        )
+                                                    ) : (
+                                                        cell.labSlot && (
+                                                            <span className="text-[10px] font-semibold text-[#d6b49c] group-hover:text-amber-200 transition-colors leading-none">
+                                                                {cell.labSlot}
+                                                            </span>
+                                                        )
+                                                    )}
                                                 </div>
                                             ) : (
                                                 <div className="flex flex-col items-center justify-center py-0.5 space-y-0.5">
