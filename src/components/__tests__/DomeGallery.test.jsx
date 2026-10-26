@@ -167,9 +167,12 @@ describe('DomeGallery', () => {
         expect(container.querySelector('.viewer .frame')).toBeInTheDocument();
     });
 
-    it('applies the grayscale filter by default', () => {
-        const { container } = render(<DomeGallery images={images} minSlots={6} />);
-        expect(container.querySelector('.sphere-root').style.getPropertyValue('--image-filter')).toBe(
+    it('defaults to no image filter and applies grayscale when grayscale prop is true', () => {
+        const { container: c1 } = render(<DomeGallery images={images} minSlots={6} />);
+        expect(c1.querySelector('.sphere-root').style.getPropertyValue('--image-filter')).toBe('none');
+
+        const { container: c2 } = render(<DomeGallery images={images} minSlots={6} grayscale />);
+        expect(c2.querySelector('.sphere-root').style.getPropertyValue('--image-filter')).toBe(
             'grayscale(1)'
         );
     });
