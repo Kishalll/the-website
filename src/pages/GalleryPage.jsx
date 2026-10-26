@@ -55,7 +55,6 @@ const GalleryPage = () => {
                         overlayBlurColor="#000000"
                         imageBorderRadius="8px"
                         openedImageBorderRadius="12px"
-                        grayscale
                     />
                 </div>
             )}
