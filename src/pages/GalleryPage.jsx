@@ -50,6 +50,7 @@ const GalleryPage = () => {
                     <DomeGallery
                         images={domeImages}
                         minSlots={12}
+                        slotsPerRing={10}
                         autoRotate
                         padFactor={0.16}
                         overlayBlurColor="#000000"
