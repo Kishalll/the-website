@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Users, Rocket, Brain, Globe, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight } from 'lucide-react';
+import { Code2, Users, Rocket, Brain, FolderGit2, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight } from 'lucide-react';
 import FogBackground from '../components/ui/FogBackground';
 import { boardMembers, facultyCoordinator, departments } from '../data/teamData';
 
@@ -40,9 +40,9 @@ const AboutPage = () => {
             description: "Hands-on guidance from experienced seniors and industry professionals."
         },
         {
-            icon: <Globe className="w-6 h-6" />,
-            title: "Open Source",
-            description: "Contributors to significant global repositories that power the developer community."
+            icon: <FolderGit2 className="w-6 h-6" />,
+            title: "Projects",
+            description: "Developing practical software solutions to solve real-world problems."
         },
         {
             icon: <Cpu className="w-6 h-6" />,
