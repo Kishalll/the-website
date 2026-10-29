@@ -15,9 +15,9 @@ const DomainsPage = () => {
             tags: ["MVP", "Innovation", "Snacks", "All-nighters"]
         },
         {
-            title: "Open Source Sprints",
-            desc: "Dedicated sessions for contributing to popular open-source projects or maintaining ZBC's own tools and libraries.",
-            tags: ["Git", "OSS", "Collaboration"]
+            title: "Projects",
+            desc: "Building and maintaining real-world applications, utility tools, and community-driven software.",
+            tags: ["Full Stack", "Tooling", "Git", "Production"]
         },
         {
             title: "Guest Tech Talks",

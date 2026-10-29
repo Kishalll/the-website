@@ -15,8 +15,8 @@ const Activities = () => {
         },
         {
             id: "03",
-            title: "Open Source",
-            desc: "Contributing to major projects and maintaining our own OSS ecosystem."
+            title: "Projects",
+            desc: "Building and maintaining real-world applications, internal tools, and collaborative software."
         }
     ];
 
