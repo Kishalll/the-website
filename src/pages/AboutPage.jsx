@@ -4,6 +4,15 @@ import { Code2, Users, Rocket, Brain, FolderGit2, Cpu, Linkedin, Github, Instagr
 import PageBackground from '../components/ui/PageBackground';
 import { boardMembers, facultyCoordinator, departments } from '../data/teamData';
 
+const PLATFORM_ICONS = {
+    linkedin: <Linkedin size={18} />,
+    github: <Github size={18} />,
+    instagram: <Instagram size={18} />,
+};
+
+const toSocialProps = (socials) =>
+    socials?.map(s => ({ icon: PLATFORM_ICONS[s.platform] || null, href: s.url }));
+
 const AboutPage = () => {
     React.useLayoutEffect(() => {
         const lockedY = sessionStorage.getItem('about_locked_y');
@@ -179,6 +188,7 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={president.name}
                         role={president.role}
+                        socials={toSocialProps(president.socials)}
                     />
                 </div>
             )}
@@ -188,6 +198,7 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={vicePresident.name}
                         role={vicePresident.role}
+                        socials={toSocialProps(vicePresident.socials)}
                     />
                 </div>
             )}
@@ -197,6 +208,7 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={coSecretary.name}
                         role={coSecretary.role}
+                        socials={toSocialProps(coSecretary.socials)}
                     />
                 </div>
             )}

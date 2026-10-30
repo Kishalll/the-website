@@ -30,9 +30,9 @@ export const boardMembers = [
             'Facilitated industry partnerships and technical collaborations.'
         ],
         socials: [
-            { platform: 'linkedin', url: '#' },
-            { platform: 'github', url: '#' },
-            { platform: 'instagram', url: '#' }
+            { platform: 'linkedin', url: 'https://www.linkedin.com/in/kishal-p-0a13842b9/' },
+            { platform: 'github', url: 'https://github.com/Kishalll' },
+            { platform: 'instagram', url: 'https://www.instagram.com/im.kishalll?xtok=bjFobW93czhlZ29y' }
         ]
     },
     {
