@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Users, Rocket, Brain, FolderGit2, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight } from 'lucide-react';
-import FogBackground from '../components/ui/FogBackground';
+import PageBackground from '../components/ui/PageBackground';
 import { boardMembers, facultyCoordinator, departments } from '../data/teamData';
 
 const AboutPage = () => {
@@ -58,7 +58,7 @@ const AboutPage = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
-            <FogBackground />
+            <PageBackground />
 
             <div className="max-w-7xl mx-auto relative z-10">
                 <div className="text-center mb-20">

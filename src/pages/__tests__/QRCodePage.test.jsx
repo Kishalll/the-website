@@ -23,9 +23,9 @@ vi.mock('qr-code-styling', () => {
   };
 });
 
-// Mock FogBackground
-vi.mock('../../components/ui/FogBackground', () => ({
-  default: () => <div data-testid="fog-background" />
+// Mock PageBackground
+vi.mock('../../components/ui/PageBackground', () => ({
+  default: () => <div data-testid="page-background" />
 }));
 
 describe('QR Code Feature', () => {

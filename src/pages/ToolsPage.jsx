@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Terminal, Wrench, ArrowRight, Calendar, QrCode } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import FogBackground from '../components/ui/FogBackground'; // Adjust path based on your folder structure
+import PageBackground from '../components/ui/PageBackground';
 
 const tools = [
     {
@@ -39,8 +39,7 @@ const ToolsPage = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
-            {/* Replaced MonochromeAuroraBackground with unified FogBackground */}
-            <FogBackground />
+            <PageBackground />
 
             <div className="max-w-6xl mx-auto relative z-10">
                 <div className="mb-16">

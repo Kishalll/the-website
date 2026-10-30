@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import FogBackground from '../components/ui/FogBackground'; // Adjust path based on your folder structure
+import PageBackground from '../components/ui/PageBackground';
 
 const DomainsPage = () => {
     const activities = [
@@ -33,7 +33,7 @@ const DomainsPage = () => {
             exit={{ opacity: 0 }}
             className="min-h-screen bg-black pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
         >
-            <FogBackground />
+            <PageBackground />
 
             <div className="max-w-6xl mx-auto relative z-10">
                 <h1 className="text-5xl md:text-7xl font-bold mb-16 text-white tracking-tighter">

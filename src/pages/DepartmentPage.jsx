@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Linkedin, Github, Instagram, Mail } from 'lucide-react';
-import FogBackground from '../components/ui/FogBackground';
+import PageBackground from '../components/ui/PageBackground';
 import { getDepartmentBySlug } from '../data/teamData';
 
 const SocialIcon = ({ platform }) => {
@@ -47,7 +47,7 @@ const DepartmentPage = () => {
             className="min-h-screen bg-black pt-28 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-white"
         >
             {/* Background Layer - Sits strictly behind content */}
-            <FogBackground />
+            <PageBackground />
 
             <div className="max-w-7xl mx-auto relative z-20">
                 {/* Back Button */}

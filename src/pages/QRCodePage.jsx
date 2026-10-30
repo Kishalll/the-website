@@ -17,7 +17,7 @@ import {
   FileText
 } from 'lucide-react';
 import QRCodeStyling from 'qr-code-styling';
-import FogBackground from '../components/ui/FogBackground';
+import PageBackground from '../components/ui/PageBackground';
 import InAppColorPicker from '../components/ui/InAppColorPicker';
 
 const DOT_TYPES = [
@@ -212,7 +212,7 @@ const QRCodePage = () => {
       exit={{ opacity: 0 }}
       className="min-h-screen bg-black pt-24 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden flex flex-col"
     >
-      <FogBackground />
+      <PageBackground />
 
       <div className="relative z-10 flex flex-col flex-1 max-w-7xl mx-auto w-full">
         {/* Header navigation and title */}

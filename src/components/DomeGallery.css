@@ -304,7 +304,7 @@ main.sphere-main {
 
 .edge-fade--bottom {
   bottom: 0;
-  height: 40vh;
+  height: 15vh;
   background: linear-gradient(
     to bottom,
     transparent 0%,

@@ -51,6 +51,7 @@ const GalleryPage = () => {
                         images={domeImages}
                         minSlots={12}
                         slotsPerRing={10}
+                        repeatImages
                         autoRotate
                         padFactor={0.16}
                         overlayBlurColor="#000000"

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import FogBackground from '../components/ui/FogBackground';
+import PageBackground from '../components/ui/PageBackground';
 import FFCSPlanner from '../components/FFCSPlanner';
 
 const FFCSPlannerPage = () => {
@@ -14,7 +14,7 @@ const FFCSPlannerPage = () => {
             className="min-h-screen bg-black pt-20 pb-6 px-0 relative overflow-hidden flex flex-col"
         >
             {/* Background Layer - Sit strictly behind content */}
-            <FogBackground />
+            <PageBackground />
 
             <div className="relative z-10 flex flex-col flex-1 px-3 sm:px-6 lg:px-8">
                 {/* Header */}

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Code2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import FogBackground from '../components/ui/FogBackground'; // Import from your saved component path
+import PageBackground from '../components/ui/PageBackground';
 import CompilerApp from '../compiler/App';
 import '../compiler/compiler.css';
 
@@ -15,7 +15,7 @@ const CompilerPage = () => {
             className="min-h-screen bg-black pt-24 pb-0 px-0 relative overflow-hidden flex flex-col"
         >
             {/* Background Layer - Sit strictly behind content */}
-            <FogBackground />
+            <PageBackground />
 
             <div className="relative z-10 flex flex-col flex-1 px-4 sm:px-6 lg:px-8">
                 {/* Header */}

@@ -59,10 +59,11 @@ describe('DomeGallery', () => {
 
         const offsets = rings.map((el) => el.style.getPropertyValue('--ring-y'));
         expect(new Set(offsets).size).toBe(RING_COUNT);
-        expect(rings[1].style.getPropertyValue('--ring-y')).toBe('0px');
+        // The stack is centered below the navbar, so rows sit evenly around the middle one.
         const numbers = offsets.map((v) => parseFloat(v));
-        expect(numbers[0]).toBeLessThan(0);
-        expect(numbers[2]).toBeGreaterThan(0);
+        expect(numbers[0]).toBeLessThan(numbers[1]);
+        expect(numbers[2]).toBeGreaterThan(numbers[1]);
+        expect(numbers[1] - numbers[0]).toBeCloseTo(numbers[2] - numbers[1], 5);
     });
 
     it('gives every ring its own random direction and speed', () => {

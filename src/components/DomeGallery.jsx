@@ -28,6 +28,12 @@ const PLACEHOLDER_COLORS = ['#172554', '#450a0a', '#052e16'];
 const RING_WIDTH_FACTOR = 0.72;
 const MIN_RING_RADIUS = 240;
 const MAX_RING_SLOTS = 64;
+// On wide screens the rows fill the space between the navbar and the bottom edge.
+const NAV_INSET = 112;
+const BOTTOM_INSET = 16;
+// Row spacing = tallest tile * ROW_STEP + ROW_GAP.
+const ROW_STEP = 1.08;
+const ROW_GAP = 4;
 
 // Width multiplier + aspect ratio per tier. Medium is the base size; small and
 // big scale it, so rings of any radius can mix tile sizes while staying under
@@ -133,7 +139,7 @@ function solveScale(n, factors, radius, gapEff) {
 
 // One ring: fixed radius (shared by all rings so they form a donut), slot
 // count n chosen by the caller, tile scale solved so spans close exactly 360°.
-function layoutAt(ringIndex, n, ringImages, radius, gap) {
+function layoutAt(ringIndex, n, ringImages, radius, gap, repeat = false) {
     const tiers = assignTiers(n, n * 31 + ringIndex * 97);
     const factors = tiers.map((t) => SIZE_TIERS[t].w);
     // Guarantees closure is solvable for any n >= 3: gaps never eat more than
@@ -144,9 +150,14 @@ function layoutAt(ringIndex, n, ringImages, radius, gap) {
     const heights = tiers.map((t, i) => widths[i] * SIZE_TIERS[t].aspect);
 
     const imageBySlot = new Map();
-    pickIndices(n, ringImages.length, n * 7 + ringIndex * 13 + 1).forEach((slot, j) => {
-        imageBySlot.set(slot, ringImages[j]);
-    });
+    if (repeat && ringImages.length) {
+        // Cycle the ring's photos through every slot: A..J, A..J, ...
+        for (let i = 0; i < n; i++) imageBySlot.set(i, ringImages[i % ringImages.length]);
+    } else {
+        pickIndices(n, ringImages.length, n * 7 + ringIndex * 13 + 1).forEach((slot, j) => {
+            imageBySlot.set(slot, ringImages[j]);
+        });
+    }
 
     let cursor = 0;
     const items = widths.map((w, i) => {
@@ -166,6 +177,7 @@ function layoutAt(ringIndex, n, ringImages, radius, gap) {
                 w,
                 h: heights[i],
                 placeholder: null,
+                copy: repeat && i >= ringImages.length,
             };
         }
         return {
@@ -187,7 +199,9 @@ function layoutAt(ringIndex, n, ringImages, radius, gap) {
 // The donut: on vertical screens (phones/portrait), size radius and spacing so each
 // ring spans 1/3rd of the screen height, fitting the rings from top to bottom.
 // On horizontal screens (desktop/landscape), size radius to fit viewport width.
-function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRing = null) {
+// Few slots make tiles too tall for every row to fit, so a ring adds slots
+// until its tallest tile fits (filled by repeats or placeholders).
+function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRing = null, repeat = false) {
     const count = Math.max(1, Math.round(ringCount));
     const isVertical = viewport.h > viewport.w;
     const radius = isVertical
@@ -196,22 +210,42 @@ function buildRings(uniqueImages, minSlots, viewport, gap, ringCount, slotsPerRi
     const minPerRing = Math.max(3, Math.ceil(minSlots / count));
     const targetSlots = slotsPerRing ?? DEFAULTS.slotsPerRing;
 
+    // Vertical: rows sit h/count apart, so a tile must not overrun its slot.
+    // Horizontal: the whole stack fits between the navbar and the bottom edge.
+    const freeH = viewport.h - NAV_INSET - BOTTOM_INSET;
+    const maxTallest = isVertical
+        ? (viewport.h / count) * 0.85
+        : (freeH - ROW_GAP * (count - 1)) / (ROW_STEP * (count - 1) + 1);
+
     const rings = [];
     let tallestAll = 0;
     for (let r = 0; r < count; r++) {
         const ringImages = uniqueImages.filter((_, i) => i % count === r);
-        let n = Math.max(targetSlots, minPerRing, ringImages.length, 3);
-        let layout = layoutAt(r, n, ringImages, radius, gap);
+        const baseN = Math.max(targetSlots, minPerRing, ringImages.length, 3);
+        let n = baseN;
+        let layout = layoutAt(r, n, ringImages, radius, gap, repeat);
+        // Tile height scales roughly with 1/n, so a few passes land it.
+        for (let i = 0; i < 4 && layout.tallest > maxTallest && n < MAX_RING_SLOTS; i++) {
+            n = Math.min(MAX_RING_SLOTS, Math.max(n + 1, Math.ceil((n * layout.tallest) / maxTallest)));
+            layout = layoutAt(r, n, ringImages, radius, gap, repeat);
+        }
+        // The jump above tends to overshoot; step back to the fewest slots that still fit.
+        while (n > baseN && layout.tallest <= maxTallest) {
+            const fewer = layoutAt(r, n - 1, ringImages, radius, gap, repeat);
+            if (fewer.tallest > maxTallest) break;
+            n -= 1;
+            layout = fewer;
+        }
         tallestAll = Math.max(tallestAll, layout.tallest);
         rings.push(layout);
     }
 
     // On vertical screens, space rings evenly so each occupies 1/3rd of the viewport height.
-    // On horizontal screens, use tight stacking derived from tile height + clear gap.
-    const clearGap = tallestAll * 0.16 + 8;
-    const spacing = isVertical ? viewport.h / count : tallestAll + clearGap * 0.75;
+    // On horizontal screens, stack tightly and center the stack below the navbar.
+    const spacing = isVertical ? viewport.h / count : tallestAll * ROW_STEP + ROW_GAP;
+    const offsetY = isVertical ? 0 : (NAV_INSET - BOTTOM_INSET) / 2;
     rings.forEach((ring, r) => {
-        ring.y = (r - (count - 1) / 2) * spacing;
+        ring.y = (r - (count - 1) / 2) * spacing + offsetY;
     });
     return { rings, radius };
 }
@@ -242,6 +276,7 @@ export default function DomeGallery({
     enlargeTransitionMs = DEFAULTS.enlargeTransitionMs,
     minSlots = DEFAULTS.minSlots,
     slotsPerRing = DEFAULTS.slotsPerRing,
+    repeatImages = false,
     autoRotate = DEFAULTS.autoRotate,
     tileGap = DEFAULTS.tileGap,
     ringCount = DEFAULTS.ringCount,
@@ -293,8 +328,8 @@ export default function DomeGallery({
         h: typeof window !== 'undefined' && window.innerHeight ? window.innerHeight : 768,
     }));
     const { rings, radius } = useMemo(
-        () => buildRings(uniqueImages, minSlots, viewport, tileGap, ringCount, slotsPerRing),
-        [uniqueImages, minSlots, viewport, tileGap, ringCount, slotsPerRing]
+        () => buildRings(uniqueImages, minSlots, viewport, tileGap, ringCount, slotsPerRing, repeatImages),
+        [uniqueImages, minSlots, viewport, tileGap, ringCount, slotsPerRing, repeatImages]
     );
 
     const [motion] = useState(() => makeMotion(ringCount));
@@ -943,7 +978,8 @@ export default function DomeGallery({
                                             <div
                                                 className="item__image"
                                                 role="button"
-                                                tabIndex={0}
+                                                tabIndex={it.copy ? -1 : 0}
+                                                aria-hidden={it.copy || undefined}
                                                 aria-label={it.alt || 'Open image'}
                                                 onClick={onTileClick}
                                                 onPointerUp={onTilePointerUp}
