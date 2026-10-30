@@ -28,3 +28,7 @@ dist-ssr
 .env
 .env.*
 !.env.example
+
+# Uncompressed gallery source images (keep folder, ignore contents)
+public/gallery/uncompress/*
+!public/gallery/uncompress/.gitkeep
