@@ -50,7 +50,6 @@ const GalleryPage = () => {
                     <DomeGallery
                         images={domeImages}
                         minSlots={12}
-                        slotsPerRing={10}
                         repeatImages
                         autoRotate
                         padFactor={0.16}
