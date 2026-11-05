@@ -476,6 +476,7 @@ const GradientBlinds = ({
         if (waves[i * 4 + 3] > 0 && time - waves[i * 4 + 2] > RIPPLE_SECONDS) waves[i * 4 + 3] = 0;
       }
       draw();
+
       const settling =
         Math.abs(light.tx - light.x) > 0.05 ||
         Math.abs(light.ty - light.y) > 0.05 ||

@@ -140,14 +140,14 @@ const AboutPage = () => {
 const TeamMemberCard = ({ name, role, socials }) => (
     <motion.div
         whileHover={{
-            y: -4,
-            boxShadow: "0px 8px 20px 2px rgba(255, 255, 255, 0.08)",
+            y: -8,
+            scale: 1.02,
+            boxShadow: "0px 12px 35px 2px rgba(255, 255, 255, 0.2)",
             zIndex: 20
         }}
         transition={{
-            type: "spring",
-            stiffness: 300,
-            damping: 25,
+            y: { type: "spring", stiffness: 300, damping: 25 },
+            scale: { type: "spring", stiffness: 300, damping: 25 },
             boxShadow: { duration: 0.25 }
         }}
         className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-[#111111] hover:border-white/20 transition-colors cursor-default w-full max-w-sm mx-auto relative shadow-xl z-10"
@@ -204,7 +204,7 @@ const TeamHierarchy = () => {
             )}
 
             {coSecretary && (
-                <div className="w-full flex justify-center gap-8 flex-wrap p-2">
+                <div className="w-full flex justify-center p-2">
                     <TeamMemberCard
                         name={coSecretary.name}
                         role={coSecretary.role}
