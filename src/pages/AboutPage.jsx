@@ -137,7 +137,7 @@ const AboutPage = () => {
     );
 };
 
-const TeamMemberCard = ({ name, role, socials }) => (
+const TeamMemberCard = ({ name, role, socials, image }) => (
     <motion.div
         whileHover={{
             y: -8,
@@ -153,7 +153,10 @@ const TeamMemberCard = ({ name, role, socials }) => (
         className="flex flex-col items-center p-6 rounded-2xl border border-white/10 bg-[#111111] hover:border-white/20 transition-colors cursor-default w-full max-w-sm mx-auto relative shadow-xl z-10"
     >
         <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-neutral-800 mb-4 border-2 border-white/10 overflow-hidden relative shadow-inner">
-            <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
+            {image
+                ? <img src={image} alt={name} className="absolute inset-0 w-full h-full object-cover" />
+                : <div className="absolute inset-0 bg-gradient-to-tr from-gray-700 to-gray-600"></div>
+            }
         </div>
         <h3 className="text-xl font-bold text-white mb-1">{name}</h3>
         <p className="text-sm text-blue-400 font-mono tracking-wide mb-4 uppercase">{role}</p>
@@ -161,15 +164,14 @@ const TeamMemberCard = ({ name, role, socials }) => (
         <div className="flex gap-4">
             {socials ? (
                 socials.map((social, index) => (
-                    <a key={index} href={social.href || '#'} className="text-gray-400 hover:text-white transition-colors">
+                    <a key={index} href={social.href || undefined} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                         {social.icon}
                     </a>
                 ))
             ) : (
                 <>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={18} /></a>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors"><Github size={18} /></a>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram size={18} /></a>
+                    <a href={undefined} className="text-gray-400 hover:text-white transition-colors"><Linkedin size={18} /></a>
+                    <a href={undefined} className="text-gray-400 hover:text-white transition-colors"><Github size={18} /></a>
                 </>
             )}
         </div>
@@ -189,6 +191,7 @@ const TeamHierarchy = () => {
                         name={president.name}
                         role={president.role}
                         socials={toSocialProps(president.socials)}
+                        image={president.image || null}
                     />
                 </div>
             )}
@@ -199,6 +202,7 @@ const TeamHierarchy = () => {
                         name={vicePresident.name}
                         role={vicePresident.role}
                         socials={toSocialProps(vicePresident.socials)}
+                        image={vicePresident.image || null}
                     />
                 </div>
             )}
@@ -209,6 +213,7 @@ const TeamHierarchy = () => {
                         name={coSecretary.name}
                         role={coSecretary.role}
                         socials={toSocialProps(coSecretary.socials)}
+                        image={coSecretary.image || null}
                     />
                 </div>
             )}
@@ -223,6 +228,8 @@ const TeamHierarchy = () => {
                             <TeamMemberCard
                                 name={dept.lead.name}
                                 role={`${dept.name} Lead`}
+                                socials={toSocialProps(dept.lead.socials)}
+                                image={dept.lead.image || null}
                             />
                             <button
                                 type="button"

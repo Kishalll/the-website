@@ -3,7 +3,7 @@ export const boardMembers = [
         slug: 'manvi-chadha',
         name: 'Manvi Chadha',
         role: 'Chairperson',
-        image: '',
+        image: '/about/manvi.png',
         noteFrom: 'Faculty Coordinator',
         note: 'Outstanding strategic vision and executive leadership, driving innovation and guiding Zero Bugs Club across all technical and community initiatives.',
         contributions: [
@@ -12,16 +12,15 @@ export const boardMembers = [
             'Mentored leadership teams and facilitated inter-departmental collaboration.'
         ],
         socials: [
-            { platform: 'linkedin', url: '#' },
-            { platform: 'github', url: '#' },
-            { platform: 'instagram', url: '#' }
+            { platform: 'linkedin', url: 'https://www.linkedin.com/in/manvi-chadha-579839272' },
+            { platform: 'github', url: 'https://github.com/Manvichadha' }
         ]
     },
     {
         slug: 'kishal-p',
         name: 'Kishal P',
         role: 'Vice Chairperson',
-        image: '',
+        image: '/about/kishal.png',
         noteFrom: 'Faculty Coordinator',
         note: 'Exceptional operational execution and technical leadership, ensuring seamless execution across all projects.',
         contributions: [
@@ -39,7 +38,7 @@ export const boardMembers = [
         slug: 'bhavya-shree',
         name: 'Bhavya Shree',
         role: 'Co-secretary',
-        image: '',
+        image: '/about/bhavya.png',
         noteFrom: 'Faculty Coordinator',
         note: 'Dedicated governance and organizational efficiency, ensuring smooth scheduling and official correspondence.',
         contributions: [
@@ -48,9 +47,9 @@ export const boardMembers = [
             'Assisted in managing club outreach and official communications.'
         ],
         socials: [
-            { platform: 'linkedin', url: '#' },
-            { platform: 'github', url: '#' },
-            { platform: 'instagram', url: '#' }
+            { platform: 'linkedin', url: 'https://www.linkedin.com/in/bhavya-shri-vijayakumar-093a52334' },
+            { platform: 'github', url: 'https://github.com/Bhavya-Shri' },
+            { platform: 'instagram', url: 'https://www.instagram.com/simpl_y.bhavya?rpxt=MW16OXh3cDdrN3o5OQ==' }
         ]
     }
 ];
@@ -81,7 +80,7 @@ export const departments = [
             slug: 'joel-panjimaram-mathew',
             name: 'Joel Panjimaram Mathew',
             role: 'Project Lead',
-            image: '',
+            image: '/about/joel.jpg',
             noteFrom: 'Board',
             note: 'Demonstrates outstanding project management and technical oversight, driving complex software builds to production.',
             contributions: [
@@ -90,9 +89,8 @@ export const departments = [
                 'Guided developers in building resilient full-stack applications.'
             ],
             socials: [
-                { platform: 'linkedin', url: '#' },
-                { platform: 'github', url: '#' },
-                { platform: 'instagram', url: '#' }
+                { platform: 'linkedin', url: 'https://www.linkedin.com/in/joel-mathew-23b207315/' },
+                { platform: 'github', url: 'https://github.com/joelpanjimaram2024' }
             ]
         },
         members: [
@@ -153,7 +151,7 @@ export const departments = [
             slug: 'tharun-gopinath',
             name: 'Tharun Gopinath',
             role: 'Technical Lead',
-            image: '',
+            image: '/about/tharun.png',
             noteFrom: 'Board',
             note: 'Technical powerhouse mentoring members in modern frameworks, system architecture, and clean code principles.',
             contributions: [
@@ -162,9 +160,8 @@ export const departments = [
                 'Enforced testing and security best practices across projects.'
             ],
             socials: [
-                { platform: 'linkedin', url: '#' },
-                { platform: 'github', url: '#' },
-                { platform: 'instagram', url: '#' }
+                { platform: 'linkedin', url: 'https://www.linkedin.com/in/tharun-gopinath?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
+                { platform: 'github', url: 'https://github.com/tg1106' }
             ]
         },
         members: [
@@ -222,7 +219,7 @@ export const departments = [
         slug: 'design',
         name: 'Design',
         lead: {
-            slug: 'aryan-pillai',
+            slug: 'aryan',
             name: 'Aryan Pillai',
             role: 'Design Lead',
             image: '',
@@ -234,9 +231,8 @@ export const departments = [
                 'Guided design members in UI/UX research and asset creation.'
             ],
             socials: [
-                { platform: 'linkedin', url: '#' },
-                { platform: 'github', url: '#' },
-                { platform: 'instagram', url: '#' }
+                { platform: 'linkedin', url: 'https://www.linkedin.com/in/' },
+                { platform: 'github', url: 'https://github.com' }
             ]
         },
         members: [
@@ -297,7 +293,7 @@ export const departments = [
             slug: 'shanjay-ravikumar',
             name: 'Shanjay Ravikumar',
             role: 'Event Lead',
-            image: '',
+            image: '/about/Shanjay R.jpeg',
             noteFrom: 'Board',
             note: 'Master of event planning and logistics, executing flagship hackathons and workshops seamlessly.',
             contributions: [
@@ -306,8 +302,7 @@ export const departments = [
                 'Managed volunteer squads during live hackathons.'
             ],
             socials: [
-                { platform: 'linkedin', url: '#' },
-                { platform: 'instagram', url: '#' }
+                { platform: 'linkedin', url: 'https://www.linkedin.com/in/shanjay-ravikumar-162203334/' }
             ]
         },
         members: [
@@ -368,7 +363,7 @@ export const departments = [
             slug: 'v-thipthi-shree',
             name: 'V Thipthi Shree',
             role: 'HR Lead',
-            image: '',
+            image: '/about/Thipthi Shree.jpg',
             noteFrom: 'Board',
             note: 'Fosters team culture, recruitment, and internal engagement to maintain a vibrant developer community.',
             contributions: [
@@ -377,8 +372,8 @@ export const departments = [
                 'Managed member attendance and performance reviews.'
             ],
             socials: [
-                { platform: 'linkedin', url: '#' },
-                { platform: 'instagram', url: '#' }
+                { platform: 'linkedin', url: 'https://www.linkedin.com/in/v-thipthi-shree-1b2624323/' },
+                { platform: 'github', url: 'https://github.com/ThipthiShree' }
             ]
         },
         members: [
@@ -439,7 +434,7 @@ export const departments = [
             slug: 'sam-stephen-prince',
             name: 'Sam Stephen Prince',
             role: 'Outreach Lead',
-            image: '',
+            image: '/about/sam.jpeg',
             noteFrom: 'Board',
             note: 'Expands ZBC brand reach, building strategic campus partnerships and social media engagement.',
             contributions: [
@@ -448,8 +443,8 @@ export const departments = [
                 'Directed social media marketing strategies.'
             ],
             socials: [
-                { platform: 'linkedin', url: '#' },
-                { platform: 'instagram', url: '#' }
+                { platform: 'linkedin', url: 'https://www.linkedin.com/in/sam-stephen-981762213?utm_source=share_via&utm_content=profile&utm_medium=member_ios' },
+                { platform: 'github', url: 'https://github.com/samstephen1603' }
             ]
         },
         members: [
