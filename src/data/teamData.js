@@ -222,7 +222,7 @@ export const departments = [
             slug: 'aryan',
             name: 'Aryan Pillai',
             role: 'Design Lead',
-            image: '',
+            image: '/about/aryan.jpg',
             noteFrom: 'Board',
             note: 'Brings extraordinary design aesthetics, visual identity, and user-centric interfaces to all ZBC products.',
             contributions: [
@@ -231,8 +231,8 @@ export const departments = [
                 'Guided design members in UI/UX research and asset creation.'
             ],
             socials: [
-                { platform: 'linkedin', url: 'https://www.linkedin.com/in/' },
-                { platform: 'github', url: 'https://github.com' }
+                { platform: 'linkedin', url: 'www.linkedin.com/in/aryan8888' },
+                { platform: 'github', url: 'https://github.com/ren-pillai30' }
             ]
         },
         members: [
