@@ -399,12 +399,10 @@ const FFCSPlanner = () => {
         };
     }, []);
 
-    const allAvailableSlotOptions = useMemo(() => {
-        return [
-            ...allSelectableSlots.theory.map(s => ({ value: s, label: s, type: 'Theory' })),
-            ...allSelectableSlots.lab.map(s => ({ value: s, label: s, type: 'Lab' }))
-        ];
-    }, [allSelectableSlots]);
+    const allAvailableSlotOptions = [
+        ...allSelectableSlots.theory.map(s => ({ value: s, label: s, type: 'Theory' })),
+        ...allSelectableSlots.lab.map(s => ({ value: s, label: s, type: 'Lab' }))
+    ];
 
     return (
         <div className="flex-1 flex flex-col w-full text-white">

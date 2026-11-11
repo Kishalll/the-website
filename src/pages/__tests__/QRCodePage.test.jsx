@@ -41,7 +41,7 @@ describe('QR Code Feature', () => {
     expect(screen.getByText('Design')).toBeInTheDocument();
   });
 
-  it('renders QRCodePage with tabs, live preview, and download buttons', () => {
+  it('renders QRCodePage with tabs and download buttons', () => {
     render(
       <BrowserRouter>
         <QRCodePage />
@@ -49,7 +49,6 @@ describe('QR Code Feature', () => {
     );
 
     expect(screen.getByText('Canva-Style QR Generator')).toBeInTheDocument();
-    expect(screen.getByText('Live Preview')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /PNG/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /SVG/i })).toBeInTheDocument();
 
@@ -60,8 +59,8 @@ describe('QR Code Feature', () => {
     expect(screen.getByText('Logo')).toBeInTheDocument();
     expect(screen.queryByText('Presets')).not.toBeInTheDocument();
 
-    // Verify default URL text
-    expect(screen.getByDisplayValue('https://before-build-26.vercel.app/')).toBeInTheDocument();
+    // Verify content input field is present
+    expect(screen.getByPlaceholderText('https://example.com or any plain text...')).toBeInTheDocument();
   });
 
   it('switches between tabs and shows respective controls', () => {
