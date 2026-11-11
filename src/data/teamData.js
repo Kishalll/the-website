@@ -31,7 +31,8 @@ export const boardMembers = [
         socials: [
             { platform: 'linkedin', url: 'https://www.linkedin.com/in/kishal-p-0a13842b9/' },
             { platform: 'github', url: 'https://github.com/Kishalll' },
-            { platform: 'instagram', url: 'https://www.instagram.com/im.kishalll?xtok=bjFobW93czhlZ29y' }
+            { platform: 'instagram', url: 'https://www.instagram.com/im.kishalll?xtok=bjFobW93czhlZ29y' },
+            { platform: 'website', url: 'https://kishalll.netlify.app/' }
         ]
     },
     {
@@ -58,7 +59,7 @@ export const facultyCoordinator = {
     slug: 'dr-punitha-k',
     name: 'Dr.Punitha K',
     role: 'Faculty Coordinator',
-    image: '',
+    image: '/about/punitha.png',
     noteFrom: 'Zero Bugs Club Board',
     note: 'Faculty Advisor guiding Zero Bugs Club towards technical mastery, academic rigor, and impactful student projects.',
     contributions: [
@@ -67,7 +68,7 @@ export const facultyCoordinator = {
         'Mentored club leadership in project governance and event compliance.'
     ],
     socials: [
-        { platform: 'linkedin', url: '#' },
+        { platform: 'linkedin', url: 'https://www.linkedin.com/in/dr-punitha-k-25462a9b?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
         { platform: 'mail', url: 'mailto:zbcvitc@gmail.com' }
     ]
 };
@@ -231,7 +232,7 @@ export const departments = [
                 'Guided design members in UI/UX research and asset creation.'
             ],
             socials: [
-                { platform: 'linkedin', url: 'www.linkedin.com/in/aryan8888' },
+                { platform: 'linkedin', url: 'https://www.linkedin.com/in/aryan8888' },
                 { platform: 'github', url: 'https://github.com/ren-pillai30' }
             ]
         },

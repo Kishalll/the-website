@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Users, Rocket, Brain, FolderGit2, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight } from 'lucide-react';
+import { Code2, Users, Rocket, Brain, FolderGit2, Cpu, Linkedin, Github, Instagram, Mail, ArrowRight, Globe } from 'lucide-react';
 import PageBackground from '../components/ui/PageBackground';
 import { boardMembers, facultyCoordinator, departments } from '../data/teamData';
 
@@ -8,6 +8,8 @@ const PLATFORM_ICONS = {
     linkedin: <Linkedin size={18} />,
     github: <Github size={18} />,
     instagram: <Instagram size={18} />,
+    website: <Globe size={18} />,
+    mail: <Mail size={18} />,
 };
 
 const toSocialProps = (socials) =>
@@ -253,10 +255,8 @@ const TeamHierarchy = () => {
                     <TeamMemberCard
                         name={facultyCoordinator.name}
                         role={facultyCoordinator.role}
-                        socials={[
-                            { icon: <Linkedin size={18} />, href: "#" },
-                            { icon: <Mail size={18} />, href: "mailto:zbcvitc@gmail.com" }
-                        ]}
+                        socials={toSocialProps(facultyCoordinator.socials)}
+                        image={facultyCoordinator.image || null}
                     />
                 </div>
             </div>
