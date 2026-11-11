@@ -33,14 +33,14 @@ const Footer = () => {
     };
 
     return (
-        <footer id="contact" className="bg-surface text-white pt-20 pb-10 border-t border-white/5 relative overflow-hidden">
+        <footer id="contact" className="text-white pt-20 pb-10 relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-4 mb-16 items-center">
                     
                     {/* Navigation & Contact */}
                     <div className="lg:col-span-5 grid grid-cols-2 gap-4 sm:gap-6 text-left">
                         <div>
-                            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider text-gray-500">Navigation</h4>
+                            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider text-white leading-relaxed">Navigation</h4>
                             <ul className="space-y-3">
                                 {[
                                     { name: 'Home', path: '/' },
@@ -53,23 +53,23 @@ const Footer = () => {
                                         <Link
                                             to={link.path}
                                             onClick={() => window.scrollTo(0, 0)}
-                                            className="group flex items-center gap-2 text-gray-400 hover:text-white transition-colors py-1"
+                                            className="group flex items-center gap-2 text-white hover:text-white transition-colors py-1"
                                         >
                                             <span className="h-px w-0 bg-white group-hover:w-4 transition-all duration-300"></span>
-                                            <span className="transform group-hover:translate-x-1 transition-transform duration-300 uppercase tracking-wider text-sm">{link.name}</span>
+                                            <span className="transform group-hover:translate-x-1 transition-transform duration-300 uppercase tracking-wider text-sm leading-relaxed">{link.name}</span>
                                         </Link>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                         <div>
-                            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider text-gray-500">Contact</h4>
+                            <h4 className="font-bold mb-6 text-sm uppercase tracking-wider text-white leading-relaxed">Contact</h4>
                             <ul className="space-y-4">
-                                <li className="flex items-center gap-2 text-gray-300 text-sm">
+                                <li className="flex items-center gap-2 text-white text-sm leading-relaxed">
                                     <Mail size={16} className="shrink-0" />
                                     zbcvitc@gmail.com
                                 </li>
-                                <li className="text-gray-300 text-sm leading-relaxed">
+                                <li className="text-white text-sm leading-relaxed">
                                     VIT Chennai, Kelambakkam - Vandalur Rd, Rajan Nagar, Chennai, Tamil Nadu 600127, India
                                 </li>
                             </ul>
@@ -88,7 +88,7 @@ const Footer = () => {
                     {/* Brand Bio & Socials */}
                     <div className="lg:col-span-3 text-center lg:text-right flex flex-col items-center lg:items-end">
 
-                        <p className="text-gray-400 text-sm max-w-[220px] mb-5 leading-relaxed">
+                        <p className="text-white text-sm max-w-[220px] mb-5 leading-relaxed">
                             Zero Bugs Club. <br />
                             Shipping code that matters. <br />
                             Building the future, one commit at a time.
@@ -100,7 +100,7 @@ const Footer = () => {
                                 href="https://github.com/Zero-Bugs-Club" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="text-gray-400 hover:text-white transition-colors p-3 bg-white/5 rounded-full hover:bg-white/10 hover:scale-110 duration-300"
+                                className="text-white p-3 bg-white/5 rounded-full hover:bg-white/10 hover:scale-110 duration-300"
                             >
                                 <Github size={22} />
                             </a>
@@ -108,7 +108,7 @@ const Footer = () => {
                                 href="https://www.instagram.com/zbcvitc?igsh=MTlzam1jaDRxd3c1" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="text-gray-400 hover:text-white transition-colors p-3 bg-white/5 rounded-full hover:bg-white/10 hover:scale-110 duration-300"
+                                className="text-white p-3 bg-white/5 rounded-full hover:bg-white/10 hover:scale-110 duration-300"
                             >
                                 <Instagram size={22} />
                             </a>
@@ -116,7 +116,7 @@ const Footer = () => {
                                 href="https://www.linkedin.com/in/zbc-vitc-905075301?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="text-gray-400 hover:text-white transition-colors p-3 bg-white/5 rounded-full hover:bg-white/10 hover:scale-110 duration-300"
+                                className="text-white p-3 bg-white/5 rounded-full hover:bg-white/10 hover:scale-110 duration-300"
                             >
                                 <Linkedin size={22} />
                             </a>
@@ -129,7 +129,7 @@ const Footer = () => {
                 <div className="border-t border-white/10 pt-8 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-center md:text-left">
                     
                     {/* Left Column: Copyright */}
-                    <p className="text-gray-500 text-sm order-2 md:order-1">
+                    <p className="text-white text-sm order-2 md:order-1">
                         &copy; {new Date().getFullYear()} Zero Bugs Club. All rights reserved.
                     </p>
 

@@ -42,7 +42,7 @@ const CORNER_DOT_TYPES = [
 
 const QRCodePage = () => {
   const [activeTab, setActiveTab] = useState('content');
-  const [data, setData] = useState('https://before-build-26.vercel.app/');
+  const [data, setData] = useState('');
   const [dotsType, setDotsType] = useState('square');
   const [dotsColor, setDotsColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#FFF7ED');
@@ -258,7 +258,7 @@ const QRCodePage = () => {
           <div className="lg:col-span-5 order-1 lg:order-2 lg:sticky lg:top-28">
             <div className="rounded-2xl border border-white/10 bg-neutral-950/80 backdrop-blur-md p-5 sm:p-6 shadow-2xl flex flex-col items-center">
               <span className="text-xs font-mono uppercase tracking-wider text-gray-400 mb-4 self-start">
-                Live Preview
+                
               </span>
 
               {/* QR Canvas Display Wrapper with fluid centering */}
@@ -305,7 +305,7 @@ const QRCodePage = () => {
               </div>
 
               <p className="text-[11px] text-gray-500 text-center mt-3">
-                Scannable on all modern iOS & Android cameras.
+
               </p>
             </div>
           </div>

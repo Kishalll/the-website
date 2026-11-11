@@ -5,7 +5,7 @@
  * Uses the website's dark theme, navbar, and overall layout.
  */
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 
 import { Toolbar } from "./components/Toolbar";
 import { EditorPanel } from "./components/EditorPanel";
@@ -54,29 +54,27 @@ function getLanguageExtensions(language) {
 
 export default function CompilerApp() {
   const { language, setLanguage, code, setCode, stdin, setStdin } = useEditor();
+  const shouldStartPythonPreload = language === "python" && !isRuntimePreloaded("python");
 
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
   const [fontSize, setFontSize] = useState(16);
-  const [lineCount, setLineCount] = useState(1);
-  const [loadingRuntime, setLoadingRuntime] = useState(null);
-  const [loadProgress, setLoadProgress] = useState("");
+  const [loadingRuntime, setLoadingRuntime] = useState(() => (shouldStartPythonPreload ? "python" : null));
+  const [loadProgress, setLoadProgress] = useState(() =>
+    shouldStartPythonPreload ? "Loading Python runtime (Pyodide)..." : ""
+  );
   const [loadProgressPercent, setLoadProgressPercent] = useState("");
   const [pythonDownloadCancelled, setPythonDownloadCancelled] = useState(false);
+
+  const lineCount = useMemo(() => code.split("\n").length, [code]);
 
   const isPreviewLanguage = PREVIEW_LANGUAGES.has(language);
 
   // ── Preload Pyodide when Python is selected; cancel it if the user
   //    switches away before the download finishes ──
   useEffect(() => {
-    // Reset cancelled flag when switching languages or starting a new download
-    setPythonDownloadCancelled(false);
-
     if (language === "python" && !isRuntimePreloaded("python")) {
-      setLoadingRuntime("python");
-      setLoadProgress("Loading Python runtime (Pyodide)...");
-
       let active = true;
       const startedAt = performance.now();
       preloadRuntime("python", (percent) => {
@@ -120,11 +118,6 @@ export default function CompilerApp() {
     }
   }, [language]);
 
-  // ── Track line count ──
-  useEffect(() => {
-    setLineCount(code.split("\n").length);
-  }, [code]);
-
   // ── Execution ──
   const handleRun = useCallback(async () => {
     if (isRunning) return;
@@ -146,6 +139,16 @@ export default function CompilerApp() {
     setResult(null);
     setError(null);
   }, []);
+
+  const handleLanguageChange = useCallback((nextLanguage) => {
+    if (nextLanguage === "python" && !isRuntimePreloaded("python")) {
+      setLoadingRuntime("python");
+      setLoadProgress("Loading Python runtime (Pyodide)...");
+      setLoadProgressPercent("");
+    }
+    setLanguage(nextLanguage);
+    setPythonDownloadCancelled(false);
+  }, [setLanguage]);
 
   // Abort the in-progress Pyodide download (used by the shimmer Cancel button).
   const handleCancelRuntimeLoad = useCallback(() => {
@@ -214,7 +217,7 @@ export default function CompilerApp() {
         isRunning={isRunning}
         fontSize={fontSize}
         loadingRuntime={loadingRuntime}
-        onLanguageChange={setLanguage}
+        onLanguageChange={handleLanguageChange}
         onRun={handleRun}
         onFontSizeChange={setFontSize}
       />

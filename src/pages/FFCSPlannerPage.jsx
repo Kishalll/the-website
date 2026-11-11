@@ -11,14 +11,14 @@ const FFCSPlannerPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="min-h-screen bg-black pt-20 pb-6 px-0 relative overflow-hidden flex flex-col"
+            className="min-h-screen bg-black pt-24 pb-6 px-0 relative overflow-hidden flex flex-col"
         >
             {/* Background Layer - Sit strictly behind content */}
             <PageBackground />
 
             <div className="relative z-10 flex flex-col flex-1 px-3 sm:px-6 lg:px-8">
                 {/* Header */}
-                <div className="max-w-7xl mx-auto w-full mb-2 pt-1">
+                <div className="max-w-7xl mx-auto w-full mb-2 pt-6">
                     <div className="flex items-center gap-3 border-b border-white/10 pb-2">
                         <Link
                             to="/tools"
