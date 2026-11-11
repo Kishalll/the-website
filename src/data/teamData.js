@@ -69,7 +69,7 @@ export const facultyCoordinator = {
     ],
     socials: [
         { platform: 'linkedin', url: 'https://www.linkedin.com/in/dr-punitha-k-25462a9b?utm_source=share_via&utm_content=profile&utm_medium=member_android' },
-        { platform: 'mail', url: 'mailto:zbcvitc@gmail.com' }
+        { platform: 'mail', url: 'mailto:punitha.k@vit.ac.in' }
     ]
 };
 
