@@ -1,8 +1,6 @@
-# Zero Bugs Club (ZBC) - Official Website
+# Zero Bugs Club - Official Website
 
-Welcome to the official repository for the **Zero Bugs Club** website. This project is a modern, high-performance web application designed to showcase our community, events, and technical achievements.
-
-## 🛠️ Technology Stack
+## Stack
 This project is built using a modern frontend stack focused on performance and aesthetics:
 *   **Core:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
 *   **Styling:** [Tailwind CSS](https://tailwindcss.com/)
@@ -14,7 +12,7 @@ This project is built using a modern frontend stack focused on performance and a
 
 ---
 
-## 📦 Quick Start
+## Quick Start
 
 ### Prerequisites
 *   Node.js (v16 or higher)
@@ -45,7 +43,7 @@ The output will be in the `dist` folder.
 
 ---
 
-## 🔒 Maintenance Mode (Hiding & Revealing the Site)
+## Maintenance Mode (Hiding & Revealing the Site)
 
 The website includes a standalone **"Coming Soon / Maintenance"** page. This allows you to temporarily hide the main application during updates or before the official launch.
 
@@ -82,7 +80,7 @@ To launch the full React application:
 
 ---
 
-## ⚡ Deployment & Troubleshooting
+## Deployment & Troubleshooting
 
 ### Deployment to Netlify
 This site is configured for Netlify.
