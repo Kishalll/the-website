@@ -36,8 +36,8 @@ export const boardMembers = [
         ]
     },
     {
-        slug: 'bhavya-shree',
-        name: 'Bhavya Shree',
+        slug: 'bhavya-shrai',
+        name: 'Bhavya Shrai',
         role: 'Co-secretary',
         image: '/about/bhavya.png',
         noteFrom: 'Faculty Coordinator',
