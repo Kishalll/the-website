@@ -183,7 +183,7 @@ const TeamMemberCard = ({ name, role, socials, image }) => (
 const TeamHierarchy = () => {
     const president = boardMembers.find(m => m.slug === 'manvi-chadha');
     const vicePresident = boardMembers.find(m => m.slug === 'kishal-p');
-    const coSecretary = boardMembers.find(m => m.slug === 'bhavya-shree');
+    const coSecretary = boardMembers.find(m => m.slug === 'bhavya-shri');
 
     return (
         <div className="flex flex-col gap-12 items-center">
